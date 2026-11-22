@@ -1,0 +1,10 @@
+{
+  "id": "federal-highway",
+  "name": "Federal Highway (Shah Alam - Kuala Lumpur)",
+  "_note": "APPROXIMATE bbox and gates. Tim to verify on a map before first run.",
+  "bbox": [101.48, 3.02, 101.70, 3.15],
+  "gates": [
+    { "name": "Shah Alam (west)", "pos": { "lat": 3.0730, "lon": 101.5180 }, "role": "west" },
+    { "name": "Kuala Lumpur (east)", "pos": { "lat": 3.1180, "lon": 101.6750 }, "role": "east" }
+  ]
+}

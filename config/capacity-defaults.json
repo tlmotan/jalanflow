@@ -1,0 +1,12 @@
+{
+  "_note": "PLACEHOLDER values. Calibrate against the Malaysian Highway Capacity Manual (MHCM) or local studies and update each source field.",
+  "classes": {
+    "motorway":  { "per_lane_vph": 2000, "default_lanes": 3, "source": "placeholder - calibrate (MHCM)" },
+    "trunk":     { "per_lane_vph": 1800, "default_lanes": 2, "source": "placeholder - calibrate (MHCM)" },
+    "primary":   { "per_lane_vph": 1500, "default_lanes": 2, "source": "placeholder - calibrate (MHCM)" },
+    "secondary": { "per_lane_vph": 1200, "default_lanes": 1, "source": "placeholder - calibrate (MHCM)" },
+    "tertiary":  { "per_lane_vph": 900,  "default_lanes": 1, "source": "placeholder - calibrate (MHCM)" }
+  },
+  "signal_factor": 0.5,
+  "signal_source": "placeholder - typical green-time share; calibrate"
+}
