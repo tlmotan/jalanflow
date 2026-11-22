@@ -3,11 +3,11 @@
 > The 2-minute version. Full detail: ARCHITECTURE.md. If this file and ARCHITECTURE.md disagree, ARCHITECTURE.md wins — and fix this file.
 
 ## What we're building
-Static website showing **capacity bottlenecks (min cut)** on one Klang Valley corridor (Federal Highway, Shah Alam ↔ KL), plus a ranked list of **"+1 lane" fixes** with capacity gain and difficulty.
+Static website whose headline is **lane drops** on the route (merges and narrowings where more lanes come in than carry on, biggest squeeze first, locally confirmed ones marked), plus **capacity bottlenecks (min cut)** on one Klang Valley corridor (Kota Kemuning ↔ Petaling Jaya via KESAS then LDP), plus a ranked list of **"+1 lane" fixes** with capacity gain and difficulty.
 
 ## Shape (Phase 1)
 ```
-OSM .pbf → osmium clip → cmd/build-graph → graph.json → cmd/analyze → web/public/data/*.json → static MapLibre site
+Overpass (bbox, road classes) → osmium cat → .pbf → cmd/build-graph → graph.json → cmd/analyze → web/public/data/*.json → static MapLibre site
 ```
 **No server. No database. No Docker. No scheduled jobs.**
 
@@ -27,15 +27,16 @@ OSM .pbf → osmium clip → cmd/build-graph → graph.json → cmd/analyze → 
 8. **Fix ranking** = for each cut edge, +1 lane, re-run, record gain and the next cut.
 9. **Junctions are unlimited capacity** in Phase 1 (known limitation, disclosed).
 10. **Go structs are the source of truth** for output formats; `web/src/types.ts` mirrors them in the same commit.
+11. **Lane drops count lanes, not traffic.** Signalised junctions and points near toll booths are skipped; confirmed spots are keyed by OSM ids (decision 0004).
 
 ## Package rules
-`flow` ← imports nothing internal · `graph` ← `osm`, `config` · `fixes` ← `flow`, `graph` · `export` ← all above · `cmd/*` wires only.
+`flow` ← imports nothing internal · `graph` ← `osm`, `config` · `fixes` ← `flow`, `graph` · `lanedrop` ← `graph`, `config` · `export` ← all above · `cmd/*` wires only.
 
 ## Out of scope (do not build)
 Removing roads, route choice, real-time traffic, user what-if editing, API server, buses/rail/walking, other corridors, land ownership data.
 
 ## Key files
-- `config/corridors/federal-highway.json` — bbox + gates
+- `config/corridors/kemuning-pj.json` — bbox + gates
 - `config/capacity-defaults.json` — per-lane capacities (with sources)
 - `internal/graph/model.go` — data model
 - `internal/flow/dinic.go` — algorithm

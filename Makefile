@@ -1,4 +1,4 @@
-CORRIDOR ?= federal-highway
+CORRIDOR ?= kemuning-pj
 
 # paulmach/osm/osmpbf links C zlib (needs pkg-config) when cgo is on.
 # The pure-Go zlib path needs no system libraries.

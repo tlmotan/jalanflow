@@ -39,3 +39,49 @@ export interface Manifest {
   max_flow_vph: Record<Direction, number>;
   assumptions: string[];
 }
+
+// Mirrors internal/lanedrop (Drop, Road, Confirmation) and export.LaneDropsFile.
+export type LaneDropKind = "merge" | "narrowing";
+
+export interface LatLon {
+  lat: number;
+  lon: number;
+}
+
+export interface LaneDropRoad {
+  osm_way_id: number;
+  name: string;
+  ref: string;
+  class: string;
+  lanes: number;
+  lanes_inferred: boolean;
+}
+
+export interface LaneDropConfirmation {
+  name: string;
+  source: string;
+}
+
+export interface LaneDrop {
+  rank: number;
+  key: string;
+  kind: LaneDropKind;
+  pos: LatLon;
+  lanes_in: number;
+  lanes_out: number;
+  lanes_lost: number;
+  squeeze: number;
+  from: LaneDropRoad[];
+  to: LaneDropRoad[];
+  lanes_inferred: boolean;
+  confirmed: LaneDropConfirmation | null;
+}
+
+export interface LaneDropsFile {
+  corridor: string;
+  osm_date: string;
+  generated_at: string;
+  ranking: string;
+  assumptions: string[];
+  drops: LaneDrop[];
+}

@@ -1,0 +1,3309 @@
+{
+  "corridor": "kemuning-pj",
+  "osm_date": "2026-11-22",
+  "generated_at": "2026-11-22T22:33:12Z",
+  "ranking": "Biggest squeeze first: lanes out ÷ lanes in, smallest first; ties go to the drop losing more lanes.",
+  "assumptions": [
+    "Counts lanes only. It does not know how many cars use each road, so a small drop with heavy traffic can jam worse than a big one.",
+    "Only highways and their ramps ([motorway motorway_link trunk trunk_link]) on or next to [E5 E11].",
+    "Junctions with traffic signals are skipped: movements take turns there, so more lanes in than out is normal.",
+    "Drops within 400 m of a toll booth are skipped: plazas widen briefly and narrow back.",
+    "Lane counts come from OpenStreetMap; untagged roads use a class default and are flagged lanes_inferred."
+  ],
+  "drops": [
+    {
+      "rank": 1,
+      "key": "node:142431119",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0183559,
+        "lon": 101.53903620000001
+      },
+      "lanes_in": 6,
+      "lanes_out": 3,
+      "lanes_lost": 3,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 362684994,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": true
+        },
+        {
+          "osm_way_id": 1165118313,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 25774683,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": true
+        }
+      ],
+      "lanes_inferred": true,
+      "confirmed": null
+    },
+    {
+      "rank": 2,
+      "key": "node:2288905945",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0205680000000004,
+        "lon": 101.59532080000001
+      },
+      "lanes_in": 6,
+      "lanes_out": 3,
+      "lanes_lost": 3,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 591142751,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": true
+        },
+        {
+          "osm_way_id": 1163589694,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1163589694,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": true,
+      "confirmed": null
+    },
+    {
+      "rank": 3,
+      "key": "way:1088371555\u003e274056658",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0631125000000003,
+        "lon": 101.5947256
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 1088371555,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 274056658,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 4,
+      "key": "way:1160384630\u003e726768072",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9805186000000004,
+        "lon": 101.65868350000001
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 1160384630,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 726768072,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 5,
+      "key": "way:1163763700\u003e776023396",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.1128449000000002,
+        "lon": 101.6049093
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 1163763700,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 776023396,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 6,
+      "key": "way:157226372\u003e1303695741",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9863304000000004,
+        "lon": 101.5050394
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 157226372,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1303695741,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 7,
+      "key": "way:498339374\u003e776805373",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0879320000000003,
+        "lon": 101.61288880000001
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 498339374,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 776805373,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 8,
+      "key": "way:627467523\u003e777849538",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.1224027000000003,
+        "lon": 101.62000540000001
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 627467523,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 777849538,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 9,
+      "key": "way:766355571\u003e779929779",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9805989000000004,
+        "lon": 101.64495950000001
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 766355571,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 779929779,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 10,
+      "key": "way:776834765\u003e776308855",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0717017,
+        "lon": 101.61373470000001
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 776834765,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 776308855,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 11,
+      "key": "way:777824325\u003e777824327",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.1119174000000003,
+        "lon": 101.5969771
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 777824325,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 777824327,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 12,
+      "key": "way:777824326\u003e777824324",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.1124323,
+        "lon": 101.59764510000001
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 777824326,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 777824324,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 13,
+      "key": "way:779715084\u003e23078095",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0184677,
+        "lon": 101.61046010000001
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 779715084,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 23078095,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 14,
+      "key": "way:779999499\u003e131890805",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0298947000000003,
+        "lon": 101.6150489
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 779999499,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 131890805,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 15,
+      "key": "way:780557324\u003e192886336",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0443477000000003,
+        "lon": 101.6191965
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 780557324,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 192886336,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 16,
+      "key": "way:780644841\u003e1088371557",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0690423,
+        "lon": 101.640494
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 780644841,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1088371557,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 17,
+      "key": "way:935069045\u003e1303695743",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9846613000000004,
+        "lon": 101.5020016
+      },
+      "lanes_in": 2,
+      "lanes_out": 1,
+      "lanes_lost": 1,
+      "squeeze": 0.5,
+      "from": [
+        {
+          "osm_way_id": 935069045,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1303695743,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 18,
+      "key": "node:142413442",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0324956000000003,
+        "lon": 101.552935
+      },
+      "lanes_in": 5,
+      "lanes_out": 3,
+      "lanes_lost": 2,
+      "squeeze": 0.6,
+      "from": [
+        {
+          "osm_way_id": 23036367,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": true
+        },
+        {
+          "osm_way_id": 1303695729,
+          "name": "Persimpangan Hicom",
+          "ref": "507",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 23036367,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": true
+        }
+      ],
+      "lanes_inferred": true,
+      "confirmed": null
+    },
+    {
+      "rank": 19,
+      "key": "node:1436221075",
+      "kind": "merge",
+      "pos": {
+        "lat": 2.9906816000000003,
+        "lon": 101.62072590000001
+      },
+      "lanes_in": 5,
+      "lanes_out": 3,
+      "lanes_lost": 2,
+      "squeeze": 0.6,
+      "from": [
+        {
+          "osm_way_id": 758468543,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 780269331,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1513155202,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 20,
+      "key": "node:1749436822",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0054577,
+        "lon": 101.5287407
+      },
+      "lanes_in": 5,
+      "lanes_out": 3,
+      "lanes_lost": 2,
+      "squeeze": 0.6,
+      "from": [
+        {
+          "osm_way_id": 23036366,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 164421108,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 23036366,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 21,
+      "key": "node:33987957",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0403127000000003,
+        "lon": 101.5572807
+      },
+      "lanes_in": 5,
+      "lanes_out": 3,
+      "lanes_lost": 2,
+      "squeeze": 0.6,
+      "from": [
+        {
+          "osm_way_id": 18276942,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 1303695727,
+          "name": "Persimpangan Hicom",
+          "ref": "507",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 135117901,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 22,
+      "key": "way:1116728166\u003e1116932342",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0509925,
+        "lon": 101.5634457
+      },
+      "lanes_in": 5,
+      "lanes_out": 3,
+      "lanes_lost": 2,
+      "squeeze": 0.6,
+      "from": [
+        {
+          "osm_way_id": 1116728166,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1116932342,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 23,
+      "key": "node:14306621988",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0701369,
+        "lon": 101.644644
+      },
+      "lanes_in": 6,
+      "lanes_out": 4,
+      "lanes_lost": 2,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 1570431896,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 1570431897,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1570431897,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 24,
+      "key": "node:2919814546",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0543345000000004,
+        "lon": 101.6203732
+      },
+      "lanes_in": 6,
+      "lanes_out": 4,
+      "lanes_lost": 2,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 288414106,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 2,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 288414107,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 288414107,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 25,
+      "key": "node:5780572023",
+      "kind": "merge",
+      "pos": {
+        "lat": 2.9966243,
+        "lon": 101.61435700000001
+      },
+      "lanes_in": 6,
+      "lanes_out": 4,
+      "lanes_lost": 2,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 227085166,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 758712840,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 227085166,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 26,
+      "key": "node:656145747",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.1126850000000004,
+        "lon": 101.60798580000001
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 607249007,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 51396983,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 27,
+      "key": "way:106797382\u003e777824325",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.1112212,
+        "lon": 101.5964326
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 106797382,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 777824325,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 28,
+      "key": "way:1160377192\u003e1160377189",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9812471,
+        "lon": 101.6543754
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 1160377192,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1160377189,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 29,
+      "key": "way:1160377194\u003e1160377193",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9810597000000003,
+        "lon": 101.65603
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 1160377194,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1160377193,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 30,
+      "key": "way:1160384631\u003e1160384630",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9806793000000003,
+        "lon": 101.65841830000001
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 1160384631,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1160384630,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 31,
+      "key": "way:148018437\u003e1116586907",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0633318000000003,
+        "lon": 101.5926582
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 148018437,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1116586907,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": {
+        "name": "KESAS exit 510, left into Subang",
+        "source": "Tim, local driver, checked on Street View 2026-11-22"
+      }
+    },
+    {
+      "rank": 32,
+      "key": "way:604094060\u003e1160377184",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9809435,
+        "lon": 101.6499591
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 604094060,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1160377184,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 33,
+      "key": "way:766330364\u003e779924914",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9811073,
+        "lon": 101.6521429
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 766330364,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 779924914,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 34,
+      "key": "way:776805374\u003e498339374",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0854655,
+        "lon": 101.61321550000001
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 776805374,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 498339374,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 35,
+      "key": "way:779715077\u003e779715078",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0196704000000003,
+        "lon": 101.6107819
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 779715077,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 779715078,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 36,
+      "key": "way:779726084\u003e779726085",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0240716,
+        "lon": 101.6143189
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 779726084,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 779726085,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 37,
+      "key": "way:779929780\u003e766355571",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9806121,
+        "lon": 101.6454016
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 779929780,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 766355571,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 38,
+      "key": "way:780557327\u003e780557324",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0438271,
+        "lon": 101.6189267
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 780557327,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 780557324,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 39,
+      "key": "way:780557332\u003e780557330",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0428759000000003,
+        "lon": 101.618572
+      },
+      "lanes_in": 3,
+      "lanes_out": 2,
+      "lanes_lost": 1,
+      "squeeze": 0.6666666666666666,
+      "from": [
+        {
+          "osm_way_id": 780557332,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 780557330,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 40,
+      "key": "node:2690798406",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.020274,
+        "lon": 101.60698790000001
+      },
+      "lanes_in": 7,
+      "lanes_out": 5,
+      "lanes_lost": 2,
+      "squeeze": 0.7142857142857143,
+      "from": [
+        {
+          "osm_way_id": 263459947,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": true
+        },
+        {
+          "osm_way_id": 767944975,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 767944974,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": true,
+      "confirmed": null
+    },
+    {
+      "rank": 41,
+      "key": "node:1471940995",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0204632,
+        "lon": 101.5948276
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 133737865,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 765228025,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 767973404,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 42,
+      "key": "node:1694169141",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.1251573,
+        "lon": 101.6223942
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 53155309,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 627526153,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1188316520,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 43,
+      "key": "node:1694461495",
+      "kind": "merge",
+      "pos": {
+        "lat": 2.9866669000000003,
+        "lon": 101.5075324
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 23843825,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 935069054,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 23843825,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 44,
+      "key": "node:1743953924",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0289488,
+        "lon": 101.549609
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 142141200,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 162530515,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": true
+        }
+      ],
+      "lanes_inferred": true,
+      "confirmed": null
+    },
+    {
+      "rank": 45,
+      "key": "node:1749436879",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0025334000000004,
+        "lon": 101.52649860000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 1303695737,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 921568440,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 921568440,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 46,
+      "key": "node:270063797",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.1286143,
+        "lon": 101.6240499
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 24855187,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 2,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 777837019,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 777837017,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 47,
+      "key": "node:3340417283",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0092976,
+        "lon": 101.53200290000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 23036366,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 327303061,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 23036366,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 48,
+      "key": "node:7222892988",
+      "kind": "merge",
+      "pos": {
+        "lat": 2.9806755000000003,
+        "lon": 101.64460100000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 604094061,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 779929779,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 604094061,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 49,
+      "key": "node:7222893077",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0551518,
+        "lon": 101.61432860000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 23078049,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 477380628,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 477380628,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 50,
+      "key": "way:1116728174\u003e1303695718",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0632076,
+        "lon": 101.57243770000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 1116728174,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1303695718,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 51,
+      "key": "way:1163589850\u003e1163589694",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0209954000000003,
+        "lon": 101.58733830000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 1163589850,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1163589694,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 52,
+      "key": "way:1570431891\u003e780644840",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0699556,
+        "lon": 101.6437202
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 1570431891,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 780644840,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 53,
+      "key": "way:1570431897\u003e612892193",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0699249,
+        "lon": 101.646122
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 1570431897,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 612892193,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 54,
+      "key": "way:53561474\u003e1116932339",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0467176,
+        "lon": 101.560868
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 53561474,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1116932339,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 55,
+      "key": "way:765219954\u003e765219955",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0203564000000003,
+        "lon": 101.60592120000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 765219954,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 765219955,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 56,
+      "key": "way:765244714\u003e765252767",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0224433000000004,
+        "lon": 101.58155330000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 765244714,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 765252767,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 57,
+      "key": "way:766307016\u003e766307017",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9863683,
+        "lon": 101.62994520000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 766307016,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 766307017,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 58,
+      "key": "way:767714238\u003e767714237",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.988726,
+        "lon": 101.62217220000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 767714238,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 767714237,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 59,
+      "key": "way:767714240\u003e767714239",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9874622000000004,
+        "lon": 101.62390500000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 767714240,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 767714239,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 60,
+      "key": "way:776839971\u003e1157957438",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0945553,
+        "lon": 101.6022377
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 776839971,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1157957438,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 61,
+      "key": "way:777830913\u003e777830914",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0946890000000002,
+        "lon": 101.60228260000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 777830913,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 777830914,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 62,
+      "key": "way:779721462\u003e779999502",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0241897,
+        "lon": 101.61412920000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 779721462,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 779999502,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 63,
+      "key": "way:779935031\u003e767714243",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9856682,
+        "lon": 101.63092040000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 779935031,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 767714243,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 64,
+      "key": "way:779991720\u003e583121684",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0201244000000003,
+        "lon": 101.61282800000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 779991720,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 583121684,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 65,
+      "key": "way:780625494\u003e501452456",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0668669000000004,
+        "lon": 101.6526049
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 780625494,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 501452456,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 66,
+      "key": "way:780973954\u003e954603648",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0606653,
+        "lon": 101.62131950000001
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 780973954,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 954603648,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 67,
+      "key": "way:781863034\u003e260603907",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0660045,
+        "lon": 101.6569589
+      },
+      "lanes_in": 4,
+      "lanes_out": 3,
+      "lanes_lost": 1,
+      "squeeze": 0.75,
+      "from": [
+        {
+          "osm_way_id": 781863034,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 260603907,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 68,
+      "key": "node:1450816986",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0217017000000004,
+        "lon": 101.5844174
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 563657291,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 1163599610,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1163589695,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 69,
+      "key": "node:271726619",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0255978000000003,
+        "lon": 101.54500150000001
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 1303695731,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 880457611,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 142141200,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": {
+        "name": "Sri Muda entry onto KESAS eastbound",
+        "source": "Tim, local driver, checked on Street View 2026-11-22"
+      }
+    },
+    {
+      "rank": 70,
+      "key": "node:677399597",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0588028,
+        "lon": 101.6197436
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 1571387918,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 31657407,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 984701918,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 71,
+      "key": "node:769988247",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0126128000000003,
+        "lon": 101.61080410000001
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 61815060,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 766315842,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 766315841,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 72,
+      "key": "node:770116304",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0070095,
+        "lon": 101.6114477
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 61815082,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 1171027691,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 2,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 766323337,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 73,
+      "key": "node:770116509",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0011849,
+        "lon": 101.61168590000001
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 130358961,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 1,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 1168175130,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1168175130,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 74,
+      "key": "way:1116586916\u003e1168460616",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0601668,
+        "lon": 101.60182400000001
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 1116586916,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1168460616,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 75,
+      "key": "way:1157623992\u003e773803015",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0298515000000004,
+        "lon": 101.5776402
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 1157623992,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 773803015,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 76,
+      "key": "way:1165332582\u003e1165332581",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0630746,
+        "lon": 101.58903120000001
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 1165332582,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1165332581,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 77,
+      "key": "way:53562541\u003e1116728174",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0629364000000003,
+        "lon": 101.57125350000001
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 53562541,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1116728174,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 78,
+      "key": "way:765219956\u003e765257075",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0173387000000003,
+        "lon": 101.6102836
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 765219956,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 765257075,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 79,
+      "key": "way:767944974\u003e765219954",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0202897,
+        "lon": 101.6067713
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 767944974,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 765219954,
+          "name": "Lebuhraya Damansara–Puchong (Hubungan Puchong Barat)",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 80,
+      "key": "way:777838494\u003e777838495",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.1136129,
+        "lon": 101.59977520000001
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 777838494,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 777838495,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 81,
+      "key": "way:777849543\u003e777849541",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.1158407,
+        "lon": 101.6143706
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 777849543,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 777849541,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 82,
+      "key": "way:779721472\u003e779721469",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0202464,
+        "lon": 101.61212330000001
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 779721472,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 779721469,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 83,
+      "key": "way:780973955\u003e780973954",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0602122,
+        "lon": 101.6208184
+      },
+      "lanes_in": 5,
+      "lanes_out": 4,
+      "lanes_lost": 1,
+      "squeeze": 0.8,
+      "from": [
+        {
+          "osm_way_id": 780973955,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 780973954,
+          "name": "Lebuhraya Shah Alam",
+          "ref": "E5",
+          "class": "motorway",
+          "lanes": 4,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 84,
+      "key": "node:770065479",
+      "kind": "merge",
+      "pos": {
+        "lat": 3.0320786,
+        "lon": 101.61594280000001
+      },
+      "lanes_in": 6,
+      "lanes_out": 5,
+      "lanes_lost": 1,
+      "squeeze": 0.8333333333333334,
+      "from": [
+        {
+          "osm_way_id": 145389540,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 780264346,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 780037538,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 85,
+      "key": "way:773803031\u003e773803030",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0546488000000003,
+        "lon": 101.62001070000001
+      },
+      "lanes_in": 6,
+      "lanes_out": 5,
+      "lanes_lost": 1,
+      "squeeze": 0.8333333333333334,
+      "from": [
+        {
+          "osm_way_id": 773803031,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 6,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 773803030,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 86,
+      "key": "way:780246700\u003e780247871",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 3.0421871,
+        "lon": 101.61868150000001
+      },
+      "lanes_in": 6,
+      "lanes_out": 5,
+      "lanes_lost": 1,
+      "squeeze": 0.8333333333333334,
+      "from": [
+        {
+          "osm_way_id": 780246700,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 6,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 780247871,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 5,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 87,
+      "key": "node:7222840582",
+      "kind": "merge",
+      "pos": {
+        "lat": 2.9812342000000003,
+        "lon": 101.65236460000001
+      },
+      "lanes_in": 7,
+      "lanes_out": 6,
+      "lanes_lost": 1,
+      "squeeze": 0.8571428571428571,
+      "from": [
+        {
+          "osm_way_id": 1160377186,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 7,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 766330364,
+          "name": "",
+          "ref": "",
+          "class": "motorway_link",
+          "lanes": 3,
+          "lanes_inferred": false
+        },
+        {
+          "osm_way_id": 779924915,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 3,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    },
+    {
+      "rank": 88,
+      "key": "way:1160377190\u003e1160377187",
+      "kind": "narrowing",
+      "pos": {
+        "lat": 2.9813031000000003,
+        "lon": 101.65340800000001
+      },
+      "lanes_in": 7,
+      "lanes_out": 6,
+      "lanes_lost": 1,
+      "squeeze": 0.8571428571428571,
+      "from": [
+        {
+          "osm_way_id": 1160377190,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 7,
+          "lanes_inferred": false
+        }
+      ],
+      "to": [
+        {
+          "osm_way_id": 1160377187,
+          "name": "Lebuhraya Damansara–Puchong",
+          "ref": "E11",
+          "class": "motorway",
+          "lanes": 6,
+          "lanes_inferred": false
+        }
+      ],
+      "lanes_inferred": false,
+      "confirmed": null
+    }
+  ]
+}

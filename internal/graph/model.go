@@ -57,6 +57,9 @@ type Segment struct {
 	Signalised    bool    `json:"signalised"` // ends at traffic signals; signal factor applied
 	LengthM       float64 `json:"length_m"`
 	CapacityVPH   int     `json:"capacity_vph"`
+	// End is where this part stops, in travel order. Inside a merged edge
+	// it is the point where the next part (maybe with fewer lanes) begins.
+	End LatLon `json:"end"`
 }
 
 // Graph is the full directed road network for one corridor.
@@ -65,4 +68,8 @@ type Graph struct {
 	OSMDate  string           `json:"osm_date"`
 	Nodes    map[NodeID]*Node `json:"nodes"`
 	Edges    []Edge           `json:"edges"`
+	// TollBooths are barrier=toll_booth nodes on kept roads, sorted by
+	// lat then lon. Plazas widen briefly, so lane-drop detection skips
+	// points near them.
+	TollBooths []LatLon `json:"toll_booths"`
 }

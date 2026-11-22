@@ -12,9 +12,9 @@ Go pipeline turns an OpenStreetMap clip of one Klang Valley corridor into a dire
 
 ## Commands
 ```bash
-make fetch      # download + clip OSM (needs osmium-tool)
-make graph      # cmd/build-graph → data/interim/federal-highway.graph.json
-make analyze    # cmd/analyze → web/public/data/federal-highway/
+make fetch      # Overpass download → data/raw/<corridor>.osm.pbf (needs osmium-tool, jq)
+make graph      # cmd/build-graph → data/interim/kemuning-pj.graph.json
+make analyze    # cmd/analyze → web/public/data/kemuning-pj/
 make test       # go vet ./... && go test ./...
 make web        # cd web && npm ci && npm run build
 make all        # everything above, in order

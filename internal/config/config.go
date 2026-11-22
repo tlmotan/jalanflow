@@ -26,6 +26,45 @@ type Corridor struct {
 	Name  string     `json:"name"`
 	BBox  [4]float64 `json:"bbox"` // minLon, minLat, maxLon, maxLat
 	Gates []Gate     `json:"gates"`
+	// LaneDrops configures lane-drop detection; nil disables it.
+	LaneDrops *LaneDrops `json:"lane_drops"`
+}
+
+// LaneDrops are the settings for finding places where lanes run out.
+type LaneDrops struct {
+	// RouteRefs are the road refs (e.g. "E5") that make up the corridor
+	// route; only drops on these roads or their ramps are reported.
+	RouteRefs []string `json:"route_refs"`
+	// Classes are the highway classes checked (grade-separated roads).
+	Classes []string `json:"classes"`
+	// TollPlazaRadiusM skips drops this close to a toll booth: plazas widen
+	// briefly and narrow back, which is not a real loss of lanes.
+	TollPlazaRadiusM float64 `json:"toll_plaza_radius_m"`
+	Source           string  `json:"source"`
+	// Confirmed are drops checked on the ground, matched by Key.
+	Confirmed []ConfirmedDrop `json:"confirmed"`
+}
+
+// ConfirmedDrop marks one detected drop as checked by a person.
+type ConfirmedDrop struct {
+	// Key is "node:<osm node id>" for a merge or "way:<from>><to>" for a
+	// narrowing between two OSM ways, as printed by cmd/analyze.
+	Key    string `json:"key"`
+	Name   string `json:"name"`
+	Pin    LatLon `json:"pin"` // where the person reported it
+	Source string `json:"source"`
+}
+
+func (l *LaneDrops) validate() error {
+	if len(l.RouteRefs) == 0 || len(l.Classes) == 0 || l.TollPlazaRadiusM <= 0 || l.Source == "" {
+		return fmt.Errorf("lane_drops: need route_refs, classes, toll_plaza_radius_m > 0 and source")
+	}
+	for i, c := range l.Confirmed {
+		if c.Key == "" || c.Name == "" || c.Source == "" {
+			return fmt.Errorf("lane_drops.confirmed[%d]: need key, name and source", i)
+		}
+	}
+	return nil
 }
 
 // ClassDefaults are per-road-class assumptions.
@@ -50,6 +89,11 @@ func LoadCorridor(path string) (*Corridor, error) {
 	}
 	if c.ID == "" || len(c.Gates) < 2 {
 		return nil, fmt.Errorf("corridor %s: need id and at least 2 gates", path)
+	}
+	if c.LaneDrops != nil {
+		if err := c.LaneDrops.validate(); err != nil {
+			return nil, fmt.Errorf("corridor %s: %w", path, err)
+		}
 	}
 	return &c, nil
 }

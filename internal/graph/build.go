@@ -3,6 +3,7 @@ package graph
 import (
 	"fmt"
 	"math"
+	"sort"
 
 	"github.com/tlmotan/jalanflow/internal/config"
 	"github.com/tlmotan/jalanflow/internal/osm"
@@ -62,6 +63,7 @@ func Build(d *osm.Data, cfg *config.Capacity, corridor string) (*Graph, error) {
 	if !d.Timestamp.IsZero() {
 		g.OSMDate = d.Timestamp.UTC().Format("2006-01-02")
 	}
+	g.TollBooths = tollBooths(d)
 	for i := range g.Edges {
 		e := &g.Edges[i]
 		e.ID = EdgeID(i)
@@ -74,6 +76,26 @@ func Build(d *osm.Data, cfg *config.Capacity, corridor string) (*Graph, error) {
 	}
 	return g, nil
 }
+
+// tollBooths returns toll-booth positions in a stable order.
+func tollBooths(d *osm.Data) []LatLon {
+	res := []LatLon{}
+	for _, n := range d.Nodes {
+		if n.TollBooth {
+			res = append(res, LatLon{Lat: n.Lat, Lon: n.Lon})
+		}
+	}
+	sort.Slice(res, func(i, j int) bool {
+		if res[i].Lat != res[j].Lat {
+			return res[i].Lat < res[j].Lat
+		}
+		return res[i].Lon < res[j].Lon
+	})
+	return res
+}
+
+// HaversineM returns the great-circle distance between two points in metres.
+func HaversineM(a, b LatLon) float64 { return haversineM(a, b) }
 
 // splitNodes returns the nodes where ways must be cut into segments.
 func splitNodes(d *osm.Data) map[int64]bool {
@@ -136,6 +158,7 @@ func newArc(d *osm.Data, cfg *config.Capacity, w osm.Way, class HighwayClass, id
 		Signalised:    signal,
 		LengthM:       e.LengthM,
 		CapacityVPH:   e.CapacityVPH,
+		End:           geom[len(geom)-1],
 	}}
 	return e
 }

@@ -2,7 +2,7 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { FixesFile } from "./types";
 
-const CORRIDOR = "federal-highway";
+const CORRIDOR = "kemuning-pj";
 const DATA = `/data/${CORRIDOR}`;
 
 // Free OSM-based style. Verify terms before launch (ARCHITECTURE.md §2).

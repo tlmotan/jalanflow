@@ -16,10 +16,11 @@ import (
 
 // Node is an OSM node referenced by at least one kept way.
 type Node struct {
-	ID      int64
-	Lat     float64
-	Lon     float64
-	Signals bool // highway=traffic_signals
+	ID        int64
+	Lat       float64
+	Lon       float64
+	Signals   bool // highway=traffic_signals
+	TollBooth bool // barrier=toll_booth
 }
 
 // Way is an OSM way whose highway class is included.
@@ -143,10 +144,11 @@ func read(ctx context.Context, open openFunc, opt Options) (*Data, error) {
 			return
 		}
 		d.Nodes[int64(n.ID)] = Node{
-			ID:      int64(n.ID),
-			Lat:     n.Lat,
-			Lon:     n.Lon,
-			Signals: n.Tags.Find("highway") == "traffic_signals",
+			ID:        int64(n.ID),
+			Lat:       n.Lat,
+			Lon:       n.Lon,
+			Signals:   n.Tags.Find("highway") == "traffic_signals",
+			TollBooth: n.Tags.Find("barrier") == "toll_booth",
 		}
 	})
 	if err != nil {

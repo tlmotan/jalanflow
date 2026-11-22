@@ -71,7 +71,7 @@ func arcs(g *Graph) []arc {
 
 func TestBuild(t *testing.T) {
 	trunk := func(kv ...string) map[string]string {
-		return t2(append([]string{"highway", "trunk", "name", "Federal Highway"}, kv...)...)
+		return t2(append([]string{"highway", "trunk", "name", "Lebuhraya Shah Alam"}, kv...)...)
 	}
 	tests := []struct {
 		name    string
@@ -241,11 +241,11 @@ func TestBuildErrors(t *testing.T) {
 func TestBuildOSMDate(t *testing.T) {
 	d := data([]way{{10, []int64{1, 2}, t2("highway", "trunk")}})
 	d.Timestamp = time.Date(2026, 11, 20, 21, 0, 0, 0, time.UTC)
-	g, err := Build(d, testCfg, "federal-highway")
+	g, err := Build(d, testCfg, "kemuning-pj")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if g.OSMDate != "2026-11-20" || g.Corridor != "federal-highway" {
+	if g.OSMDate != "2026-11-20" || g.Corridor != "kemuning-pj" {
 		t.Fatalf("got date %q corridor %q", g.OSMDate, g.Corridor)
 	}
 }
@@ -256,5 +256,29 @@ func TestHaversine(t *testing.T) {
 	want := earthRadiusM * math.Pi / 180
 	if math.Abs(got-want) > 1e-6 {
 		t.Fatalf("got %f, want %f", got, want)
+	}
+}
+
+func TestBuildTollBoothsAndPartEnd(t *testing.T) {
+	d := data([]way{
+		{1, []int64{1, 2, 3}, t2("highway", "trunk", "oneway", "yes", "lanes", "3")},
+		{2, []int64{3, 4}, t2("highway", "trunk", "oneway", "yes", "lanes", "2")},
+	})
+	n := d.Nodes[2]
+	n.TollBooth = true
+	d.Nodes[2] = n
+	g, err := Build(d, testCfg, "t")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := []LatLon{{Lat: 3.0, Lon: 101.002}}; !reflect.DeepEqual(g.TollBooths, want) {
+		t.Errorf("TollBooths = %v, want %v", g.TollBooths, want)
+	}
+	if len(g.Edges) != 1 || len(g.Edges[0].Parts) != 2 {
+		t.Fatalf("want 1 merged edge with 2 parts, got %+v", g.Edges)
+	}
+	// Part 1 (3 lanes) ends at node 3, where the 2-lane part begins.
+	if got, want := g.Edges[0].Parts[0].End, (LatLon{Lat: 3.0, Lon: 101.003}); got != want {
+		t.Errorf("Parts[0].End = %v, want %v", got, want)
 	}
 }

@@ -1,0 +1,63 @@
+{
+  "id": "kemuning-pj",
+  "name": "Kota Kemuning - Petaling Jaya (KESAS E5 + LDP E11)",
+  "_note": "Gates checked against OSM 2026-11-22: west = KESAS mainline just east of exit 506B Kota Kemuning; east = LDP mainline at exit 1108 Taman Megah, PJ. Each pos sits between the two carriageways, so cmd/analyze must snap per direction to a node whose road runs the right way (KESAS eastbound / LDP northbound for inbound). The bbox covers Kota Kemuning to TTDI plus the parallel routes (Federal Highway, NPE, Subang, Puchong) a driver could use instead.",
+  "bbox": [
+    101.5,
+    2.98,
+    101.66,
+    3.14
+  ],
+  "gates": [
+    {
+      "name": "Kota Kemuning (KESAS exit 506B)",
+      "pos": {
+        "lat": 3.0215,
+        "lon": 101.545
+      },
+      "role": "west"
+    },
+    {
+      "name": "Petaling Jaya (LDP exit 1108 Taman Megah)",
+      "pos": {
+        "lat": 3.113,
+        "lon": 101.605
+      },
+      "role": "east"
+    }
+  ],
+  "lane_drops": {
+    "route_refs": [
+      "E5",
+      "E11"
+    ],
+    "classes": [
+      "motorway",
+      "motorway_link",
+      "trunk",
+      "trunk_link"
+    ],
+    "toll_plaza_radius_m": 400,
+    "source": "Chosen 2026-11-22 by checking the real graph: 400 m clears the widened plaza approaches on KESAS and LDP (11-15 booth lanes) without hiding the Sri Muda or exit-510 drops. See docs/decisions/0004-lane-drops-headline.md",
+    "confirmed": [
+      {
+        "key": "node:271726619",
+        "name": "Sri Muda entry onto KESAS eastbound",
+        "pin": {
+          "lat": 3.0245507704006007,
+          "lon": 101.54281308204921
+        },
+        "source": "Tim, local driver, checked on Street View 2026-11-22"
+      },
+      {
+        "key": "way:148018437>1116586907",
+        "name": "KESAS exit 510, left into Subang",
+        "pin": {
+          "lat": 3.063249022948336,
+          "lon": 101.59109636839865
+        },
+        "source": "Tim, local driver, checked on Street View 2026-11-22"
+      }
+    ]
+  }
+}

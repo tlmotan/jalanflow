@@ -7,7 +7,8 @@
 Phase 1 is a **batch pipeline + static website**. No server, no database.
 
 ```
- Geofabrik .osm.pbf ──► osmium extract (bbox) ──► data/raw/<corridor>.osm.pbf
+ Overpass API (bbox + road classes) ──► osmium cat ──► data/raw/<corridor>.osm.pbf
+ (or: Geofabrik .osm.pbf ──► osmium extract (bbox), OSM_SOURCE=geofabrik)
                                                         │
                                           cmd/build-graph (Go)
                                                         ▼
@@ -30,7 +31,8 @@ Why two Go commands, not one: building the graph is slow and changes rarely; ana
 |---|---|---|
 | Language (engine) | **Go 1.23+** | Resume goal; fast; single static binaries |
 | OSM parsing | `github.com/paulmach/osm` (+ `osmpbf`) | Mature Go OSM library; streams PBF; built with `CGO_ENABLED=0` (set in Makefile) so no C zlib / pkg-config is needed |
-| Clipping | `osmium-tool` (CLI, external) | Far faster and more correct than clipping in Go; one shell line |
+| Fetching | Overpass API by default (a few MB: only the corridor bbox and included classes, with `osm_base` date written into the PBF header); Geofabrik extract + `osmium extract` as fallback | The full Geofabrik extract is ~250 MB and was impractically slow to download; Overpass returns complete ways like `--strategy complete_ways` |
+| Format conversion / clipping | `osmium-tool` (CLI, external) | XML→PBF and bbox clipping; faster and more correct than doing it in Go |
 | Max flow | **Own Dinic's implementation** in `internal/flow` | Small (~150 lines), good interview talking point, no good Go lib |
 | Config | JSON files in `config/` | Zero dependencies; std `encoding/json` |
 | Output | GeoJSON (RFC 7946) + JSON | Any map library reads it |
@@ -64,7 +66,8 @@ Why two Go commands, not one: building the graph is slow and changes rarely; ana
 ### 3.3 Sources and sinks ("gates")
 - Each corridor config lists **gates**: named points (lat/lon) snapped to the nearest graph node, each marked `source` or `sink`.
 - A **super-source** links to all source gates and a **super-sink** from all sink gates, with infinite capacity.
-- Run per **direction** (`inbound`: Shah Alam → KL; `outbound`: reverse) by swapping gate roles.
+- **Gate snapping is per direction.** On a dual carriageway the nearest node may be on the wrong side, so a source gate snaps to the nearest node whose outgoing road runs in the direction of travel, and a sink to one whose incoming road does (KESAS eastbound / LDP northbound for inbound). Checked 2026-11-22: naive nearest-node snapping put a gate on a side street and capped max flow at that street.
+- Run per **direction** (`inbound`: Kota Kemuning → PJ; `outbound`: reverse) by swapping gate roles.
 - Max flow therefore = the most vehicles/hour the network can move between the gate sets. The min cut = the set of road segments that together cap that number.
 
 ### 3.4 Algorithms
@@ -104,6 +107,7 @@ type Node struct {
     Pos     LatLon
     Signals bool // highway=traffic_signals
 }
+// osm.Node also reads barrier=toll_booth; booths end up in Graph.TollBooths.
 
 type HighwayClass string // "motorway", "trunk", "primary", ... (+ "_link")
 
@@ -112,7 +116,7 @@ type Edge struct {
     From, To      NodeID
     OSMWayIDs     []int64   // ways merged into this edge
     Name          string
-    Ref           string    // e.g. "FT2"
+    Ref           string    // e.g. "E5"
     Class         HighwayClass
     Lanes         int       // per direction
     LanesInferred bool
@@ -133,6 +137,7 @@ type Segment struct {
     Signalised    bool    // ends at traffic signals
     LengthM       float64
     CapacityVPH   int
+    End           LatLon  // where this part stops; inside an edge, where the next part begins
 }
 
 type Graph struct {
@@ -140,6 +145,7 @@ type Graph struct {
     OSMDate     string // from the PBF header / file
     Nodes       map[NodeID]*Node
     Edges       []Edge
+    TollBooths  []LatLon // barrier=toll_booth nodes, sorted; lane drops skip points near them
 }
 ```
 
@@ -147,7 +153,7 @@ type Graph struct {
 
 ```go
 type Corridor struct {
-    ID      string     // "federal-highway"
+    ID      string     // "kemuning-pj"
     Name    string
     BBox    [4]float64 // minLon, minLat, maxLon, maxLat
     Gates   []Gate
@@ -156,6 +162,14 @@ type Gate struct {
     Name string
     Pos  LatLon
     Role string // "west" | "east"  (direction decides which is source)
+}
+// Corridor.LaneDrops (optional; cmd/analyze needs it):
+type LaneDrops struct {
+    RouteRefs        []string // ["E5","E11"]: only drops on these roads or ramps touching them
+    Classes          []string // grade-separated classes checked
+    TollPlazaRadiusM float64  // skip drops this close to a toll booth
+    Source           string
+    Confirmed        []ConfirmedDrop // {key, name, pin, source}; key must match a drop or analyze fails
 }
 ```
 
@@ -185,6 +199,26 @@ type Fix struct {
 }
 ```
 
+### 4.3b Lane drops (`internal/lanedrop`) — the site headline (decision 0004)
+
+```go
+type Drop struct {
+    Rank          int     // 1 = biggest squeeze
+    Key           string  // "node:<osm node>" (merge) | "way:<from>><to>" (narrowing); stable across rebuilds
+    Kind          Kind    // "merge" | "narrowing"
+    Pos           LatLon
+    LanesIn, LanesOut, LanesLost int
+    Squeeze       float64 // LanesOut / LanesIn
+    From, To      []Road  // {osm_way_id, name, ref, class, lanes, lanes_inferred}
+    LanesInferred bool    // any lane count here is a class default
+    Confirmed     *Confirmation // {name, source} or null
+}
+```
+- **Merge:** node without signals, all roads in `Classes`, one on `RouteRefs`, Σ lanes in > Σ lanes out. Lanes are taken from the part of each edge that touches the node, not the edge minimum.
+- **Narrowing:** consecutive `Edge.Parts` where lanes fall; edge on the route or a ramp touching it. Position = `Parts[k-1].End`.
+- Skip within `TollPlazaRadiusM` of a toll booth. Order: squeeze asc, lanes lost desc, key.
+- Lanes only: no demand, so rank ≠ how bad the jam is. Said on the site.
+
 ### 4.4 Output files (`web/public/data/<corridor>/`)
 
 **`edges.geojson`** — FeatureCollection, one LineString per edge **per direction analysed**:
@@ -192,7 +226,7 @@ type Fix struct {
 { "type": "Feature",
   "geometry": { "type": "LineString", "coordinates": [[101.5, 3.07], ...] },
   "properties": {
-    "id": 42, "dir": "inbound", "name": "Federal Highway", "ref": "FT2",
+    "id": 42, "dir": "inbound", "name": "Lebuhraya Shah Alam", "ref": "E5",
     "class": "trunk", "lanes": 3, "lanes_inferred": false,
     "capacity_vph": 5400, "flow_vph": 5400, "utilisation": 1.0, "is_cut": true
   } }
@@ -200,9 +234,11 @@ type Fix struct {
 
 **`fixes.json`** — `{ "inbound": Fix[], "outbound": Fix[] }`, sorted by `GainVPH` desc.
 
+**`lane_drops.json`** — `{ corridor, osm_date, generated_at, ranking, assumptions[], drops: Drop[] }` (`export.LaneDropsFile`), drops in rank order.
+
 **`manifest.json`**
 ```json
-{ "corridor": "federal-highway", "generated_at": "2026-11-21T00:00:00Z",
+{ "corridor": "kemuning-pj", "generated_at": "2026-11-21T00:00:00Z",
   "osm_date": "2026-11-20", "pipeline_version": "0.1.0",
   "capacity_config_hash": "sha256:...",
   "max_flow_vph": { "inbound": 0, "outbound": 0 },
@@ -227,11 +263,12 @@ jalanflow/
 │   ├── osm/                   read PBF, filter ways, tag parsing (lanes, oneway)
 │   ├── graph/                 data model, build, simplify, capacity
 │   ├── flow/                  Dinic, min cut (pure, no I/O)
+│   ├── lanedrop/              lane drops: merges and narrowings on the route
 │   ├── fixes/                 +1 lane ranking, difficulty heuristic
 │   └── export/                GeoJSON / JSON writers
 ├── config/
 │   ├── capacity-defaults.json
-│   └── corridors/federal-highway.json
+│   └── corridors/kemuning-pj.json
 ├── data/                      git-ignored: raw/, interim/
 ├── testdata/                  tiny hand-made graphs + OSM snippets for tests
 ├── scripts/fetch-osm.sh       download + osmium clip
@@ -239,7 +276,7 @@ jalanflow/
 └── docs/                      PRD, ARCHITECTURE(-ESSENTIALS), REVIEW, decisions/
 ```
 
-**Dependency rule:** `flow` depends on nothing in the repo. `graph` depends on `osm` and `config`. `fixes` depends on `flow` and `graph`. `export` depends on `graph`, `flow`, `fixes`. `cmd/*` wire things together. No package imports `cmd`.
+**Dependency rule:** `flow` depends on nothing in the repo. `graph` depends on `osm` and `config`. `fixes` depends on `flow` and `graph`. `lanedrop` depends on `graph` and `config`. `export` depends on `graph`, `flow`, `fixes`, `lanedrop`. `cmd/*` wire things together. No package imports `cmd`.
 
 ## 6. Testing
 

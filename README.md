@@ -1,6 +1,6 @@
 # JalanFlow (working name)
 
-Finds the roads that limit traffic flow on Klang Valley corridors, using OpenStreetMap data and max flow / min cut, and ranks cheap fixes. Phase 1: Federal Highway, Shah Alam ↔ KL.
+Finds the roads that limit traffic flow on Klang Valley corridors, using OpenStreetMap data and max flow / min cut, and ranks cheap fixes. Phase 1: Kota Kemuning ↔ Petaling Jaya via KESAS (E5) and LDP (E11).
 
 - What and why: [docs/PRD.md](docs/PRD.md)
 - How: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) (short version: [ARCHITECTURE-ESSENTIALS](docs/ARCHITECTURE-ESSENTIALS.md))

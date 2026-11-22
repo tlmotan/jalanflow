@@ -1,5 +1,45 @@
-// Package export writes edges.geojson, fixes.json and manifest.json.
+// Package export writes edges.geojson, fixes.json, lane_drops.json and
+// manifest.json.
 package export
+
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"github.com/tlmotan/jalanflow/internal/lanedrop"
+)
+
+// LaneDropsFile is lane_drops.json (mirror in web/src/types.ts).
+type LaneDropsFile struct {
+	Corridor    string `json:"corridor"`
+	OSMDate     string `json:"osm_date"`
+	GeneratedAt string `json:"generated_at"`
+	// Ranking explains the order of Drops in plain words.
+	Ranking     string          `json:"ranking"`
+	Assumptions []string        `json:"assumptions"`
+	Drops       []lanedrop.Drop `json:"drops"`
+}
+
+// WriteLaneDrops writes dir/lane_drops.json.
+func WriteLaneDrops(dir string, f LaneDropsFile) error {
+	return writeJSON(filepath.Join(dir, "lane_drops.json"), f)
+}
+
+func writeJSON(path string, v any) error {
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		return fmt.Errorf("create dir for %s: %w", path, err)
+	}
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		return fmt.Errorf("encode %s: %w", path, err)
+	}
+	if err := os.WriteFile(path, append(b, '\n'), 0o644); err != nil {
+		return fmt.Errorf("write %s: %w", path, err)
+	}
+	return nil
+}
 
 // Manifest records how a data release was produced.
 type Manifest struct {

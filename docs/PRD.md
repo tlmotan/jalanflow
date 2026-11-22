@@ -1,6 +1,6 @@
 # PRD — JalanFlow (working name)
 
-> Status: v0.2 (revised after REVIEW.md) · Owner: Tim Tan · Last updated: 2026-11-21
+> Status: v0.3 (corridor switched, see decisions/0003) · Owner: Tim Tan · Last updated: 2026-11-22
 
 ## 1. One-liner
 
@@ -25,11 +25,12 @@ A public website that models Klang Valley roads as a flow network and shows, wit
 ## 4. Goals and non-goals
 
 ### Goals (Phase 1 — one corridor)
-1. Find the **capacity bottleneck** (min cut) on one corridor: **Federal Highway, Shah Alam ↔ KL** plus the parallel roads a driver could realistically use.
+1. Find the **capacity bottleneck** (min cut) on one corridor: **Kota Kemuning ↔ Petaling Jaya via KESAS (E5) and LDP (E11)** plus the parallel roads a driver could realistically use.
 2. Show it on a public map: every road coloured by how close it is to being the limiting cut.
 3. For each bottleneck segment, test **"+1 lane"** and report the capacity gained, so knock-on bottlenecks (the jam just moves) become visible.
 4. Label each fix **easy / medium / hard** from data we actually have (road class, toll/concession, bridge/tunnel).
 5. Every number on the site traces back to a stated assumption.
+6. **Headline: lane drops on the route** (KESAS + LDP and their ramps), biggest squeeze first, with spots confirmed by local drivers marked. Lanes only; the site says it does not know traffic volumes (decision 0004).
 
 ### Non-goals (Phase 1)
 - ❌ Predicting real travel times or real-time jams.
