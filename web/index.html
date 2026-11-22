@@ -3,16 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JalanFlow — Klang Valley road bottlenecks</title>
+    <title>JalanFlow — where lanes run out on KESAS + LDP</title>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
     <div id="map"></div>
     <aside id="panel">
-      <h1>Kota Kemuning → PJ bottlenecks (KESAS + LDP)</h1>
-      <p class="note">Shows where the road network can carry the <b>least</b> traffic, not live jams. <a href="#method">How this works</a></p>
-      <h2>Top fixes</h2>
-      <ol id="fixes"></ol>
+      <h1>Where lanes run out: Kota Kemuning → PJ</h1>
+      <p class="note">
+        Places on KESAS (E5), LDP (E11) and their ramps where <b>more lanes come in than carry on</b>.
+        Ranked by size of the squeeze. This counts lanes, not cars, so it can't say which one jams worst.
+        <a href="#method">How this works</a>
+      </p>
+      <div class="legend">
+        <span><i class="dot confirmed"></i>Confirmed by a local driver</span>
+        <span><i class="dot"></i>Lane drop</span>
+        <span><i class="dot guessed"></i>Lane count guessed</span>
+      </div>
+
+      <h2>Confirmed jam spots</h2>
+      <ol id="confirmed" class="drops"></ol>
+
+      <h2 id="all-heading">All lane drops</h2>
+      <ol id="drops" class="drops"></ol>
+
+      <section id="fixes-section" hidden>
+        <h2>Top fixes</h2>
+        <ol id="fixes"></ol>
+      </section>
+
+      <details id="method">
+        <summary>How this works</summary>
+        <p id="ranking" class="note"></p>
+        <ul id="assumptions" class="note"></ul>
+        <p class="note" id="osm-date"></p>
+      </details>
       <footer>© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> · data ODbL</footer>
     </aside>
     <script type="module" src="/src/main.ts"></script>

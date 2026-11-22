@@ -209,13 +209,14 @@ type Drop struct {
     Pos           LatLon
     LanesIn, LanesOut, LanesLost int
     Squeeze       float64 // LanesOut / LanesIn
-    From, To      []Road  // {osm_way_id, name, ref, class, lanes, lanes_inferred}
+    From, To      []Road  // {osm_way_id, name, ref, class, lanes, lanes_inferred, leaves, joins}
     LanesInferred bool    // any lane count here is a class default
     Confirmed     *Confirmation // {name, source} or null
 }
 ```
 - **Merge:** node without signals, all roads in `Classes`, one on `RouteRefs`, Σ lanes in > Σ lanes out. Lanes are taken from the part of each edge that touches the node, not the edge minimum.
 - **Narrowing:** consecutive `Edge.Parts` where lanes fall; edge on the route or a ramp touching it. Position = `Parts[k-1].End`.
+- Unnamed ramps get `leaves` / `joins`: the nearest named road (ref, else name) where the ramp starts / ends, found breadth-first through other ramps (ties → lowest edge ID). The site titles ramps "ramp E5 → E11".
 - Skip within `TollPlazaRadiusM` of a toll booth. Order: squeeze asc, lanes lost desc, key.
 - Lanes only: no demand, so rank ≠ how bad the jam is. Said on the site.
 

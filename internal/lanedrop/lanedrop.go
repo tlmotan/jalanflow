@@ -32,6 +32,11 @@ type Road struct {
 	Class         string `json:"class"`
 	Lanes         int    `json:"lanes"`
 	LanesInferred bool   `json:"lanes_inferred"`
+	// Leaves and Joins name the nearest named road (ref, else name) where
+	// an unnamed ramp starts and ends, following other ramps on the way.
+	// Empty for roads that have a name or ref, or if none is found.
+	Leaves string `json:"leaves"`
+	Joins  string `json:"joins"`
 }
 
 // Confirmation records that a person checked the drop on the ground.
@@ -96,6 +101,22 @@ func Find(g *graph.Graph, cfg config.LaneDrops) ([]Drop, error) {
 			}
 		}
 		return false
+	}
+
+	road := func(e *graph.Edge, p graph.Segment) Road {
+		r := Road{
+			OSMWayID:      p.OSMWayID,
+			Name:          e.Name,
+			Ref:           e.Ref,
+			Class:         string(e.Class),
+			Lanes:         p.Lanes,
+			LanesInferred: p.LanesInferred,
+		}
+		if isRamp(e) {
+			r.Leaves = nearestNamed(e.From, ins, func(x *graph.Edge) graph.NodeID { return x.From })
+			r.Joins = nearestNamed(e.To, outs, func(x *graph.Edge) graph.NodeID { return x.To })
+		}
+		return r
 	}
 
 	var drops []Drop
@@ -193,15 +214,46 @@ func (d *Drop) finish() bool {
 	return d.LanesLost > 0
 }
 
-func road(e *graph.Edge, p graph.Segment) Road {
-	return Road{
-		OSMWayID:      p.OSMWayID,
-		Name:          e.Name,
-		Ref:           e.Ref,
-		Class:         string(e.Class),
-		Lanes:         p.Lanes,
-		LanesInferred: p.LanesInferred,
+// isRamp reports whether e is an unnamed link road (OSM *_link).
+func isRamp(e *graph.Edge) bool {
+	return strings.HasSuffix(string(e.Class), "_link") && e.Ref == "" && e.Name == ""
+}
+
+// label is how a named road is called: its ref, else its name.
+func label(e *graph.Edge) string {
+	if e.Ref != "" {
+		return e.Ref
 	}
+	return e.Name
+}
+
+// nearestNamed searches breadth-first from node start through unnamed ramps
+// (via adj and next: in-edges walking backward, or out-edges walking
+// forward) and returns the label of the first named road it meets. Ties at
+// the same depth go to the lowest edge ID, so the result is stable.
+func nearestNamed(start graph.NodeID, adj map[graph.NodeID][]*graph.Edge, next func(*graph.Edge) graph.NodeID) string {
+	seen := map[graph.NodeID]bool{start: true}
+	frontier := []graph.NodeID{start}
+	for len(frontier) > 0 {
+		var edges []*graph.Edge
+		for _, n := range frontier {
+			edges = append(edges, adj[n]...)
+		}
+		sort.Slice(edges, func(i, j int) bool { return edges[i].ID < edges[j].ID })
+		for _, e := range edges {
+			if !isRamp(e) {
+				return label(e)
+			}
+		}
+		frontier = frontier[:0]
+		for _, e := range edges {
+			if n := next(e); !seen[n] {
+				seen[n] = true
+				frontier = append(frontier, n)
+			}
+		}
+	}
+	return ""
 }
 
 // touchesRoute reports whether e starts or ends at a node with a route road.

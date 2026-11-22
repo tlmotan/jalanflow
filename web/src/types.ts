@@ -55,6 +55,8 @@ export interface LaneDropRoad {
   class: string;
   lanes: number;
   lanes_inferred: boolean;
+  leaves: string; // unnamed ramps: nearest named road where it starts ("" if none)
+  joins: string; // unnamed ramps: nearest named road where it ends ("" if none)
 }
 
 export interface LaneDropConfirmation {

@@ -175,3 +175,51 @@ func TestFindConfirmed(t *testing.T) {
 		t.Errorf("stale key: err = %v, want error naming node:99", err)
 	}
 }
+
+func TestFindNamesRamps(t *testing.T) {
+	named := edge(5, 6, "", "motorway", part{50, 2})
+	named.Name = "Persiaran Kewajipan"
+	g := build(nil, nil,
+		edge(1, 2, "E5", "motorway", part{20, 3}),
+		edge(2, 3, "", "motorway_link", part{30, 3}),
+		edge(3, 4, "", "motorway_link", part{10, 3}, part{11, 2}), // the drop, two ramps from E5
+		edge(4, 5, "E11", "motorway", part{40, 3}),
+		named,
+	)
+	cfg := testCfg
+	cfg.RouteRefs = []string{"E5", "E11"}
+	drops, err := Find(g, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var d *Drop
+	for i := range drops {
+		if drops[i].Key == "way:10>11" {
+			d = &drops[i]
+		}
+	}
+	if d == nil {
+		t.Fatalf("narrowing way:10>11 not found in %+v", drops)
+	}
+	for _, r := range append(d.From, d.To...) {
+		if r.Leaves != "E5" || r.Joins != "E11" {
+			t.Errorf("ramp way %d: leaves %q joins %q, want E5 → E11", r.OSMWayID, r.Leaves, r.Joins)
+		}
+	}
+
+	// A named road is not a ramp: no leaves/joins. Without a ref, a ramp
+	// uses the road's name.
+	g = build(nil, nil,
+		edge(1, 2, "E5", "motorway", part{20, 3}),
+		edge(2, 3, "", "motorway_link", part{10, 3}, part{11, 2}),
+		named,
+		edge(3, 5, "", "motorway_link", part{60, 2}),
+	)
+	drops, err = Find(g, testCfg)
+	if err != nil || len(drops) != 1 {
+		t.Fatalf("drops %+v, err %v", drops, err)
+	}
+	if r := drops[0].To[0]; r.Leaves != "E5" || r.Joins != "Persiaran Kewajipan" {
+		t.Errorf("leaves %q joins %q, want E5 → Persiaran Kewajipan", r.Leaves, r.Joins)
+	}
+}

@@ -1,7 +1,7 @@
 {
   "corridor": "kemuning-pj",
   "osm_date": "2026-11-22",
-  "generated_at": "2026-11-22T22:33:12Z",
+  "generated_at": "2026-11-22T22:43:51Z",
   "ranking": "Biggest squeeze first: lanes out ÷ lanes in, smallest first; ties go to the drop losing more lanes.",
   "assumptions": [
     "Counts lanes only. It does not know how many cars use each road, so a small drop with heavy traffic can jam worse than a big one.",
@@ -30,7 +30,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": true
+          "lanes_inferred": true,
+          "leaves": "E13 KK-RE",
+          "joins": "E5"
         },
         {
           "osm_way_id": 1165118313,
@@ -38,7 +40,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -48,7 +52,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": true
+          "lanes_inferred": true,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": true,
@@ -73,7 +79,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": true
+          "lanes_inferred": true,
+          "leaves": "",
+          "joins": "E11"
         },
         {
           "osm_way_id": 1163589694,
@@ -81,7 +89,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -91,7 +101,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": true,
@@ -116,7 +128,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Persiaran Kewajipan",
+          "joins": "E5"
         }
       ],
       "to": [
@@ -126,7 +140,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Persiaran Kewajipan",
+          "joins": "E5"
         }
       ],
       "lanes_inferred": false,
@@ -151,7 +167,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "3215",
+          "joins": ""
         }
       ],
       "to": [
@@ -161,7 +179,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "3215",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -186,7 +206,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan SS 2/3",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -196,7 +218,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan SS 2/3",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -221,7 +245,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan Kebun",
+          "joins": "E5"
         }
       ],
       "to": [
@@ -231,7 +257,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan Kebun",
+          "joins": "E5"
         }
       ],
       "lanes_inferred": false,
@@ -256,7 +284,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan SS 7/2",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -266,7 +296,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan SS 7/2",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -291,7 +323,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -301,7 +335,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -326,7 +362,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -336,7 +374,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -361,7 +401,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan PJS 7/13",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -371,7 +413,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan PJS 7/13",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -396,7 +440,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan PJU 1A/4F",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -406,7 +452,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan PJU 1A/4F",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -431,7 +479,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan PJU 1A/4F",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -441,7 +491,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan PJU 1A/4F",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -466,7 +518,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -476,7 +530,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -501,7 +557,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "Jalan Perindustrian Puchong"
         }
       ],
       "to": [
@@ -511,7 +569,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "Jalan Perindustrian Puchong"
         }
       ],
       "lanes_inferred": false,
@@ -536,7 +596,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -546,7 +608,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -571,7 +635,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": "E5"
         }
       ],
       "to": [
@@ -581,7 +647,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": "E5"
         }
       ],
       "lanes_inferred": false,
@@ -606,7 +674,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan Kebun",
+          "joins": ""
         }
       ],
       "to": [
@@ -616,7 +686,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan Kebun",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -641,7 +713,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": true
+          "lanes_inferred": true,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 1303695729,
@@ -649,7 +723,9 @@
           "ref": "507",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -659,7 +735,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": true
+          "lanes_inferred": true,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": true,
@@ -684,7 +762,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "B11",
+          "joins": "E11"
         },
         {
           "osm_way_id": 780269331,
@@ -692,7 +772,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -702,7 +784,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -727,7 +811,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 164421108,
@@ -735,7 +821,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Persiaran Anggerik Eria",
+          "joins": "E5"
         }
       ],
       "to": [
@@ -745,7 +833,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -770,7 +860,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 1303695727,
@@ -778,7 +870,9 @@
           "ref": "507",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -788,7 +882,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -813,7 +909,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -823,7 +921,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -848,7 +948,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan PJS 1/15",
+          "joins": "E5"
         },
         {
           "osm_way_id": 1570431897,
@@ -856,7 +958,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -866,7 +970,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -891,7 +997,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 288414107,
@@ -899,7 +1007,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -909,7 +1019,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -934,7 +1046,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 758712840,
@@ -942,7 +1056,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -952,7 +1068,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -977,7 +1095,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -987,7 +1107,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1012,7 +1134,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan PJU 1A/4F",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1022,7 +1146,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan PJU 1A/4F",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -1047,7 +1173,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan Putra Permai",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1057,7 +1185,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan Putra Permai",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -1082,7 +1212,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan Putra Permai",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1092,7 +1224,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan Putra Permai",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -1117,7 +1251,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "3215",
+          "joins": ""
         }
       ],
       "to": [
@@ -1127,7 +1263,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "3215",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1152,7 +1290,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E5",
+          "joins": "Persiaran Kewajipan"
         }
       ],
       "to": [
@@ -1162,7 +1302,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E5",
+          "joins": "Persiaran Kewajipan"
         }
       ],
       "lanes_inferred": false,
@@ -1190,7 +1332,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1200,7 +1344,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -1225,7 +1371,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1235,7 +1383,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -1260,7 +1410,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan SS 7/2",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1270,7 +1422,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan SS 7/2",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -1295,7 +1449,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1305,7 +1461,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -1330,7 +1488,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Persiaran Puteri 1",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1340,7 +1500,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Persiaran Puteri 1",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -1365,7 +1527,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1375,7 +1539,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -1400,7 +1566,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1410,7 +1578,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -1435,7 +1605,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1445,7 +1617,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "lanes_inferred": false,
@@ -1470,7 +1644,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": true
+          "lanes_inferred": true,
+          "leaves": "",
+          "joins": "E11"
         },
         {
           "osm_way_id": 767944975,
@@ -1478,7 +1654,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -1488,7 +1666,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": true,
@@ -1513,7 +1693,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         },
         {
           "osm_way_id": 765228025,
@@ -1521,7 +1703,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -1531,7 +1715,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1556,7 +1742,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 627526153,
@@ -1564,7 +1752,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1574,7 +1764,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1599,7 +1791,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 935069054,
@@ -1607,7 +1801,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan Kebun",
+          "joins": "E5"
         }
       ],
       "to": [
@@ -1617,7 +1813,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1642,7 +1840,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -1652,7 +1852,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": true
+          "lanes_inferred": true,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": true,
@@ -1677,7 +1879,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Persiaran Anggerik Eria",
+          "joins": "E5"
         },
         {
           "osm_way_id": 921568440,
@@ -1685,7 +1889,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -1695,7 +1901,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1720,7 +1928,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 777837019,
@@ -1728,7 +1938,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E23",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1738,7 +1950,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1763,7 +1977,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 327303061,
@@ -1771,7 +1987,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Persiaran Kemuning Prima",
+          "joins": "E5"
         }
       ],
       "to": [
@@ -1781,7 +1999,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1806,7 +2026,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 779929779,
@@ -1814,7 +2036,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -1824,7 +2048,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1849,7 +2075,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E5"
         },
         {
           "osm_way_id": 477380628,
@@ -1857,7 +2085,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -1867,7 +2097,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1892,7 +2124,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -1902,7 +2136,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1927,7 +2163,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -1937,7 +2175,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1962,7 +2202,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -1972,7 +2214,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -1997,7 +2241,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2007,7 +2253,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2032,7 +2280,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2042,7 +2292,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2067,7 +2319,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2077,7 +2331,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2102,7 +2358,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2112,7 +2370,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2137,7 +2397,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2147,7 +2409,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2172,7 +2436,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2182,7 +2448,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2207,7 +2475,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2217,7 +2487,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2242,7 +2514,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2252,7 +2526,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2277,7 +2553,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2287,7 +2565,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2312,7 +2592,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2322,7 +2604,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2347,7 +2631,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2357,7 +2643,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2382,7 +2670,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2392,7 +2682,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2417,7 +2709,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2427,7 +2721,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2452,7 +2748,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2462,7 +2760,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2487,7 +2787,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2497,7 +2799,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2522,7 +2826,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Persiaran Harmoni",
+          "joins": "E11"
         },
         {
           "osm_way_id": 1163599610,
@@ -2530,7 +2836,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2540,7 +2848,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2565,7 +2875,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan Sepadu 25/123",
+          "joins": "E5"
         },
         {
           "osm_way_id": 880457611,
@@ -2573,7 +2885,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2583,7 +2897,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2611,7 +2927,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2621,7 +2939,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E5",
+          "joins": "E11"
         },
         {
           "osm_way_id": 984701918,
@@ -2629,7 +2949,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2654,7 +2976,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 766315842,
@@ -2662,7 +2986,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Persiaran Puchong Perdana",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -2672,7 +2998,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2697,7 +3025,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 1171027691,
@@ -2705,7 +3035,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 2,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan PPU 1",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -2715,7 +3047,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2740,7 +3074,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 1,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Persiaran Taman Tasik Prima",
+          "joins": "E11"
         },
         {
           "osm_way_id": 1168175130,
@@ -2748,7 +3084,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2758,7 +3096,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2783,7 +3123,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2793,7 +3135,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2818,7 +3162,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2828,7 +3174,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2853,7 +3201,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2863,7 +3213,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2888,7 +3240,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2898,7 +3252,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2923,7 +3279,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2933,7 +3291,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2958,7 +3318,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -2968,7 +3330,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -2993,7 +3357,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -3003,7 +3369,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -3028,7 +3396,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -3038,7 +3408,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -3063,7 +3435,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -3073,7 +3447,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -3098,7 +3474,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -3108,7 +3486,9 @@
           "ref": "E5",
           "class": "motorway",
           "lanes": 4,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -3133,7 +3513,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         },
         {
           "osm_way_id": 780264346,
@@ -3141,7 +3523,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "Jalan Layang-Layang 1",
+          "joins": "E11"
         }
       ],
       "to": [
@@ -3151,7 +3535,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -3176,7 +3562,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 6,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -3186,7 +3574,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -3211,7 +3601,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 6,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -3221,7 +3613,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 5,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -3246,7 +3640,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 7,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -3256,7 +3652,9 @@
           "ref": "",
           "class": "motorway_link",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "E11",
+          "joins": "E11"
         },
         {
           "osm_way_id": 779924915,
@@ -3264,7 +3662,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 3,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
@@ -3289,7 +3689,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 7,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "to": [
@@ -3299,7 +3701,9 @@
           "ref": "E11",
           "class": "motorway",
           "lanes": 6,
-          "lanes_inferred": false
+          "lanes_inferred": false,
+          "leaves": "",
+          "joins": ""
         }
       ],
       "lanes_inferred": false,
