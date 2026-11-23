@@ -4,7 +4,7 @@ CORRIDOR ?= kemuning-pj
 # The pure-Go zlib path needs no system libraries.
 export CGO_ENABLED ?= 0
 
-.PHONY: fetch graph analyze test web all clean hooks
+.PHONY: fetch graph analyze calibrate test web all clean hooks
 
 fetch:
 	scripts/fetch-osm.sh $(CORRIDOR)
@@ -15,6 +15,14 @@ graph:
 analyze:
 	go run ./cmd/analyze -graph data/interim/$(CORRIDOR).graph.json \
 		-corridor config/corridors/$(CORRIDOR).json -out web/public/data/$(CORRIDOR)
+
+# Estimate uncounted traffic by fitting the simulation to observed travel
+# times; rewrites config/demand/$(CORRIDOR).json (decision 0009). Run by hand
+# when observations change; not part of `make all`.
+calibrate:
+	go run ./cmd/calibrate -graph data/interim/$(CORRIDOR).graph.json \
+		-corridor config/corridors/$(CORRIDOR).json \
+		-demand config/demand/$(CORRIDOR).json -observed config/observed/$(CORRIDOR).json
 
 test:
 	go vet ./...

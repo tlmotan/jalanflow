@@ -1,5 +1,5 @@
 {
-  "_note": "PLACEHOLDER values. Calibrate against the Malaysian Highway Capacity Manual (MHCM) or local studies and update each source field.",
+  "_note": "PLACEHOLDER values. Calibrate against the Malaysian Highway Capacity Manual (MHCM) or local studies and update each source field. CTM: per-lane capacity is classes.<class>.per_lane_vph; keep ctm.<class>.free_flow_kmh x critical_density_vpkmpl equal to it (triangular fundamental diagram).",
   "classes": {
     "motorway":  { "per_lane_vph": 2000, "default_lanes": 3, "source": "placeholder - calibrate (MHCM)" },
     "trunk":     { "per_lane_vph": 1800, "default_lanes": 2, "source": "placeholder - calibrate (MHCM)" },
@@ -8,5 +8,33 @@
     "tertiary":  { "per_lane_vph": 900,  "default_lanes": 1, "source": "placeholder - calibrate (MHCM)" }
   },
   "signal_factor": 0.5,
-  "signal_source": "placeholder - typical green-time share; calibrate"
+  "signal_source": "placeholder - typical green-time share; calibrate",
+  "ctm": {
+    "motorway":  { "free_flow_kmh": 100, "critical_density_vpkmpl": 20, "jam_density_vpkmpl": 150, "capacity_drop_fraction": 0.1, "source": "placeholder - calibrate. Triangular diagram per Daganzo 1994; vf from 110 km/h posted limit, kc = per_lane_vph / vf, kj ~6.7 m per vehicle; capacity drop 5-15% after breakdown (Hall & Agyemang-Duah 1991)" },
+    "trunk":     { "free_flow_kmh": 90,  "critical_density_vpkmpl": 20, "jam_density_vpkmpl": 150, "capacity_drop_fraction": 0.1, "source": "placeholder - calibrate. Daganzo 1994 triangular diagram; kc = per_lane_vph / vf" },
+    "primary":   { "free_flow_kmh": 60,  "critical_density_vpkmpl": 25, "jam_density_vpkmpl": 150, "capacity_drop_fraction": 0.1, "source": "placeholder - calibrate. Daganzo 1994 triangular diagram; kc = per_lane_vph / vf" },
+    "secondary": { "free_flow_kmh": 50,  "critical_density_vpkmpl": 24, "jam_density_vpkmpl": 150, "capacity_drop_fraction": 0.1, "source": "placeholder - calibrate. Daganzo 1994 triangular diagram; kc = per_lane_vph / vf" },
+    "tertiary":  { "free_flow_kmh": 40,  "critical_density_vpkmpl": 22.5, "jam_density_vpkmpl": 150, "capacity_drop_fraction": 0.1, "source": "placeholder - calibrate. Daganzo 1994 triangular diagram; kc = per_lane_vph / vf" }
+  },
+  "alinea": {
+    "gain_vph_per_pct": 70,
+    "target_occupancy_pct": 13,
+    "min_rate_vph": 240,
+    "update_s": 60,
+    "source": "Papageorgiou et al. 1991 (ALINEA): K_R = 70 veh/h per occupancy %, updated every 60 s. Target just below critical occupancy: the simulator converts occupancy to density as occupancy % x jam density / 100, and motorway critical density 20 / jam density 150 = 13.3 %. Minimum rate 240 veh/h = one car every 15 s - placeholder, calibrate from loop data"
+  },
+  "signals": {
+    "saturation_flow_vphpl": 1900,
+    "lost_time_per_phase_s": 4,
+    "source": "HCM 2010 base saturation flow 1900 pc/h/ln; lost time per phase ~4 s (start-up + clearance, Webster 1958) - placeholder, calibrate with stopwatch surveys / Arahan Teknik (Jalan) 13/87"
+  },
+  "restripe": {
+    "aux_lane_m": 500,
+    "source": "placeholder - a joining ramp keeps its own lane for 500 m before merging; choose per site from the road reserve seen on Street View"
+  },
+  "channelisation": {
+    "capacity_drop_reduction": 0.5,
+    "confidence": "low",
+    "source": "placeholder - calibrate. Assumed share of the capacity drop removed by a solid line / divider that stops late lane changes at a merge; little published evidence"
+  }
 }

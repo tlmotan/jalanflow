@@ -1,0 +1,14 @@
+# 0009 — Uncounted traffic is estimated by fitting, and labelled as such
+
+- Status: accepted · 2026-11-23
+- Context: The inbound route (19.1 km) has 16 roads joining and 14 leaving. Public data gives only whole-highway daily totals (KESAS 321,493 veh/day FY2019, LDP 356,000 weekday tollable FY2022; see `docs/validation.md`), not a count at any ramp. The owner cannot count 30 ramps. Without ramp traffic the simulator (0007) says nothing. The owner chose to estimate ("fit it", 2026-11-23).
+- Decision: `cmd/calibrate` (`make calibrate`, run by hand) fills every figure nobody has counted and writes it into `config/demand/<corridor>.json` with a source starting `estimated -`. Counted figures (any other source) are never touched.
+  - **Few knobs, not 30.** The observations' end points cut the route into sections. Per section: `ramp_load` (each on-ramp's peak as a share of its own capacity) and `exit_scale` (each off-ramp's share = scale × ramp lanes ÷ (ramp lanes + lanes carrying on)). Plus route-start peak traffic and the time the peak starts. The profile is a fixed trapezoid. Ranges and assumptions live in the demand file's `estimate` block with a `source`.
+  - **Objective.** Mean absolute % error against Google Maps typical travel times, **among candidates that reproduce every observed queue** (`min_queue_match` of its length queued at that time). Reason, found on the real corridor: two very different traffic patterns matched the travel times within 10–12 %, and only one put the queue where drivers meet it (Sri Muda back from the exit-507 merge). Travel times alone do not identify demand.
+  - **Search.** Grid search section by section, upstream first, then each section re-fitted against all observations until nothing changes (`corridor.Fit`). Deterministic. Greedy, not exhaustive.
+- Consequences:
+  - Observed queues are now part of the fit, so they are no longer an independent check. The validation gate (0007) still applies, but passing it shows the model *can* match what we observed, not that its demand is right.
+  - Past the last observation's end (currently 10.68 km, the KESAS → LDP ramp) nothing is calibrated; LDP reuses the last section's numbers. Results there must not be published until an observation covers it.
+  - The site must say demand is estimated, not counted, wherever a simulated number appears. `corridor.Model.Estimated` counts the estimated figures.
+  - Known weak points: one load factor per section (a quiet ramp and a busy one get the same share of capacity); a FIFO diverge (a full off-ramp blocks the whole mainline, so the model cannot hold a small steady queue before an exit); free-flow speed from the class default, not from an off-peak observation.
+  - Replace estimates with counts whenever one turns up: give the entry a real source and re-run `make calibrate`.

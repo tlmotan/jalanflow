@@ -35,9 +35,10 @@ Same pipeline and static site. `cmd/analyze` also builds a CTM cell chain of the
 13. **Fixed routes.** Demand enters at on-ramps and leaves at off-ramps by measured split ratios; nobody re-routes. No induced demand; the site says so. Route choice stays Phase 3.
 14. **Validation gate.** No fix is published in `scenarios.json` until the baseline reproduces both known jams (Sri Muda queue from drop #21 at exit 507; exit-510 Subang ramp) and peak travel times within ≤ 20 %.
 15. **Fixes are ranked by delay saved** (veh-h per peak), each run alone against the baseline, with a confidence label; dividers/channelisation are always low confidence (decision 0008).
+16. **Uncounted traffic is estimated, and says so.** `make calibrate` fits a few numbers per route section to observed travel times and queues and writes them to `config/demand/` with source `estimated - …`; counted figures are never overwritten; nothing past the last observation is calibrated (decision 0009).
 
 ## Package rules
-`flow` ← imports nothing internal · `ctm` ← imports nothing internal (pure, no I/O, no logging) · `graph` ← `osm`, `config` · `fixes` ← `flow`, `graph` · `lanedrop` ← `graph`, `config` · `corridor` ← `graph`, `config`, `ctm` · `export` ← all above · `cmd/*` wires only.
+`flow` ← imports nothing internal · `ctm` ← imports nothing internal (pure, no I/O, no logging) · `graph` ← `osm`, `config` · `fixes` ← `flow`, `graph` · `lanedrop` ← `graph`, `config` · `corridor` ← `graph`, `config`, `ctm` · `export` ← all above · `cmd/*` wires only (`cmd/calibrate` rewrites the demand config).
 
 ## Out of scope (do not build)
 Removing roads, route choice (incl. re-routing in the simulator), real-time traffic, travel-time prediction outside the simulated corridor, user what-if editing, API server, buses/rail/walking, other corridors, land ownership data.
@@ -47,5 +48,7 @@ Removing roads, route choice (incl. re-routing in the simulator), real-time traf
 - `config/capacity-defaults.json` — per-lane capacities (with sources)
 - `internal/graph/model.go` — data model
 - `internal/flow/dinic.go` — algorithm
-- `internal/ctm/` — cell transmission model (Phase 1.5, planned)
+- `internal/ctm/` — cell transmission model (Phase 1.5)
+- `internal/corridor/` — route → CTM cells, demand estimate and fit
+- `config/demand/`, `config/observed/` — traffic (counted or estimated) and what it is fitted to
 - `web/src/types.ts` — frontend mirror of outputs

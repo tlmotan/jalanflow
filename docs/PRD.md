@@ -103,7 +103,7 @@ Phase 1 stays as shipped. Phase 1.5 adds demand and a simulator on top of it (de
 | Capacity ≠ congestion (no demand data) | Say clearly: "this shows where the road can carry the least, not where it is busiest" |
 | Public reads "+1 lane" as "build more roads" | Method page explains induced demand; Phase 3 compares with transit |
 | Demand data is coarse, old or annual (JKR/HPU counts are AADT at a few stations; LLM stats are per plaza) → simulated jams in the wrong place | Validation gate (goal 8) blocks publishing fixes; show demand source and year on the site; mark low-confidence inputs; calibrate peak factors and split ratios to Google Maps typical times and local observations |
-| CTM is 1-D cells: it cannot model divider geometry, lane-level weaving or a physical obstacle's shape | Model dividers/channelisation only as lower capacity drop + zipper priority, always labelled **low confidence** (decision 0008); never claim a geometry is tested |
+| CTM is 1-D cells: it cannot model divider geometry, lane-level weaving or a physical obstacle's shape | Model dividers/channelisation only as lower capacity drop (merge shares unchanged; decision 0008 as amended), always labelled **low confidence** (decision 0008); never claim a geometry is tested |
 | Induced demand: a fix that cuts delay attracts more traffic, so real savings are smaller | Fixed-route model says so next to every result; show savings as "with today's traffic"; real treatment is Phase 3 |
 | Scope creep (it's a side project) | Non-goals list above is binding; changes go through REVIEW.md |
 

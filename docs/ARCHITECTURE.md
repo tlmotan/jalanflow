@@ -115,7 +115,7 @@ Phase 1 is unchanged. Phase 1.5 adds traffic demand and a **Cell Transmission Mo
 - Calibration targets: Google Maps typical peak travel times per section (recorded manually with date/time) and local queue observations (where the queue head and tail sit).
 - **Validation gate** (checked in a test against `docs/validation.md` targets): baseline reproduces (1) the Sri Muda queue with its head at drop #21 (node 33987957, exit-507 merge), (2) the exit-510 Subang ramp queue, (3) peak travel times within ≤ 20 %. If it fails, `scenarios.json` has `validated: false` and no fixes.
 
-**Fix types** (decision 0008, each run alone against the baseline): re-striping (lane-add instead of merge, longer auxiliary lane), dividers/channelisation (lower capacity drop + zipper priority, low confidence), ramp metering (ALINEA), +1 lane, signal timing (Webster retiming, new-signal scenario). Ranked by delay saved (veh-h per peak).
+**Fix types** (decision 0008, each run alone against the baseline): re-striping (lane-add instead of merge, longer auxiliary lane), dividers/channelisation (lower capacity drop (merge shares unchanged; decision 0008 as amended), low confidence), ramp metering (ALINEA), +1 lane, signal timing (Webster retiming, new-signal scenario). Ranked by delay saved (veh-h per peak).
 
 ## 4. Data models
 

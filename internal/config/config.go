@@ -91,6 +91,115 @@ type Capacity struct {
 	Classes      map[string]ClassDefaults `json:"classes"`
 	SignalFactor float64                  `json:"signal_factor"`
 	SignalSource string                   `json:"signal_source"`
+	// Phase 1.5 simulation parameters; required by LoadCapacity.
+	CTM            map[string]CTMClass `json:"ctm"`
+	ALINEA         ALINEA              `json:"alinea"`
+	Signals        SignalParams        `json:"signals"`
+	Channelisation Channelisation      `json:"channelisation"`
+	Restripe       Restripe            `json:"restripe"`
+}
+
+// CTMClass is the triangular fundamental diagram for one road class in
+// the Cell Transmission Model (Daganzo 1994). Per-lane capacity is the
+// class's PerLaneVPH; FreeFlowKMH × CriticalDensity should equal it.
+type CTMClass struct {
+	FreeFlowKMH     float64 `json:"free_flow_kmh"`
+	CriticalDensity float64 `json:"critical_density_vpkmpl"` // veh/km/lane
+	JamDensity      float64 `json:"jam_density_vpkmpl"`      // veh/km/lane
+	// CapacityDrop is the fraction of capacity lost once a queue forms
+	// (queue discharge rate = capacity × (1 − CapacityDrop)).
+	CapacityDrop float64 `json:"capacity_drop_fraction"`
+	Source       string  `json:"source"`
+}
+
+// ALINEA holds ramp-metering controller settings (Papageorgiou 1991):
+// r(k) = r(k−1) + GainVPHPerPct × (TargetOccupancyPct − occupancy(k)).
+type ALINEA struct {
+	GainVPHPerPct      float64 `json:"gain_vph_per_pct"`
+	TargetOccupancyPct float64 `json:"target_occupancy_pct"`
+	// MinRateVPH is the lowest rate the meter may fall to; UpdateS is how
+	// often it adjusts.
+	MinRateVPH float64 `json:"min_rate_vph"`
+	UpdateS    float64 `json:"update_s"`
+	Source     string  `json:"source"`
+}
+
+// Restripe is the re-striping fix: the joining ramp keeps its own lane
+// for AuxLaneM before merging (decision 0008).
+type Restripe struct {
+	AuxLaneM float64 `json:"aux_lane_m"`
+	Source   string  `json:"source"`
+}
+
+// SignalParams are signal-timing defaults (Webster 1958, HCM).
+type SignalParams struct {
+	SaturationFlowVPHPL float64 `json:"saturation_flow_vphpl"`
+	LostTimePerPhaseS   float64 `json:"lost_time_per_phase_s"`
+	Source              string  `json:"source"`
+}
+
+// Channelisation is the assumed effect of a divider or solid line that
+// stops late lane changes at a merge.
+type Channelisation struct {
+	// CapacityDropReduction is the share of CTMClass.CapacityDrop removed.
+	CapacityDropReduction float64 `json:"capacity_drop_reduction"`
+	Confidence            string  `json:"confidence"` // "low" | "medium" | "high"
+	Source                string  `json:"source"`
+}
+
+func (c *Capacity) validate() error {
+	if len(c.Classes) == 0 || c.SignalFactor <= 0 || c.SignalFactor > 1 || c.SignalSource == "" {
+		return fmt.Errorf("need classes, 0 < signal_factor <= 1 and signal_source")
+	}
+	for name, cl := range c.Classes {
+		if cl.PerLaneVPH <= 0 || cl.DefaultLanes <= 0 || cl.Source == "" {
+			return fmt.Errorf("classes.%s: need per_lane_vph > 0, default_lanes > 0 and source", name)
+		}
+		ctm, ok := c.CTM[name]
+		if !ok {
+			return fmt.Errorf("ctm.%s: missing (every class needs CTM parameters)", name)
+		}
+		if err := ctm.validate(); err != nil {
+			return fmt.Errorf("ctm.%s: %w", name, err)
+		}
+	}
+	a := c.ALINEA
+	if a.GainVPHPerPct <= 0 || a.TargetOccupancyPct <= 0 || a.TargetOccupancyPct >= 100 || a.Source == "" {
+		return fmt.Errorf("alinea: need gain_vph_per_pct > 0, 0 < target_occupancy_pct < 100 and source")
+	}
+	if a.MinRateVPH <= 0 || a.UpdateS <= 0 {
+		return fmt.Errorf("alinea: need min_rate_vph > 0 and update_s > 0")
+	}
+	if c.Restripe.AuxLaneM <= 0 || c.Restripe.Source == "" {
+		return fmt.Errorf("restripe: need aux_lane_m > 0 and source")
+	}
+	s := c.Signals
+	if s.SaturationFlowVPHPL <= 0 || s.LostTimePerPhaseS < 0 || s.Source == "" {
+		return fmt.Errorf("signals: need saturation_flow_vphpl > 0, lost_time_per_phase_s >= 0 and source")
+	}
+	ch := c.Channelisation
+	if ch.CapacityDropReduction < 0 || ch.CapacityDropReduction > 1 || ch.Source == "" {
+		return fmt.Errorf("channelisation: need 0 <= capacity_drop_reduction <= 1 and source")
+	}
+	switch ch.Confidence {
+	case "low", "medium", "high":
+	default:
+		return fmt.Errorf("channelisation: confidence must be low, medium or high, got %q", ch.Confidence)
+	}
+	return nil
+}
+
+func (c CTMClass) validate() error {
+	if c.FreeFlowKMH <= 0 || c.CriticalDensity <= 0 || c.JamDensity <= c.CriticalDensity {
+		return fmt.Errorf("need free_flow_kmh > 0 and 0 < critical_density < jam_density")
+	}
+	if c.CapacityDrop < 0 || c.CapacityDrop >= 1 {
+		return fmt.Errorf("need 0 <= capacity_drop_fraction < 1")
+	}
+	if c.Source == "" {
+		return fmt.Errorf("missing source")
+	}
+	return nil
 }
 
 // LoadCorridor reads and validates a corridor config.
@@ -126,8 +235,8 @@ func LoadCapacity(path string) (*Capacity, error) {
 	if err := load(path, &c); err != nil {
 		return nil, err
 	}
-	if len(c.Classes) == 0 || c.SignalFactor <= 0 || c.SignalFactor > 1 {
-		return nil, fmt.Errorf("capacity %s: need classes and 0 < signal_factor <= 1", path)
+	if err := c.validate(); err != nil {
+		return nil, fmt.Errorf("capacity %s: %w", path, err)
 	}
 	return &c, nil
 }

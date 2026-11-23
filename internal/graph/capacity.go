@@ -2,6 +2,10 @@ package graph
 
 import "github.com/tlmotan/jalanflow/internal/config"
 
+// BaseClass maps "primary_link" -> "primary": the key for per-class
+// settings in config/capacity-defaults.json.
+func BaseClass(c HighwayClass) string { return baseClass(c) }
+
 // baseClass maps "primary_link" -> "primary".
 func baseClass(c HighwayClass) string {
 	s := string(c)

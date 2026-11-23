@@ -1,0 +1,424 @@
+{
+  "corridor": "kemuning-pj",
+  "profile_step_min": 15,
+  "profiles": {
+    "am_peak_estimated": {
+      "start": "06:00",
+      "shape": [
+        0.583,
+        0.75,
+        0.917,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0.95,
+        0.85,
+        0.75,
+        0.65
+      ],
+      "source": "estimated - fitted trapezoid: 0.50 at 06:00 rising to 1 after 45 min, 1 until 09:30, falling to 0.60 at 10:30 (cmd/calibrate)"
+    }
+  },
+  "entries": [
+    {
+      "key": "node:142431123",
+      "name": "traffic entering at the route start",
+      "pin": {
+        "lat": 3.0238823000000004,
+        "lon": 101.54254710000001
+      },
+      "peak_vph": 5500,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:24994898",
+      "name": "on-ramp from unnamed motorway_link (way 24994898)",
+      "pin": {
+        "lat": 3.0255978000000003,
+        "lon": 101.54500150000001
+      },
+      "peak_vph": 3200,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:843204975",
+      "name": "on-ramp from Persimpangan Hicom",
+      "pin": {
+        "lat": 3.0403127000000003,
+        "lon": 101.5572807
+      },
+      "peak_vph": 3200,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:53562544",
+      "name": "on-ramp from unnamed motorway_link (way 53562544)",
+      "pin": {
+        "lat": 3.0616319,
+        "lon": 101.5693856
+      },
+      "peak_vph": 3200,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:410548778",
+      "name": "on-ramp from unnamed motorway_link (way 410548778)",
+      "pin": {
+        "lat": 3.0632146000000002,
+        "lon": 101.58533290000001
+      },
+      "peak_vph": 3200,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:1088371555",
+      "name": "on-ramp from unnamed motorway_link (way 1088371555)",
+      "pin": {
+        "lat": 3.0627611000000003,
+        "lon": 101.5962678
+      },
+      "peak_vph": 100,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:210994258",
+      "name": "on-ramp from unnamed motorway_link (way 210994258)",
+      "pin": {
+        "lat": 3.0611555000000004,
+        "lon": 101.5999421
+      },
+      "peak_vph": 100,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:31657399",
+      "name": "on-ramp from unnamed motorway_link (way 31657399)",
+      "pin": {
+        "lat": 3.0569849000000002,
+        "lon": 101.61607260000001
+      },
+      "peak_vph": 100,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:53635034",
+      "name": "on-ramp from Lebuhraya Damansara–Puchong",
+      "pin": {
+        "lat": 3.0574517,
+        "lon": 101.61582700000001
+      },
+      "peak_vph": 300,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:993643098",
+      "name": "on-ramp from unnamed motorway_link (way 993643098)",
+      "pin": {
+        "lat": 3.0592969,
+        "lon": 101.6135428
+      },
+      "peak_vph": 300,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:776830938",
+      "name": "on-ramp from Jalan Lagoon Selatan",
+      "pin": {
+        "lat": 3.0663504,
+        "lon": 101.6135606
+      },
+      "peak_vph": 60,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:776805374",
+      "name": "on-ramp from unnamed motorway_link (way 776805374)",
+      "pin": {
+        "lat": 3.0883533,
+        "lon": 101.61288110000001
+      },
+      "peak_vph": 100,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:655835885",
+      "name": "on-ramp from unnamed motorway_link (way 655835885)",
+      "pin": {
+        "lat": 3.0931142,
+        "lon": 101.60414850000001
+      },
+      "peak_vph": 200,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:52252146",
+      "name": "on-ramp from Jalan SS 7/9",
+      "pin": {
+        "lat": 3.0941476000000003,
+        "lon": 101.60278670000001
+      },
+      "peak_vph": 45,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:52252112",
+      "name": "on-ramp from Jalan SS 7/13",
+      "pin": {
+        "lat": 3.098023,
+        "lon": 101.5981787
+      },
+      "peak_vph": 45,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:106797382",
+      "name": "on-ramp from unnamed motorway_link (way 106797382)",
+      "pin": {
+        "lat": 3.112826,
+        "lon": 101.59834570000001
+      },
+      "peak_vph": 100,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:187759047",
+      "name": "on-ramp from Jalan SS 25/23",
+      "pin": {
+        "lat": 3.1133876000000003,
+        "lon": 101.59925240000001
+      },
+      "peak_vph": 120,
+      "profile": "am_peak_estimated",
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    }
+  ],
+  "exits": [
+    {
+      "key": "way:14493135",
+      "name": "off-ramp to Persimpangan Hicom",
+      "pin": {
+        "lat": 3.0320609000000003,
+        "lon": 101.5524082
+      },
+      "split_ratio": 0.5,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:53562566",
+      "name": "off-ramp to unnamed motorway_link (way 53562566)",
+      "pin": {
+        "lat": 3.0587597,
+        "lon": 101.56766920000001
+      },
+      "split_ratio": 0.4,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:148018437",
+      "name": "off-ramp to unnamed motorway_link (way 148018437)",
+      "pin": {
+        "lat": 3.0631326000000003,
+        "lon": 101.59029220000001
+      },
+      "split_ratio": 0.48,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:401178908",
+      "name": "off-ramp to unnamed motorway_link (way 401178908)",
+      "pin": {
+        "lat": 3.059133,
+        "lon": 101.60606870000001
+      },
+      "split_ratio": 0.24,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:780034777",
+      "name": "off-ramp to Lebuhraya Shah Alam",
+      "pin": {
+        "lat": 3.0552566000000003,
+        "lon": 101.61425390000001
+      },
+      "split_ratio": 0.9,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:776830934",
+      "name": "off-ramp to Jalan Lagoon Selatan",
+      "pin": {
+        "lat": 3.0652556,
+        "lon": 101.61355970000001
+      },
+      "split_ratio": 0.3,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:776311082",
+      "name": "off-ramp to unnamed motorway_link (way 776311082)",
+      "pin": {
+        "lat": 3.0709333,
+        "lon": 101.61354750000001
+      },
+      "split_ratio": 0.48,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:1284801667",
+      "name": "off-ramp to unnamed motorway_link (way 1284801667)",
+      "pin": {
+        "lat": 3.0790032000000003,
+        "lon": 101.61358910000001
+      },
+      "split_ratio": 0.6,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:52252164",
+      "name": "off-ramp to unnamed motorway_link (way 52252164)",
+      "pin": {
+        "lat": 3.0912661000000003,
+        "lon": 101.61022340000001
+      },
+      "split_ratio": 0.6,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:776839974",
+      "name": "off-ramp to Jalan SS 7/9",
+      "pin": {
+        "lat": 3.093998,
+        "lon": 101.60298130000001
+      },
+      "split_ratio": 0.3,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:777820951",
+      "name": "off-ramp to Jalan SS 7/13",
+      "pin": {
+        "lat": 3.097382,
+        "lon": 101.59870330000001
+      },
+      "split_ratio": 0.3,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:191868429",
+      "name": "off-ramp to unnamed motorway_link (way 191868429)",
+      "pin": {
+        "lat": 3.1022032000000004,
+        "lon": 101.5972414
+      },
+      "split_ratio": 0.4,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:778091340",
+      "name": "off-ramp to unnamed motorway_link (way 778091340)",
+      "pin": {
+        "lat": 3.1026394,
+        "lon": 101.59717730000001
+      },
+      "split_ratio": 0.72,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    },
+    {
+      "key": "way:776042885",
+      "name": "off-ramp to Jalan SS 25/23",
+      "pin": {
+        "lat": 3.1132178,
+        "lon": 101.5989856
+      },
+      "split_ratio": 0.4,
+      "source": "estimated - fitted to 10 Google Maps typical travel times read 2026-11-23 and 1 observed queue(s) (cmd/calibrate); not a count",
+      "year": 2026
+    }
+  ],
+  "estimate": {
+    "profile": "am_peak_estimated",
+    "start": "06:00",
+    "start_level": 0.5,
+    "peak_end": "09:30",
+    "end": "10:30",
+    "end_level": 0.6,
+    "max_exit_split": 0.9,
+    "min_queue_match": 0.8,
+    "main_peak_vph": [
+      3000,
+      7500,
+      500
+    ],
+    "ramp_load": [
+      0.05,
+      0.8,
+      0.05
+    ],
+    "exit_scale": [
+      0.2,
+      1.2,
+      0.1
+    ],
+    "peak_start_min": [
+      15,
+      75,
+      30
+    ],
+    "source": "Assumptions for cmd/calibrate, chosen 2026-11-23 (decision 0009). Profile shape: a generic weekday AM peak, half the peak at 06:00 and still 60% at 10:30; only the time the peak starts is fitted. Search ranges: route-start traffic from light to above the 3-lane capacity (6000 veh/h); ramps from 10% to 80% full; exits from a fifth of to slightly above their lane share. Replace with counts when available. min_queue_match 0.8: an observed queue counts as reproduced when four fifths of its length is queued in the simulation; pins are rough, so not 1."
+  },
+  "_note": "PLACEHOLDER demand - must be filled before CTM results mean anything. Fill peak_vph from JKR/HPU Road Traffic Volume Malaysia (RTVM) census stations or LLM highway statistics, profiles from hourly counts, split ratios from ramp counts. Keys are OSM ids like config/corridors lane_drops: node:\u003cid\u003e for a point, way:\u003cid\u003e for a ramp way; the ids below were checked against the 2026-11-23 OSM extract (tags and travel direction); the numbers are still guesses. Entries and exits whose source starts with 'placeholder' are guesses."
+}

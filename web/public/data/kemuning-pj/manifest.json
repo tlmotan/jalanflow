@@ -1,9 +1,9 @@
 {
   "corridor": "kemuning-pj",
-  "generated_at": "2026-11-23T11:58:33Z",
+  "generated_at": "2026-11-23T15:52:12Z",
   "osm_date": "2026-11-23",
   "pipeline_version": "0.2.0",
-  "capacity_config_hash": "sha256:22b48d041ba8536541193ed68e05391648240f0f2c1ccacc00d8d88e833820b3",
+  "capacity_config_hash": "sha256:da901ad16e8c8042235f08d09163835a7fa83353353ebb9bb0c8ad7c2edccb02",
   "max_flow_vph": {
     "inbound": 6000,
     "outbound": 6000

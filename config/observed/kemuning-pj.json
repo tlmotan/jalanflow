@@ -1,0 +1,193 @@
+{
+  "_note": "travel_times: Google Maps 'typical' travel time for a departure time (Directions > Depart at). Tim read single values, so minutes_low = minutes_high. Weekday Tue (Tim set Depart at to a Tuesday). queues: where a queue's tail reached and the bottleneck (head) it backed up from. Entries whose source starts with 'placeholder' are examples, not data.",
+  "corridor": "kemuning-pj",
+  "travel_times": [
+    {
+      "name": "Sri Muda to Sunway ramp onto LDP (exit 511A), KESAS eastbound",
+      "from": {
+        "lat": 3.02455,
+        "lon": 101.54281
+      },
+      "to": {
+        "lat": 3.0563,
+        "lon": 101.6155
+      },
+      "weekday": "Tue",
+      "depart": "07:00",
+      "minutes_low": 16,
+      "minutes_high": 16,
+      "date_read": "2026-11-23",
+      "source": "Google Maps typical travel time, Depart at, read by Tim 2026-11-23"
+    },
+    {
+      "name": "Sri Muda to Sunway ramp onto LDP (exit 511A), KESAS eastbound",
+      "from": {
+        "lat": 3.02455,
+        "lon": 101.54281
+      },
+      "to": {
+        "lat": 3.0563,
+        "lon": 101.6155
+      },
+      "weekday": "Tue",
+      "depart": "07:30",
+      "minutes_low": 18,
+      "minutes_high": 18,
+      "date_read": "2026-11-23",
+      "source": "Google Maps typical travel time, Depart at, read by Tim 2026-11-23"
+    },
+    {
+      "name": "Sri Muda to Sunway ramp onto LDP (exit 511A), KESAS eastbound",
+      "from": {
+        "lat": 3.02455,
+        "lon": 101.54281
+      },
+      "to": {
+        "lat": 3.0563,
+        "lon": 101.6155
+      },
+      "weekday": "Tue",
+      "depart": "08:00",
+      "minutes_low": 18,
+      "minutes_high": 18,
+      "date_read": "2026-11-23",
+      "source": "Google Maps typical travel time, Depart at, read by Tim 2026-11-23"
+    },
+    {
+      "name": "Sri Muda to Sunway ramp onto LDP (exit 511A), KESAS eastbound",
+      "from": {
+        "lat": 3.02455,
+        "lon": 101.54281
+      },
+      "to": {
+        "lat": 3.0563,
+        "lon": 101.6155
+      },
+      "weekday": "Tue",
+      "depart": "08:30",
+      "minutes_low": 20,
+      "minutes_high": 20,
+      "date_read": "2026-11-23",
+      "source": "Google Maps typical travel time, Depart at, read by Tim 2026-11-23"
+    },
+    {
+      "name": "Sri Muda to Sunway ramp onto LDP (exit 511A), KESAS eastbound",
+      "from": {
+        "lat": 3.02455,
+        "lon": 101.54281
+      },
+      "to": {
+        "lat": 3.0563,
+        "lon": 101.6155
+      },
+      "weekday": "Tue",
+      "depart": "09:00",
+      "minutes_low": 20,
+      "minutes_high": 20,
+      "date_read": "2026-11-23",
+      "source": "Google Maps typical travel time, Depart at, read by Tim 2026-11-23"
+    },
+    {
+      "name": "Sri Muda to exit 510 Kewajipan, KESAS eastbound",
+      "from": {
+        "lat": 3.02455,
+        "lon": 101.54281
+      },
+      "to": {
+        "lat": 3.06322,
+        "lon": 101.5899
+      },
+      "weekday": "Tue",
+      "depart": "07:00",
+      "minutes_low": 12,
+      "minutes_high": 12,
+      "date_read": "2026-11-23",
+      "source": "Google Maps typical travel time, Depart at, read by Tim 2026-11-23"
+    },
+    {
+      "name": "Sri Muda to exit 510 Kewajipan, KESAS eastbound",
+      "from": {
+        "lat": 3.02455,
+        "lon": 101.54281
+      },
+      "to": {
+        "lat": 3.06322,
+        "lon": 101.5899
+      },
+      "weekday": "Tue",
+      "depart": "07:30",
+      "minutes_low": 14,
+      "minutes_high": 14,
+      "date_read": "2026-11-23",
+      "source": "Google Maps typical travel time, Depart at, read by Tim 2026-11-23"
+    },
+    {
+      "name": "Sri Muda to exit 510 Kewajipan, KESAS eastbound",
+      "from": {
+        "lat": 3.02455,
+        "lon": 101.54281
+      },
+      "to": {
+        "lat": 3.06322,
+        "lon": 101.5899
+      },
+      "weekday": "Tue",
+      "depart": "08:00",
+      "minutes_low": 12,
+      "minutes_high": 12,
+      "date_read": "2026-11-23",
+      "source": "Google Maps typical travel time, Depart at, read by Tim 2026-11-23"
+    },
+    {
+      "name": "Sri Muda to exit 510 Kewajipan, KESAS eastbound",
+      "from": {
+        "lat": 3.02455,
+        "lon": 101.54281
+      },
+      "to": {
+        "lat": 3.06322,
+        "lon": 101.5899
+      },
+      "weekday": "Tue",
+      "depart": "08:30",
+      "minutes_low": 14,
+      "minutes_high": 14,
+      "date_read": "2026-11-23",
+      "source": "Google Maps typical travel time, Depart at, read by Tim 2026-11-23"
+    },
+    {
+      "name": "Sri Muda to exit 510 Kewajipan, KESAS eastbound",
+      "from": {
+        "lat": 3.02455,
+        "lon": 101.54281
+      },
+      "to": {
+        "lat": 3.06322,
+        "lon": 101.5899
+      },
+      "weekday": "Tue",
+      "depart": "09:00",
+      "minutes_low": 16,
+      "minutes_high": 16,
+      "date_read": "2026-11-23",
+      "source": "Google Maps typical travel time, Depart at, read by Tim 2026-11-23"
+    }
+  ],
+  "queues": [
+    {
+      "name": "KESAS eastbound queue from Sri Muda back from the exit 507 merge",
+      "head": {
+        "lat": 3.04031,
+        "lon": 101.55728
+      },
+      "tail": {
+        "lat": 3.0245507704006007,
+        "lon": 101.54281308204921
+      },
+      "weekday": "Tue",
+      "time": "07:45",
+      "date_observed": "2026-11-23",
+      "source": "Tim, local driver, 2026-11-23: eastbound traffic stays slow from Sri Muda until just after exit 507. Head = lane drop #21 (node 33987957), tail = Tim's Sri Muda pin. Time of day 07:45 is assumed (he did not give one) - confirm"
+    }
+  ]
+}

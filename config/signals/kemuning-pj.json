@@ -1,0 +1,31 @@
+{
+  "_note": "PLACEHOLDER signal timings - must be filled from stopwatch surveys (time several cycles, note green per phase). Keyed by OSM node with highway=traffic_signals: node:<id>. The id below is tagged highway=traffic_signals in the 2026-11-23 OSM extract. OSM splits this junction into several signal nodes (271724963, 7989966624, 4123811110, 7989966625); survey it as one junction and key it by 271724963. Entries whose source starts with 'placeholder' are guesses.",
+  "corridor": "kemuning-pj",
+  "signals": [
+    {
+      "key": "node:271724963",
+      "name": "Jalan Bukit Kemuning / Jalan Sepadu 25/123 junction, Kota Kemuning (feeds the KESAS eastbound on-ramp)",
+      "pin": {
+        "lat": 3.0236811,
+        "lon": 101.5420037
+      },
+      "cycle_s": 120,
+      "phases": [
+        {
+          "name": "phase 1",
+          "green_s": 50
+        },
+        {
+          "name": "phase 2",
+          "green_s": 30
+        },
+        {
+          "name": "phase 3",
+          "green_s": 25
+        }
+      ],
+      "date_observed": "2026-11-23",
+      "source": "placeholder - stopwatch survey needed"
+    }
+  ]
+}
