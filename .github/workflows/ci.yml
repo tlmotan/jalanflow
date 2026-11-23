@@ -1,0 +1,76 @@
+# CI: every push and PR runs the same checks as `make test` and `make web`
+# (plus gofmt and the committed-data test). CD: a green push to main deploys
+# web/dist to GitHub Pages at https://tlmotan.github.io/jalanflow/.
+#
+# Data is NOT regenerated here: raw OSM extracts are not committed and Overpass
+# is flaky. Instead internal/export's committed-data test checks that
+# web/public/data/ still matches the Go output structs and the capacity config.
+name: ci
+
+on:
+  push:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    env:
+      # paulmach/osm links C zlib when cgo is on; the pure-Go path needs no
+      # system libraries. (This also rules out `go test -race`, which needs cgo.)
+      CGO_ENABLED: "0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: gofmt
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "Run gofmt -w on:"; echo "$unformatted"; exit 1
+          fi
+      - name: make test (go vet + go test, incl. committed-data check)
+        run: make test
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      # tsc --noEmit && vite build; base matches the GitHub Pages project path.
+      - run: npm run build -- --base=/jalanflow/
+      - name: Upload Pages artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    needs: [go, web]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

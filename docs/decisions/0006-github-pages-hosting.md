@@ -1,0 +1,8 @@
+# 0006 — Host on GitHub Pages, deployed by GitHub Actions
+
+- Status: accepted · 2026-11-23
+- Context: PRD §6 needs the site live on free static hosting. ARCHITECTURE §2 listed Cloudflare Pages or Vercel, both of which need a separate account and an API token stored as a repo secret. The repo already lives on GitHub.
+- Decision: One workflow, `.github/workflows/ci.yml`. Jobs `go` (gofmt, `make test`) and `web` (`npm ci`, `npm run build -- --base=/jalanflow/`) run on every push and PR. On a push to `main`, `web` uploads `web/dist` and `deploy` publishes it with `actions/deploy-pages`, only after both checks pass.
+- The site is served from `/jalanflow/`, not `/`. The web code builds data URLs from `import.meta.env.BASE_URL`, so `npm run dev` still works at `/`. `vite.config.ts` is unchanged; the base is passed on the CLI in CI.
+- CI cannot regenerate data (raw OSM is not committed; Overpass is slow and flaky). Instead `internal/export/committed_data_test.go` strictly decodes the committed files into the Go output structs and checks `manifest.json`'s `capacity_config_hash` against the current config, so stale data fails the build.
+- Consequences: no secrets to manage. One manual step: repo Settings → Pages → Source: GitHub Actions. Moving to a custom domain later means setting base back to `/`. `go test -race` is not run because the build uses `CGO_ENABLED=0`.

@@ -39,7 +39,8 @@ cd web && npm run dev   # local site
 - TypeScript: `strict: true`. No `any`. Plain DOM, no framework.
 
 ## Definition of done
-- `make test` passes and `cd web && npm run build` passes.
+- `make test` passes and `cd web && npm run build` passes (CI runs both on every push/PR and must be green).
+- Changed the pipeline or capacity config? Re-run `make graph analyze` and commit `web/public/data/`; CI checks it is not stale.
 - New logic has tests.
 - If behaviour or a decision changed, the relevant doc is updated (and ARCHITECTURE-ESSENTIALS.md if it's a critical decision). Record bigger decisions as `docs/decisions/NNNN-title.md`.
 
