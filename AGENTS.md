@@ -6,6 +6,7 @@ This is the canonical agent instruction file. `CLAUDE.md` imports it.
 1. `docs/ARCHITECTURE-ESSENTIALS.md` — always, before any change.
 2. `docs/PRD.md` §4 (goals / non-goals) — before adding any feature.
 3. `docs/ARCHITECTURE.md` — only the section relevant to your task.
+4. `docs/DESIGN.md` and `docs/CONTENT.md` — before any change under `web/`.
 
 ## Project in one line
 Go pipeline turns an OpenStreetMap clip of one Klang Valley corridor into a directed flow network, finds the min-cut bottleneck with Dinic's, ranks "+1 lane" fixes, and writes static JSON for a MapLibre site.

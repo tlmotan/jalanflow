@@ -1,7 +1,7 @@
 {
   "corridor": "kemuning-pj",
   "osm_date": "2026-11-23",
-  "generated_at": "2026-11-23T15:52:12Z",
+  "generated_at": "2026-11-23T15:54:49Z",
   "ranking": "Biggest squeeze first: lanes out ÷ lanes in, smallest first; ties go to the drop losing more lanes.",
   "assumptions": [
     "Counts lanes only. It does not know how many cars use each road, so a small drop with heavy traffic can jam worse than a big one.",

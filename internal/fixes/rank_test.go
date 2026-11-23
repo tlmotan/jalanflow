@@ -123,7 +123,7 @@ func TestNoGainIsReallyZero(t *testing.T) {
 		if !ok {
 			continue
 		}
-		n, err := newNetwork(g, []graph.NodeID{1}, []graph.NodeID{4}, map[graph.EdgeID]int{f.EdgeID: widened})
+		n, err := newNetwork(g, nodeIndex(g), []graph.NodeID{1}, []graph.NodeID{4}, map[graph.EdgeID]int{f.EdgeID: widened})
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -140,5 +140,60 @@ func TestRankNeedsGates(t *testing.T) {
 	}
 	if _, err := Rank(g, Inbound, []graph.NodeID{9}, []graph.NodeID{2}); err == nil {
 		t.Error("want error for unknown source node")
+	}
+}
+
+func TestStepsReplayToEdgeFlow(t *testing.T) {
+	tests := []struct {
+		name           string
+		roads          []road
+		sources, sinks []graph.NodeID
+	}{
+		{
+			name:    "single pinch",
+			roads:   []road{{1, 2, []int{4}}, {2, 3, []int{2}}, {3, 4, []int{3}}},
+			sources: []graph.NodeID{1}, sinks: []graph.NodeID{4},
+		},
+		{
+			name: "two routes that share a middle road",
+			roads: []road{
+				{1, 2, []int{2}}, {1, 3, []int{2}}, {2, 3, []int{1}},
+				{2, 4, []int{1}}, {3, 4, []int{3}},
+			},
+			sources: []graph.NodeID{1}, sinks: []graph.NodeID{4},
+		},
+		{
+			name:    "two gates each end",
+			roads:   []road{{1, 3, []int{2}}, {2, 3, []int{1}}, {3, 4, []int{2}}, {3, 5, []int{2}}},
+			sources: []graph.NodeID{1, 2}, sinks: []graph.NodeID{4, 5},
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			g := testGraph(tc.roads)
+			r, err := Rank(g, Inbound, tc.sources, tc.sinks)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(r.Steps) == 0 {
+				t.Fatal("no steps")
+			}
+			sum := 0
+			flow := make([]int, len(g.Edges))
+			for _, st := range r.Steps {
+				sum += st.AmountVPH
+				for _, d := range st.Edges {
+					flow[d.EdgeID] += d.Delta
+				}
+			}
+			if sum != r.MaxFlowVPH {
+				t.Fatalf("sum of steps %d != max flow %d", sum, r.MaxFlowVPH)
+			}
+			for i := range flow {
+				if flow[i] != r.EdgeFlow[i] {
+					t.Fatalf("edge %d: replayed %d, EdgeFlow %d", i, flow[i], r.EdgeFlow[i])
+				}
+			}
+		})
 	}
 }

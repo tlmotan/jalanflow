@@ -91,6 +91,9 @@ func run(graphPath, corridorPath, capacityPath, out string) error {
 	if err := export.WriteFixes(out, results); err != nil {
 		return err
 	}
+	if err := export.WriteReplay(out, results); err != nil {
+		return err
+	}
 	capBytes, err := os.ReadFile(capacityPath)
 	if err != nil {
 		return fmt.Errorf("read %s: %w", capacityPath, err)
@@ -118,8 +121,12 @@ func run(graphPath, corridorPath, capacityPath, out string) error {
 				helps++
 			}
 		}
-		fmt.Fprintf(os.Stderr, "analyze: %s max flow %d veh/h, %d cut edges, %d fixes help on their own\n",
-			r.Direction, r.MaxFlowVPH, len(r.CutEdges), helps)
+		phases := 0
+		if n := len(r.Steps); n > 0 {
+			phases = r.Steps[n-1].Phase
+		}
+		fmt.Fprintf(os.Stderr, "analyze: %s max flow %d veh/h, %d cut edges, %d fixes help on their own, replay %d paths in %d phases\n",
+			r.Direction, r.MaxFlowVPH, len(r.CutEdges), helps, len(r.Steps), phases)
 		for _, fx := range r.Fixes {
 			e := g.Edges[fx.EdgeID]
 			fmt.Fprintf(os.Stderr, "  edge %d %s %s (%d lanes, %d veh/h): helps=%v gain=%d %s\n",

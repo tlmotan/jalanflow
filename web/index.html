@@ -10,6 +10,17 @@
     <div id="map"></div>
     <aside id="panel">
       <h1>Where lanes run out: Kota Kemuning → PJ</h1>
+      <section id="run" class="run" hidden>
+        <div class="run-row">
+          <button id="run-btn" type="button" class="primary">▶ Run the analysis</button>
+          <button id="flow-btn" type="button" aria-pressed="false" hidden>Show flow</button>
+        </div>
+        <div id="run-status" aria-live="polite" hidden>
+          <div class="counter"><b id="run-count">0</b> of <span id="run-max"></span> veh/h through</div>
+          <p id="run-caption"></p>
+        </div>
+        <p id="flow-note" class="note" hidden>Dots show how much each road can carry (max flow), not live traffic.</p>
+      </section>
       <p class="note">
         Places on KESAS (E5), LDP (E11) and their ramps where <b>more lanes come in than carry on</b>.
         Ranked by size of the squeeze. This counts lanes, not cars, so it can't say which one jams worst.
