@@ -19,7 +19,7 @@ make analyze    # cmd/analyze → web/public/data/kemuning-pj/
 make test       # go vet ./... && go test ./...
 make web        # cd web && npm ci && npm run build
 make all        # everything above, in order
-make hooks      # once per clone: pre-commit runs make test / npm run build for staged Go / web files
+make hooks      # once per clone: pre-commit runs make test / npm test + build for staged Go / web files
 cd web && npm run dev   # local site
 ```
 
@@ -41,7 +41,7 @@ cd web && npm run dev   # local site
 - TypeScript: `strict: true`. No `any`. Plain DOM, no framework.
 
 ## Definition of done
-- `make test` passes and `cd web && npm run build` passes (CI runs both on every push/PR and must be green).
+- `make test` passes and `cd web && npm test && npm run build` passes (CI runs both on every push/PR and must be green).
 - Changed the pipeline or capacity config? Re-run `make graph analyze` and commit `web/public/data/`; CI checks it is not stale.
 - New logic has tests.
 - If behaviour or a decision changed, the relevant doc is updated (and ARCHITECTURE-ESSENTIALS.md if it's a critical decision). Record bigger decisions as `docs/decisions/NNNN-title.md`.
