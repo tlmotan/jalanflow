@@ -18,6 +18,7 @@ make analyze    # cmd/analyze → web/public/data/kemuning-pj/
 make test       # go vet ./... && go test ./...
 make web        # cd web && npm ci && npm run build
 make all        # everything above, in order
+make hooks      # once per clone: pre-commit runs make test / npm run build for staged Go / web files
 cd web && npm run dev   # local site
 ```
 

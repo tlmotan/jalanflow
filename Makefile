@@ -4,7 +4,7 @@ CORRIDOR ?= kemuning-pj
 # The pure-Go zlib path needs no system libraries.
 export CGO_ENABLED ?= 0
 
-.PHONY: fetch graph analyze test web all clean
+.PHONY: fetch graph analyze test web all clean hooks
 
 fetch:
 	scripts/fetch-osm.sh $(CORRIDOR)
@@ -24,6 +24,11 @@ web:
 	cd web && npm ci && npm run build
 
 all: fetch graph analyze test web
+
+# Run make test / npm run build before each commit (scripts/git-hooks/pre-commit).
+hooks:
+	git config core.hooksPath scripts/git-hooks
+	@echo "pre-commit hook enabled"
 
 clean:
 	rm -rf data/interim/* web/dist

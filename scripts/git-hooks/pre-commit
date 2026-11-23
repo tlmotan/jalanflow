@@ -1,0 +1,50 @@
+#!/bin/sh
+# Pre-commit checks (AGENTS.md "Definition of done"). Enable once per clone:
+#   make hooks
+# Runs only what the staged files need:
+#   Go files (*.go, go.mod, go.sum, config/*.json) → make test
+#   anything under web/                             → npm run build
+# Docs-only commits run nothing. Skip in an emergency: git commit --no-verify
+#
+# Note: checks run on the working tree, not just the staged copy. If you
+# stage only part of your changes, the unstaged part is tested too.
+set -eu
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -n "$staged" ] || exit 0
+
+needs_go=no
+needs_web=no
+for f in $staged; do
+	case "$f" in
+	*.go | go.mod | go.sum | config/*.json) needs_go=yes ;;
+	web/*) needs_web=yes ;;
+	esac
+done
+
+root=$(git rev-parse --show-toplevel)
+cd "$root"
+
+if [ "$needs_go" = yes ]; then
+	echo "pre-commit: Go files staged → make test"
+	if ! make test >/tmp/jalanflow-pre-commit-go.log 2>&1; then
+		cat /tmp/jalanflow-pre-commit-go.log
+		echo "pre-commit: make test FAILED, commit stopped (git commit --no-verify to skip)." >&2
+		exit 1
+	fi
+	echo "pre-commit: make test passed"
+fi
+
+if [ "$needs_web" = yes ]; then
+	if [ ! -d web/node_modules ]; then
+		echo "pre-commit: web/node_modules missing. Run: cd web && npm ci" >&2
+		exit 1
+	fi
+	echo "pre-commit: web files staged → npm run build"
+	if ! npm --prefix web run build >/tmp/jalanflow-pre-commit-web.log 2>&1; then
+		cat /tmp/jalanflow-pre-commit-web.log
+		echo "pre-commit: npm run build FAILED, commit stopped (git commit --no-verify to skip)." >&2
+		exit 1
+	fi
+	echo "pre-commit: npm run build passed"
+fi

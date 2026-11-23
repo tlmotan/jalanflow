@@ -11,6 +11,7 @@ Finds the roads that limit traffic flow on Klang Valley corridors, using OpenStr
 # needs Go 1.23+, Node 20+, osmium-tool, jq
 make all
 cd web && npm run dev
+make hooks   # once: checks Go / web changes before each commit
 ```
 
 Map data © OpenStreetMap contributors, ODbL.
