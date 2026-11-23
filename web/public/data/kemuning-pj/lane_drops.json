@@ -1,7 +1,7 @@
 {
   "corridor": "kemuning-pj",
-  "osm_date": "2026-11-22",
-  "generated_at": "2026-11-22T22:43:51Z",
+  "osm_date": "2026-11-23",
+  "generated_at": "2026-11-23T11:53:38Z",
   "ranking": "Biggest squeeze first: lanes out ÷ lanes in, smallest first; ties go to the drop losing more lanes.",
   "assumptions": [
     "Counts lanes only. It does not know how many cars use each road, so a small drop with heavy traffic can jam worse than a big one.",
@@ -888,7 +888,10 @@
         }
       ],
       "lanes_inferred": false,
-      "confirmed": null
+      "confirmed": {
+        "name": "KESAS eastbound, exit 507 traffic rejoining (queue backs up to Sri Muda)",
+        "source": "Tim, local driver, 2026-11-23: the eastbound queue from Sri Muda stays slow until just after exit 507"
+      }
     },
     {
       "rank": 22,
@@ -1823,45 +1826,6 @@
     },
     {
       "rank": 44,
-      "key": "node:1743953924",
-      "kind": "merge",
-      "pos": {
-        "lat": 3.0289488,
-        "lon": 101.549609
-      },
-      "lanes_in": 4,
-      "lanes_out": 3,
-      "lanes_lost": 1,
-      "squeeze": 0.75,
-      "from": [
-        {
-          "osm_way_id": 142141200,
-          "name": "Lebuhraya Shah Alam",
-          "ref": "E5",
-          "class": "motorway",
-          "lanes": 4,
-          "lanes_inferred": false,
-          "leaves": "",
-          "joins": ""
-        }
-      ],
-      "to": [
-        {
-          "osm_way_id": 162530515,
-          "name": "Lebuhraya Shah Alam",
-          "ref": "E5",
-          "class": "motorway",
-          "lanes": 3,
-          "lanes_inferred": true,
-          "leaves": "",
-          "joins": ""
-        }
-      ],
-      "lanes_inferred": true,
-      "confirmed": null
-    },
-    {
-      "rank": 45,
       "key": "node:1749436879",
       "kind": "merge",
       "pos": {
@@ -1910,7 +1874,7 @@
       "confirmed": null
     },
     {
-      "rank": 46,
+      "rank": 45,
       "key": "node:270063797",
       "kind": "merge",
       "pos": {
@@ -1959,7 +1923,7 @@
       "confirmed": null
     },
     {
-      "rank": 47,
+      "rank": 46,
       "key": "node:3340417283",
       "kind": "merge",
       "pos": {
@@ -2008,7 +1972,7 @@
       "confirmed": null
     },
     {
-      "rank": 48,
+      "rank": 47,
       "key": "node:7222892988",
       "kind": "merge",
       "pos": {
@@ -2057,7 +2021,7 @@
       "confirmed": null
     },
     {
-      "rank": 49,
+      "rank": 48,
       "key": "node:7222893077",
       "kind": "merge",
       "pos": {
@@ -2106,7 +2070,7 @@
       "confirmed": null
     },
     {
-      "rank": 50,
+      "rank": 49,
       "key": "way:1116728174\u003e1303695718",
       "kind": "narrowing",
       "pos": {
@@ -2145,7 +2109,7 @@
       "confirmed": null
     },
     {
-      "rank": 51,
+      "rank": 50,
       "key": "way:1163589850\u003e1163589694",
       "kind": "narrowing",
       "pos": {
@@ -2184,7 +2148,7 @@
       "confirmed": null
     },
     {
-      "rank": 52,
+      "rank": 51,
       "key": "way:1570431891\u003e780644840",
       "kind": "narrowing",
       "pos": {
@@ -2223,7 +2187,7 @@
       "confirmed": null
     },
     {
-      "rank": 53,
+      "rank": 52,
       "key": "way:1570431897\u003e612892193",
       "kind": "narrowing",
       "pos": {
@@ -2262,7 +2226,7 @@
       "confirmed": null
     },
     {
-      "rank": 54,
+      "rank": 53,
       "key": "way:53561474\u003e1116932339",
       "kind": "narrowing",
       "pos": {
@@ -2301,7 +2265,7 @@
       "confirmed": null
     },
     {
-      "rank": 55,
+      "rank": 54,
       "key": "way:765219954\u003e765219955",
       "kind": "narrowing",
       "pos": {
@@ -2340,7 +2304,7 @@
       "confirmed": null
     },
     {
-      "rank": 56,
+      "rank": 55,
       "key": "way:765244714\u003e765252767",
       "kind": "narrowing",
       "pos": {
@@ -2379,7 +2343,7 @@
       "confirmed": null
     },
     {
-      "rank": 57,
+      "rank": 56,
       "key": "way:766307016\u003e766307017",
       "kind": "narrowing",
       "pos": {
@@ -2418,7 +2382,7 @@
       "confirmed": null
     },
     {
-      "rank": 58,
+      "rank": 57,
       "key": "way:767714238\u003e767714237",
       "kind": "narrowing",
       "pos": {
@@ -2457,7 +2421,7 @@
       "confirmed": null
     },
     {
-      "rank": 59,
+      "rank": 58,
       "key": "way:767714240\u003e767714239",
       "kind": "narrowing",
       "pos": {
@@ -2496,7 +2460,7 @@
       "confirmed": null
     },
     {
-      "rank": 60,
+      "rank": 59,
       "key": "way:776839971\u003e1157957438",
       "kind": "narrowing",
       "pos": {
@@ -2535,7 +2499,7 @@
       "confirmed": null
     },
     {
-      "rank": 61,
+      "rank": 60,
       "key": "way:777830913\u003e777830914",
       "kind": "narrowing",
       "pos": {
@@ -2574,7 +2538,7 @@
       "confirmed": null
     },
     {
-      "rank": 62,
+      "rank": 61,
       "key": "way:779721462\u003e779999502",
       "kind": "narrowing",
       "pos": {
@@ -2613,7 +2577,7 @@
       "confirmed": null
     },
     {
-      "rank": 63,
+      "rank": 62,
       "key": "way:779935031\u003e767714243",
       "kind": "narrowing",
       "pos": {
@@ -2652,7 +2616,7 @@
       "confirmed": null
     },
     {
-      "rank": 64,
+      "rank": 63,
       "key": "way:779991720\u003e583121684",
       "kind": "narrowing",
       "pos": {
@@ -2691,7 +2655,7 @@
       "confirmed": null
     },
     {
-      "rank": 65,
+      "rank": 64,
       "key": "way:780625494\u003e501452456",
       "kind": "narrowing",
       "pos": {
@@ -2730,7 +2694,7 @@
       "confirmed": null
     },
     {
-      "rank": 66,
+      "rank": 65,
       "key": "way:780973954\u003e954603648",
       "kind": "narrowing",
       "pos": {
@@ -2769,7 +2733,7 @@
       "confirmed": null
     },
     {
-      "rank": 67,
+      "rank": 66,
       "key": "way:781863034\u003e260603907",
       "kind": "narrowing",
       "pos": {
@@ -2808,7 +2772,7 @@
       "confirmed": null
     },
     {
-      "rank": 68,
+      "rank": 67,
       "key": "node:1450816986",
       "kind": "merge",
       "pos": {
@@ -2857,7 +2821,7 @@
       "confirmed": null
     },
     {
-      "rank": 69,
+      "rank": 68,
       "key": "node:271726619",
       "kind": "merge",
       "pos": {
@@ -2903,13 +2867,10 @@
         }
       ],
       "lanes_inferred": false,
-      "confirmed": {
-        "name": "Sri Muda entry onto KESAS eastbound",
-        "source": "Tim, local driver, checked on Street View 2026-11-22"
-      }
+      "confirmed": null
     },
     {
-      "rank": 70,
+      "rank": 69,
       "key": "node:677399597",
       "kind": "merge",
       "pos": {
@@ -2958,7 +2919,7 @@
       "confirmed": null
     },
     {
-      "rank": 71,
+      "rank": 70,
       "key": "node:769988247",
       "kind": "merge",
       "pos": {
@@ -3007,7 +2968,7 @@
       "confirmed": null
     },
     {
-      "rank": 72,
+      "rank": 71,
       "key": "node:770116304",
       "kind": "merge",
       "pos": {
@@ -3056,7 +3017,7 @@
       "confirmed": null
     },
     {
-      "rank": 73,
+      "rank": 72,
       "key": "node:770116509",
       "kind": "merge",
       "pos": {
@@ -3105,7 +3066,7 @@
       "confirmed": null
     },
     {
-      "rank": 74,
+      "rank": 73,
       "key": "way:1116586916\u003e1168460616",
       "kind": "narrowing",
       "pos": {
@@ -3144,7 +3105,7 @@
       "confirmed": null
     },
     {
-      "rank": 75,
+      "rank": 74,
       "key": "way:1157623992\u003e773803015",
       "kind": "narrowing",
       "pos": {
@@ -3183,7 +3144,7 @@
       "confirmed": null
     },
     {
-      "rank": 76,
+      "rank": 75,
       "key": "way:1165332582\u003e1165332581",
       "kind": "narrowing",
       "pos": {
@@ -3222,7 +3183,7 @@
       "confirmed": null
     },
     {
-      "rank": 77,
+      "rank": 76,
       "key": "way:53562541\u003e1116728174",
       "kind": "narrowing",
       "pos": {
@@ -3261,7 +3222,7 @@
       "confirmed": null
     },
     {
-      "rank": 78,
+      "rank": 77,
       "key": "way:765219956\u003e765257075",
       "kind": "narrowing",
       "pos": {
@@ -3300,7 +3261,7 @@
       "confirmed": null
     },
     {
-      "rank": 79,
+      "rank": 78,
       "key": "way:767944974\u003e765219954",
       "kind": "narrowing",
       "pos": {
@@ -3339,7 +3300,7 @@
       "confirmed": null
     },
     {
-      "rank": 80,
+      "rank": 79,
       "key": "way:777838494\u003e777838495",
       "kind": "narrowing",
       "pos": {
@@ -3378,7 +3339,7 @@
       "confirmed": null
     },
     {
-      "rank": 81,
+      "rank": 80,
       "key": "way:777849543\u003e777849541",
       "kind": "narrowing",
       "pos": {
@@ -3417,7 +3378,7 @@
       "confirmed": null
     },
     {
-      "rank": 82,
+      "rank": 81,
       "key": "way:779721472\u003e779721469",
       "kind": "narrowing",
       "pos": {
@@ -3456,7 +3417,7 @@
       "confirmed": null
     },
     {
-      "rank": 83,
+      "rank": 82,
       "key": "way:780973955\u003e780973954",
       "kind": "narrowing",
       "pos": {
@@ -3495,7 +3456,7 @@
       "confirmed": null
     },
     {
-      "rank": 84,
+      "rank": 83,
       "key": "node:770065479",
       "kind": "merge",
       "pos": {
@@ -3544,7 +3505,7 @@
       "confirmed": null
     },
     {
-      "rank": 85,
+      "rank": 84,
       "key": "way:773803031\u003e773803030",
       "kind": "narrowing",
       "pos": {
@@ -3583,7 +3544,7 @@
       "confirmed": null
     },
     {
-      "rank": 86,
+      "rank": 85,
       "key": "way:780246700\u003e780247871",
       "kind": "narrowing",
       "pos": {
@@ -3622,7 +3583,7 @@
       "confirmed": null
     },
     {
-      "rank": 87,
+      "rank": 86,
       "key": "node:7222840582",
       "kind": "merge",
       "pos": {
@@ -3671,7 +3632,7 @@
       "confirmed": null
     },
     {
-      "rank": 88,
+      "rank": 87,
       "key": "way:1160377190\u003e1160377187",
       "kind": "narrowing",
       "pos": {

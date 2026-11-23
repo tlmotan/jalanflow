@@ -41,13 +41,13 @@
     "source": "Chosen 2026-11-22 by checking the real graph: 400 m clears the widened plaza approaches on KESAS and LDP (11-15 booth lanes) without hiding the Sri Muda or exit-510 drops. See docs/decisions/0004-lane-drops-headline.md",
     "confirmed": [
       {
-        "key": "node:271726619",
-        "name": "Sri Muda entry onto KESAS eastbound",
+        "key": "node:33987957",
+        "name": "KESAS eastbound, exit 507 traffic rejoining (queue backs up to Sri Muda)",
         "pin": {
           "lat": 3.0245507704006007,
           "lon": 101.54281308204921
         },
-        "source": "Tim, local driver, checked on Street View 2026-11-22"
+        "source": "Tim, local driver, 2026-11-23: the eastbound queue from Sri Muda stays slow until just after exit 507"
       },
       {
         "key": "way:148018437>1116586907",
