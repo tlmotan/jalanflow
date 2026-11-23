@@ -23,11 +23,12 @@ cd web && npm run dev   # local site
 ```
 
 ## Rules
-- **Phase 1 scope only.** If a task needs anything in the PRD non-goals (API server, database, route choice, removing roads, buses/rail, more corridors), stop and ask.
+- **Phase 1 and Phase 1.5 scope only.** Phase 1.5 = demand + CTM simulator + tested fixes on the same corridor (PRD goals 7–9, decisions 0007–0008): fixed routes, static output, no fix published before the validation gate passes. If a task needs anything in the PRD non-goals (API server, database, route choice or re-routing, removing roads, buses/rail, more corridors, real-time data), stop and ask.
+- **`internal/ctm` stays pure** like `flow`: no I/O, no logging, no internal imports. `corridor` may import only `graph`, `config`, `ctm`.
 - **No new dependencies** without asking. Go: standard library + `paulmach/osm` only. Web: `maplibre-gl`, `vite`, `typescript` only.
 - **`internal/flow` stays pure**: no I/O, no logging, no imports from other internal packages.
 - **Respect the package dependency rule** in ARCHITECTURE-ESSENTIALS.md.
-- **No magic numbers** for capacity, speeds or factors — they go in `config/capacity-defaults.json` with a `source` field.
+- **No magic numbers** for capacity, speeds or factors — they go in `config/capacity-defaults.json` with a `source` field. Phase 1.5 demand, split ratios, signal timings and fix parameters go in JSON under `config/`, also with a `source` field (and year for counts).
 - **Merging edges keeps the minimum capacity.** Never average.
 - **Output format changes**: update the Go struct, `web/src/types.ts` and ARCHITECTURE.md §4 in the same change.
 - **Never commit** `data/raw/` or `data/interim/`. Do commit `web/public/data/`.

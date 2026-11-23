@@ -1,6 +1,6 @@
 # ARCHITECTURE — JalanFlow
 
-> Status: v0.2 (revised after REVIEW.md) · Read ARCHITECTURE-ESSENTIALS.md first if you are an agent.
+> Status: v0.3 (Phase 1.5 simulation planned, §3.6) · Read ARCHITECTURE-ESSENTIALS.md first if you are an agent.
 
 ## 1. Overview
 
@@ -92,6 +92,30 @@ Min cuts are **not unique**. We report the cut nearest the source (from the resi
 | primary and below with no above | easy (re-stripe / junction change) |
 
 Reasons are stored as a list of strings and shown to the user verbatim.
+
+### 3.6 Simulation (Phase 1.5 — planned, decisions 0007 and 0008)
+
+Phase 1 is unchanged. Phase 1.5 adds traffic demand and a **Cell Transmission Model** (Daganzo 1994/95) so fixes can be tested for delay saved, not just capacity gained.
+
+**Packages**
+- `internal/ctm` — pure simulator, like `flow`: no I/O, no logging, no internal imports. Input: cells, nodes (merge/diverge/source/sink/signal), demand profiles, controllers. Output: per-cell density/flow per time step, plus totals. Deterministic.
+- `internal/corridor` — builds the CTM network from the graph: walks KESAS E5 + LDP E11 per direction along the Phase 1 route, cuts it into cells (~200–500 m, cell length ≥ free-flow speed × Δt so CTM is stable), attaches on-ramps as source cells and off-ramps as sinks, takes lanes per cell from `Edge.Parts` (minimum, as everywhere). Depends on `graph`, `config`, `ctm`.
+- `cmd/analyze` runs baseline + every fix and `export` writes `scenarios.json`.
+
+**Model**
+- Triangular fundamental diagram per cell: free-flow speed v, capacity Q = lanes × per-lane veh/h, jam density K_j = lanes × per-lane jam density, wave speed w. Sending S = min(v·ρ, Q), receiving R = min(Q, w·(K_j − ρ)). All parameters in config with `source`.
+- **Merge** (on-ramp): inflow split by priority (default: proportional to lanes/capacity) when the downstream receiving flow is short. **Diverge** (off-ramp): fixed split ratios from demand data (FIFO, so a full off-ramp blocks the mainline — this is how the exit-510 queue spills back).
+- **Capacity drop:** once a cell's upstream queue is active, its discharge falls to Q × (1 − drop); the drop fraction is in config with `source`.
+- **ALINEA** ramp metering on chosen on-ramps: r(k) = r(k−1) + K_R · (ρ_target − ρ_downstream), clamped to [r_min, ramp capacity]; ramp queue limited by storage, overflow counted as delay.
+- **Stepped signals:** signal node passes capacity × 1 on green and 0 on red, per cycle from config (observed timings) or Webster's formula for the retiming fix.
+- **Fixed routes** (decision 0007): demand enters at on-ramps by time-of-day profile and leaves by split ratios. Nobody re-routes; no induced demand. Stated on the site.
+
+**Demand and calibration**
+- Demand: JKR/HPU Road Traffic Volume Malaysia (census station AADT + hourly profile), LLM highway statistics (plaza transactions). Converted to 15-min peak profiles at each on-ramp; off-ramp split ratios from the same. Each input carries source and year.
+- Calibration targets: Google Maps typical peak travel times per section (recorded manually with date/time) and local queue observations (where the queue head and tail sit).
+- **Validation gate** (checked in a test against `docs/validation.md` targets): baseline reproduces (1) the Sri Muda queue with its head at drop #21 (node 33987957, exit-507 merge), (2) the exit-510 Subang ramp queue, (3) peak travel times within ≤ 20 %. If it fails, `scenarios.json` has `validated: false` and no fixes.
+
+**Fix types** (decision 0008, each run alone against the baseline): re-striping (lane-add instead of merge, longer auxiliary lane), dividers/channelisation (lower capacity drop + zipper priority, low confidence), ramp metering (ALINEA), +1 lane, signal timing (Webster retiming, new-signal scenario). Ranked by delay saved (veh-h per peak).
 
 ## 4. Data models
 
@@ -243,6 +267,27 @@ type Drop struct {
 
 **`lane_drops.json`** — `{ corridor, osm_date, generated_at, ranking, assumptions[], drops: Drop[] }` (`export.LaneDropsFile`), drops in rank order.
 
+**`scenarios.json`** — *planned, Phase 1.5; not produced yet.* Shape (Go struct in `internal/export` will be the source of truth, mirrored in `web/src/types.ts` when built):
+```json
+{ "corridor": "kemuning-pj", "generated_at": "...", "validated": true,
+  "demand_sources": ["JKR/HPU RTVM 2024", "LLM highway statistics 2024"],
+  "validation": { "jams_reproduced": ["drop:node:33987957", "way:148018437>1116586907"],
+                  "travel_time_error_pct": 12.0 },
+  "assumptions": ["Fixed routes: nobody re-routes", "..."],
+  "inbound": {
+    "baseline": { "delay_veh_h": 0, "commute_min": 0,
+                  "heat": { "t0": "07:00", "dt_s": 60, "cell_km": [0.0, 0.3], "speed_kph": [[0]] } },
+    "fixes": [ { "id": "restripe-node-33987957", "type": "restripe",
+                 "where": { "key": "node:33987957", "pos": [101.55728, 3.04031] },
+                 "change": "Exit-507 ramp gets its own lane (3 + 2 → 4)",
+                 "delay_saved_veh_h": 0, "commute_min_before": 0, "commute_min_after": 0,
+                 "queue_moves_to": "node:...", "difficulty": "easy", "reasons": ["..."],
+                 "confidence": "medium", "confidence_reason": "...",
+                 "heat": { "...": "same shape as baseline" } } ] },
+  "outbound": { "...": "same shape" } }
+```
+`type` ∈ `restripe | channelise | ramp_meter | plus_lane | signal_timing`; `confidence` ∈ `low | medium | high`. Fixes sorted by `delay_saved_veh_h` desc. When `validated` is false, `fixes` is empty.
+
 **`manifest.json`**
 ```json
 { "corridor": "kemuning-pj", "generated_at": "2026-11-21T00:00:00Z",
@@ -272,6 +317,8 @@ jalanflow/
 │   ├── flow/                  Dinic, min cut (pure, no I/O)
 │   ├── lanedrop/              lane drops: merges and narrowings on the route
 │   ├── fixes/                 +1 lane ranking, difficulty heuristic
+│   ├── ctm/                   (Phase 1.5, planned) cell transmission model, pure
+│   ├── corridor/              (Phase 1.5, planned) graph → CTM cell chain, demand
 │   └── export/                GeoJSON / JSON writers
 ├── config/
 │   ├── capacity-defaults.json
@@ -283,7 +330,7 @@ jalanflow/
 └── docs/                      PRD, ARCHITECTURE(-ESSENTIALS), REVIEW, decisions/
 ```
 
-**Dependency rule:** `flow` depends on nothing in the repo. `graph` depends on `osm` and `config`. `fixes` depends on `flow` and `graph`. `lanedrop` depends on `graph` and `config`. `export` depends on `graph`, `flow`, `fixes`, `lanedrop`. `cmd/*` wire things together. No package imports `cmd`.
+**Dependency rule:** `flow` depends on nothing in the repo. `graph` depends on `osm` and `config`. `fixes` depends on `flow` and `graph`. `lanedrop` depends on `graph` and `config`. `ctm` depends on nothing in the repo (pure, like `flow`). `corridor` depends on `graph`, `config` and `ctm`. `export` depends on `graph`, `flow`, `fixes`, `lanedrop` (and `corridor`, `ctm` in Phase 1.5). `cmd/*` wire things together. No package imports `cmd`.
 
 ## 6. Testing
 
@@ -293,6 +340,8 @@ jalanflow/
 | `osm` tag parsing | Table tests for every lanes/oneway combination |
 | `graph` simplify | Test that a 2-lane pinch inside a 4-lane chain survives merging |
 | End-to-end | `testdata/mini.osm.pbf` (a few junctions) → golden `edges.geojson` |
+| `ctm` (Phase 1.5) | Table tests: vehicles conserved; queue forms at a known bottleneck and spills back at wave speed w; discharge = Q × (1 − drop) once queued; ALINEA holds downstream density near target; red signal passes 0 |
+| Simulation gate (Phase 1.5) | Baseline reproduces both known jams and travel times within ≤ 20 % (§3.6); fixes are not exported otherwise |
 | Validation | `docs/validation.md` — known jam spots vs model output (manual, before each release) |
 | Cross-check | Optional notebook: same graph in NetworkX gives the same max flow |
 
@@ -307,5 +356,6 @@ jalanflow/
 ## 9. Phase 2+ (sketch only — do not build yet)
 - **Junction capacity:** split each signalised node into in/out nodes with an internal capacity arc.
 - **API:** small Go `net/http` server: `POST /scenarios` with edge changes → returns new flow. Graph held in memory; stateless.
+- **Phase 1.5 is in §3.6**, not here: it stays static and fixed-route.
 - **Route choice (Phase 3):** Frank–Wolfe user equilibrium with BPR travel-time functions; needs an OD demand estimate.
 - **Layers (Phase 4):** GTFS for Rapid KL; crowdsourced bus stops go to OSM, not our repo.

@@ -1,0 +1,17 @@
+# 0008 — Fix types tested in the Phase 1.5 simulator
+
+- Status: accepted · 2026-11-23
+- Context: Phase 1 tests one change, "+1 lane" (0005). Most real jams on the corridor are merges (lane drops, 0004) where cheaper changes exist: re-striping, physical channelisation, ramp meters, signal retiming. The CTM (0007) can test each one if we say how it maps onto cells. Some fixes map well, some only roughly; the site must show which.
+- Decision: five fix types, each a change to the CTM inputs, run against the validated baseline and ranked by **delay saved** (vehicle-hours per peak). Each result also has commute time before/after, where the queue moves, difficulty (Phase 1 heuristic, ARCHITECTURE §3.5) and **confidence**.
+
+| Fix type | What changes on the road | How it is modelled in CTM | Confidence |
+|---|---|---|---|
+| **Re-striping** | Lane-add instead of merge (ramp gets its own lane through), or a longer auxiliary/acceleration lane | +1 lane (capacity, jam density) on the cells after the merge for the restriped length; merge cell keeps both inflows without the lane-drop priority split; capacity drop removed or shortened at that merge | Medium–high: CTM handles lane counts and merge capacity well |
+| **Dividers / channelisation** | Physical separators or an angled obstacle that forces zipper merging (the owner's "angled obstacle at a fire exit" idea) | Lower **capacity drop** at the merge (e.g. half the baseline drop) and **zipper priority** (fixed 1:1 merge ratio) instead of the default capacity-proportional split. Values are assumptions in config with `source` | **Low**: CTM cannot see divider geometry, lane-level weaving or driver reaction to an obstacle; we only test "if it cuts the drop by X, delay falls by Y". Always labelled low confidence |
+| **Ramp metering (ALINEA)** | Signal on an on-ramp that releases cars to keep the mainline just below critical density | ALINEA feedback on the on-ramp cell: release rate r(k) = r(k−1) + K_R · (ρ_target − ρ_down); ramp queue capped by ramp storage (spillback onto the local road counted as delay) | Medium: well-studied method, but gain depends on demand accuracy; ramp queue delay is included so it is not a free win |
+| **+1 lane** | Widen the bottleneck section | +1 lane on the cells of the narrowest section (same rule as 0005: narrowest part) | Medium–high on the corridor; ignores induced demand (0007) |
+| **Signal timing** | Webster retiming of an existing signal, or a new-signal scenario | Stepped signal cell: capacity × green, 0 on red, per cycle. Retiming uses Webster's optimal cycle C₀ = (1.5L + 5)/(1 − Y) and green split ∝ flow ratios from simulated demand; observed current timings go in config with `source` | Medium for retiming; low for a new signal (no observed timings, driver compliance assumed) |
+
+- Every fix is run alone against the same baseline and demand. Combinations are not ranked yet (as in 0005).
+- A fix is only published if the baseline passed the validation gate (0007).
+- Consequences: config gains per-fix parameters (capacity-drop reduction, ALINEA gain K_R and target density, signal timings), all with `source`. The site's Solutions panel shows the confidence label and its reason verbatim, and the before/after time–space heat strip, so a reader sees where the queue moves. Low-confidence fixes are shown but never ranked above a higher-confidence fix with similar delay saved without saying so.
