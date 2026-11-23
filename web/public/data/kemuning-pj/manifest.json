@@ -1,0 +1,18 @@
+{
+  "corridor": "kemuning-pj",
+  "generated_at": "2026-11-23T11:58:33Z",
+  "osm_date": "2026-11-23",
+  "pipeline_version": "0.2.0",
+  "capacity_config_hash": "sha256:22b48d041ba8536541193ed68e05391648240f0f2c1ccacc00d8d88e833820b3",
+  "max_flow_vph": {
+    "inbound": 6000,
+    "outbound": 6000
+  },
+  "assumptions": [
+    "Junctions are treated as unlimited capacity; only road segments limit flow.",
+    "Capacity = lanes x per-lane veh/h by road class x signal factor; per-lane values are placeholders until calibrated.",
+    "Max flow is the most traffic the road network could carry between the gates, not how much actually travels.",
+    "Min cuts are not unique; the cut nearest the source is shown.",
+    "A +1 lane fix only helps if its road is in every min cut; others gain nothing on their own."
+  ]
+}

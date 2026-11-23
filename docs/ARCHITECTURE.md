@@ -20,7 +20,7 @@ Phase 1 is a **batch pipeline + static website**. No server, no database.
                                                         │
                                      web/ (Vite + TypeScript + MapLibre)
                                                         ▼
-                                     static host (Cloudflare Pages / Vercel)
+                                     GitHub Pages (deployed by GitHub Actions)
 ```
 
 Why two Go commands, not one: building the graph is slow and changes rarely; analysis is fast and changes often. Splitting them lets you iterate on the algorithm without re-parsing OSM, and gives a clean, testable boundary (`graph.json`).
@@ -38,8 +38,8 @@ Why two Go commands, not one: building the graph is slow and changes rarely; ana
 | Output | GeoJSON (RFC 7946) + JSON | Any map library reads it |
 | Frontend | **Vite + TypeScript + MapLibre GL JS** | Free, open-source, vector maps, no API key needed with open tiles |
 | Base map tiles | OpenFreeMap or other free OSM-based style | Free; verify terms before launch |
-| Hosting | Cloudflare Pages or Vercel (static) | Free tier, no server |
-| CI | GitHub Actions: `go test`, `go vet`, `npm run build` | Keeps main green |
+| Hosting | **GitHub Pages**, deployed by the CI workflow on every green push to `main` (decision 0006) | Free, no extra account or secrets; site lives at `/jalanflow/`, so the web code builds URLs from `import.meta.env.BASE_URL` |
+| CI | GitHub Actions (`.github/workflows/ci.yml`): `gofmt`, `go vet`, `go test` (incl. a check that committed `web/public/data/` matches the output structs and the current capacity config), `npm run build` | Keeps main green; data is not regenerated in CI because raw OSM is not committed |
 | Prototyping (optional) | Python + OSMnx/NetworkX notebooks in `notebooks/` | Only to cross-check Go results; never in the pipeline |
 
 **Explicitly not used in Phase 1:** database, API server, Docker, Kubernetes, message queues, scheduled jobs, auth.
@@ -67,6 +67,8 @@ Why two Go commands, not one: building the graph is slow and changes rarely; ana
 - Each corridor config lists **gates**: named points (lat/lon) snapped to the nearest graph node, each marked `source` or `sink`.
 - A **super-source** links to all source gates and a **super-sink** from all sink gates, with infinite capacity.
 - **Gate snapping is per direction.** On a dual carriageway the nearest node may be on the wrong side, so a source gate snaps to the nearest node whose outgoing road runs in the direction of travel, and a sink to one whose incoming road does (KESAS eastbound / LDP northbound for inbound). Checked 2026-11-22: naive nearest-node snapping put a gate on a side street and capped max flow at that street.
+- Implemented as `graph.SnapGate`: candidates are only nodes on `gate_snap.classes` roads (motorway/trunk) within `gate_snap.max_m`; "runs the right way" = the edge's far end is nearer the other gate than its start. Checked 2026-11-23: the west gate is ~360 m from the nearest KESAS junction nodes with secondary roads nearer, so `max_m` is 500; the east gate sits on the LDP exit-1108 diverge and its inbound sink is the node where the 4-lane mainline arrives.
+- With one gate per side the min cut is usually the gate road itself (2026-11-23 OSM, placeholder capacities: 6,000 veh/h each way; inbound cut = KESAS eastbound at the source, outbound cut = LDP southbound at the source). That is a property of single-point gates (decision 0003), not a finding about the network.
 - Run per **direction** (`inbound`: Kota Kemuning → PJ; `outbound`: reverse) by swapping gate roles.
 - Max flow therefore = the most vehicles/hour the network can move between the gate sets. The min cut = the set of road segments that together cap that number.
 
@@ -76,7 +78,8 @@ Why two Go commands, not one: building the graph is slow and changes rarely; ana
 | Max flow | Dinic's | O(V²E), fast in practice | Integer capacities (veh/h) |
 | Min cut | BFS on residual graph from source | O(V+E) | Cut = arcs from reachable to unreachable |
 | Bottleneck score | `flow / capacity` per edge, plus `is_cut` | O(E) | Saturated non-cut edges shown amber |
-| Fix ranking | For each cut edge: +1 lane, re-run Dinic, record gain + new cut | O(k · Dinic) | k = cut size, small |
+| Fixes that help | Picard–Queyranne: arc u→v is in **every** min cut iff u reachable from s and v reaches t in the residual graph | O(V+E) | Only these arcs can raise max flow when widened (decision 0005) |
+| Fix ranking | For each cut edge: +1 lane on its narrowest part; if it is in every min cut, re-run Dinic and record gain + new cut, else `helps=false`, gain 0, no re-run | O(k · Dinic) | k = cut size, small |
 
 Min cuts are **not unique**. We report the cut nearest the source (from the residual BFS) and say so. Phase 2 may also compute the cut nearest the sink.
 
@@ -157,6 +160,7 @@ type Corridor struct {
     Name    string
     BBox    [4]float64 // minLon, minLat, maxLon, maxLat
     Gates   []Gate
+    GateSnap GateSnap // {classes, max_m, source}: see §3.3
 }
 type Gate struct {
     Name string
@@ -196,6 +200,8 @@ type Fix struct {
     NextCutEdges  []EdgeID // where the bottleneck moves
     Difficulty    Difficulty
     Reasons       []string
+    Helps         bool     // +1 lane alone raises max flow (edge in every min cut)
+    WhyNoGain     string   // plain words when !Helps: other equally tight cut, other equally narrow part, or unknown lanes
 }
 ```
 
@@ -222,7 +228,7 @@ type Drop struct {
 
 ### 4.4 Output files (`web/public/data/<corridor>/`)
 
-**`edges.geojson`** — FeatureCollection, one LineString per edge **per direction analysed**:
+**`edges.geojson`** — FeatureCollection, one LineString per edge **per direction analysed**, only edges carrying flow in that direction (cut edges always do). Compact JSON, coordinates rounded to 6 decimals: the whole bbox would be ~19 MB.
 ```json
 { "type": "Feature",
   "geometry": { "type": "LineString", "coordinates": [[101.5, 3.07], ...] },
@@ -233,7 +239,7 @@ type Drop struct {
   } }
 ```
 
-**`fixes.json`** — `{ "inbound": Fix[], "outbound": Fix[] }`, sorted by `GainVPH` desc.
+**`fixes.json`** — `{ "inbound": Fix[], "outbound": Fix[] }`, sorted by `GainVPH` desc (then edge id). One entry per source-side cut edge, including `helps: false` ones so the site can say why they gain nothing.
 
 **`lane_drops.json`** — `{ corridor, osm_date, generated_at, ranking, assumptions[], drops: Drop[] }` (`export.LaneDropsFile`), drops in rank order.
 

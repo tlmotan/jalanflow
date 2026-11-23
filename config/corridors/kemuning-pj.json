@@ -26,6 +26,14 @@
       "role": "east"
     }
   ],
+  "gate_snap": {
+    "classes": [
+      "motorway",
+      "trunk"
+    ],
+    "max_m": 500,
+    "source": "Chosen 2026-11-23 on the real graph: snap only to motorway/trunk (not ramps or side streets). The west gate is ~360-400 m from the nearest KESAS junction nodes on both carriageways, with secondary roads nearer, so 500 m with the class filter. The east gate sits on the LDP exit-1108 diverge. See ARCHITECTURE §3.3 and decision 0003."
+  },
   "lane_drops": {
     "route_refs": [
       "E5",

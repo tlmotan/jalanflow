@@ -5,7 +5,8 @@ import type { FeatureCollection, Point } from "geojson";
 import type { FixesFile, LaneDrop, LaneDropRoad, LaneDropsFile } from "./types";
 
 const CORRIDOR = "kemuning-pj";
-const DATA = `/data/${CORRIDOR}`;
+// BASE_URL is "/" locally and "/jalanflow/" on GitHub Pages (vite --base).
+const DATA = `${import.meta.env.BASE_URL}data/${CORRIDOR}`;
 
 // Free OSM-based style. Verify terms before launch (ARCHITECTURE.md §2).
 const STYLE = "https://tiles.openfreemap.org/styles/positron";
@@ -229,8 +230,14 @@ async function addFlowLayers(): Promise<void> {
   const fixes = await fetchJSON<FixesFile>(`${DATA}/fixes.json`);
   if (fixes) {
     const ol = document.getElementById("fixes")!;
-    for (const f of fixes.inbound.slice(0, 5)) {
+    // Only fixes that raise max flow on their own; the rest are explained
+    // by why_no_gain (another equally tight road elsewhere).
+    for (const f of fixes.inbound.filter((x) => x.helps).slice(0, 5)) {
       ol.append(el("li", `Edge ${f.edge_id}: ${f.change}, +${f.gain_vph} veh/h (${f.difficulty})`));
+    }
+    const noGain = fixes.inbound.filter((x) => !x.helps).length;
+    if (noGain > 0) {
+      ol.after(el("p", `${noGain} more bottleneck road${noGain === 1 ? "" : "s"} would gain nothing widened alone: another road is just as tight.`));
     }
     document.getElementById("fixes-section")!.hidden = false;
   }

@@ -26,6 +26,10 @@ export interface Fix {
   next_cut_edges: number[];
   difficulty: Difficulty;
   reasons: string[];
+  /** This +1 lane alone raises max flow (edge is in every min cut). */
+  helps: boolean;
+  /** Plain-language reason for zero gain; absent when helps. */
+  why_no_gain?: string;
 }
 
 export type FixesFile = Record<Direction, Fix[]>;

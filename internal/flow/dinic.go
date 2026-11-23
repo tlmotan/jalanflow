@@ -90,6 +90,43 @@ func (g *Network) MaxFlow(s, t int) int {
 // Must be called after MaxFlow. Min cuts are not unique; this is the
 // cut nearest the source.
 func (g *Network) MinCut(s int) []int {
+	seen := g.fromSource(s)
+	var cut []int
+	for id, p := range g.ids {
+		a := g.adj[p[0]][p[1]]
+		if seen[p[0]] && !seen[a.to] && a.orig > 0 {
+			cut = append(cut, id)
+		}
+	}
+	return cut
+}
+
+// InEveryMinCut returns the ids of arcs that lie in every minimum s-t cut,
+// in arc id order. Must be called after MaxFlow.
+//
+// Picard & Queyranne (1980) show that the minimum cuts correspond to the
+// closed sets of the residual graph. Two of them are the extremes: the cut
+// nearest the source, whose source side S holds the vertices reachable
+// from s, and the cut nearest the sink, whose sink side T holds the
+// vertices that can reach t. An arc u->v is in every min cut exactly when
+// u is in S and v is in T. These are the only arcs where adding any
+// capacity raises the max flow. Every other arc has an equally small cut
+// that avoids it, so widening that arc alone gains nothing.
+func (g *Network) InEveryMinCut(s, t int) []int {
+	src := g.fromSource(s)
+	snk := g.toSink(t)
+	var ids []int
+	for id, p := range g.ids {
+		a := g.adj[p[0]][p[1]]
+		if src[p[0]] && snk[a.to] && a.orig > 0 {
+			ids = append(ids, id)
+		}
+	}
+	return ids
+}
+
+// fromSource marks vertices reachable from s in the residual graph.
+func (g *Network) fromSource(s int) []bool {
 	seen := make([]bool, len(g.adj))
 	seen[s] = true
 	q := []int{s}
@@ -103,12 +140,28 @@ func (g *Network) MinCut(s int) []int {
 			}
 		}
 	}
-	var cut []int
-	for id, p := range g.ids {
-		a := g.adj[p[0]][p[1]]
-		if seen[p[0]] && !seen[a.to] && a.orig > 0 {
-			cut = append(cut, id)
+	return seen
+}
+
+// toSink marks vertices that can reach t in the residual graph. It walks
+// arcs backwards: u reaches v in the residual when the arc u->v has spare
+// capacity, and that arc's reverse is stored at v as a.rev in adj[a.to].
+func (g *Network) toSink(t int) []bool {
+	seen := make([]bool, len(g.adj))
+	seen[t] = true
+	q := []int{t}
+	for len(q) > 0 {
+		v := q[0]
+		q = q[1:]
+		for _, b := range g.adj[v] {
+			// b is v->u; its partner u->v has residual capacity
+			// g.adj[u][b.rev].cap.
+			u := b.to
+			if !seen[u] && g.adj[u][b.rev].cap > 0 {
+				seen[u] = true
+				q = append(q, u)
+			}
 		}
 	}
-	return cut
+	return seen
 }

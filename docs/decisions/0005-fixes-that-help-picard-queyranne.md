@@ -1,0 +1,8 @@
+# 0005 — Mark which "+1 lane" fixes actually help (Picard–Queyranne)
+
+- Status: accepted · 2026-11-23
+- Context: Min cuts are not unique (§3.4). When two equally tight cuts exist, for example KESAS and LDP both capped at the same capacity, widening a road in one of them gains **nothing**: traffic still queues at the other. Testing only the source-side cut would list such roads as fixes, with a gain of 0 that the site could not explain.
+- Decision: `flow.InEveryMinCut` returns the arcs that lie in every min cut. These are the arcs u→v where u is reachable from s **and** v can reach t in the residual graph, the two extreme closures in Picard & Queyranne (1980), "On the structure of all minimum cuts in a network and applications". Adding capacity to an arc raises max flow **iff** the arc is in that set. `fixes.Rank` re-runs Dinic only for cut edges in that set. Every other cut edge is output with `helps: false`, gain 0 and a plain-language `why_no_gain`.
+- +1 lane is applied to the edge's narrowest part (first one on ties), using that part's capacity ÷ lanes as the per-lane capacity. The edge's other parts still cap it (merge = min). So a road with two equally narrow stretches also gets `helps: false`.
+- Evidence: `TestInEveryMinCutPredictsGain` bumps every arc on 300 random graphs and checks that gain > 0 exactly when the arc is in `InEveryMinCut`.
+- Consequences: The site lists only helping fixes and states how many cut roads would gain nothing alone. Combined fixes ("widen KESAS **and** LDP together") are not ranked yet. That would be the next step if the real corridor shows mostly `helps: false`.

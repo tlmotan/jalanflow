@@ -1,0 +1,35 @@
+{
+  "inbound": [
+    {
+      "edge_id": 6641,
+      "direction": "inbound",
+      "change": "+1 lane",
+      "gain_vph": 2000,
+      "new_max_flow_vph": 8000,
+      "next_cut_edges": [
+        6641
+      ],
+      "helps": true,
+      "difficulty": "medium",
+      "reasons": [
+        "major highway: widening needs road reserve"
+      ]
+    }
+  ],
+  "outbound": [
+    {
+      "edge_id": 5190,
+      "direction": "outbound",
+      "change": "+1 lane",
+      "gain_vph": 0,
+      "new_max_flow_vph": 6000,
+      "next_cut_edges": [],
+      "helps": false,
+      "why_no_gain": "another stretch of this same road has as few lanes, so it stays the squeeze",
+      "difficulty": "medium",
+      "reasons": [
+        "major highway: widening needs road reserve"
+      ]
+    }
+  ]
+}

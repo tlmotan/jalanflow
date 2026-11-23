@@ -21,10 +21,10 @@ Overpass (bbox, road classes) → osmium cat → .pbf → cmd/build-graph → gr
 2. **Capacity** = lanes × per-lane veh/h by class × signal factor. Numbers live in `config/capacity-defaults.json`, never hard-coded.
 3. **Inferred lanes are flagged** (`lanes_inferred`) and shown on the map.
 4. **Merging segments keeps the MIN capacity.** Never average.
-5. **Gates** (named points in corridor config) → super-source / super-sink. Each direction analysed separately.
+5. **Gates** (named points in corridor config) → super-source / super-sink. Each direction analysed separately. Gates snap per direction onto `gate_snap.classes` roads running the right way (`graph.SnapGate`), never to the plain nearest node.
 6. **Dinic's max flow**, own implementation in `internal/flow`, pure functions, no I/O.
 7. **Min cut** = residual BFS from source. Not unique — we report the source-side cut.
-8. **Fix ranking** = for each cut edge, +1 lane, re-run, record gain and the next cut.
+8. **Fix ranking** = for each cut edge, +1 lane on its narrowest part. Only edges in **every** min cut (Picard–Queyranne, `flow.InEveryMinCut`) can gain; those are re-run for gain and next cut, the rest are `helps: false` with a reason (decision 0005).
 9. **Junctions are unlimited capacity** in Phase 1 (known limitation, disclosed).
 10. **Go structs are the source of truth** for output formats; `web/src/types.ts` mirrors them in the same commit.
 11. **Lane drops count lanes, not traffic.** Signalised junctions and points near toll booths are skipped; confirmed spots are keyed by OSM ids (decision 0004).

@@ -26,8 +26,20 @@ type Corridor struct {
 	Name  string     `json:"name"`
 	BBox  [4]float64 `json:"bbox"` // minLon, minLat, maxLon, maxLat
 	Gates []Gate     `json:"gates"`
+	// GateSnap says how gates attach to the graph; required.
+	GateSnap GateSnap `json:"gate_snap"`
 	// LaneDrops configures lane-drop detection; nil disables it.
 	LaneDrops *LaneDrops `json:"lane_drops"`
+}
+
+// GateSnap configures per-direction gate snapping (ARCHITECTURE §3.3).
+type GateSnap struct {
+	// Classes a gate may snap onto, e.g. the highway mainline classes.
+	// Keeps a gate between two carriageways off nearby side streets.
+	Classes []string `json:"classes"`
+	// MaxM is how far from the gate a snapped node may be.
+	MaxM   float64 `json:"max_m"`
+	Source string  `json:"source"`
 }
 
 // LaneDrops are the settings for finding places where lanes run out.
@@ -89,6 +101,16 @@ func LoadCorridor(path string) (*Corridor, error) {
 	}
 	if c.ID == "" || len(c.Gates) < 2 {
 		return nil, fmt.Errorf("corridor %s: need id and at least 2 gates", path)
+	}
+	if len(c.GateSnap.Classes) == 0 || c.GateSnap.MaxM <= 0 || c.GateSnap.Source == "" {
+		return nil, fmt.Errorf("corridor %s: gate_snap needs classes, max_m > 0 and source", path)
+	}
+	roles := map[string]int{}
+	for _, gt := range c.Gates {
+		roles[gt.Role]++
+	}
+	if roles["west"] == 0 || roles["east"] == 0 || roles["west"]+roles["east"] != len(c.Gates) {
+		return nil, fmt.Errorf("corridor %s: gates need role west or east, at least one of each", path)
 	}
 	if c.LaneDrops != nil {
 		if err := c.LaneDrops.validate(); err != nil {
