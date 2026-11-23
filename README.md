@@ -1,6 +1,6 @@
 # JalanFlow (working name)
 
-[![ci](https://github.com/tlmotan/jalanflow/actions/workflows/ci.yml/badge.svg)](https://github.com/tlmotan/jalanflow/actions/workflows/ci.yml) · Live: https://tlmotan.github.io/jalanflow/
+[![ci](https://github.com/tlmotan/jalanflow/actions/workflows/ci.yml/badge.svg)](https://github.com/tlmotan/jalanflow/actions/workflows/ci.yml) · Site: not deployed yet (repo is private; see CI / deploy)
 
 Finds the roads that limit traffic flow on Klang Valley corridors, using OpenStreetMap data and max flow / min cut, and ranks cheap fixes. Phase 1: Kota Kemuning ↔ Petaling Jaya via KESAS (E5) and LDP (E11).
 
@@ -17,6 +17,6 @@ make hooks   # once: checks Go / web changes before each commit
 ```
 
 ## CI / deploy
-Every push and PR runs `.github/workflows/ci.yml` (gofmt, `make test`, web build). A green push to `main` deploys the site to GitHub Pages. CI does not rebuild the data: after changing the pipeline or `config/capacity-defaults.json`, run `make graph analyze` and commit `web/public/data/`, or the committed-data test fails.
+Every push and PR runs `.github/workflows/ci.yml` (gofmt, `make test`, web build). Deploying to GitHub Pages is paused while the repo is private: the deploy job runs only when the repo variable `DEPLOY_PAGES` is `true` (make the repo public, enable Pages with source "GitHub Actions", then `gh variable set DEPLOY_PAGES --body true`). CI does not rebuild the data: after changing the pipeline or `config/capacity-defaults.json`, run `make graph analyze` and commit `web/public/data/`, or the committed-data test fails.
 
 Map data © OpenStreetMap contributors, ODbL.
