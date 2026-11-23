@@ -32,4 +32,5 @@
   4. List, detail and "How this works" views in the column; map and list highlight each other; tap a road.
   5. Phone layout: map above, text below, map sized to the space left.
   6. Deep links and share preview.
+- Progress, 2026-11-24: steps 1 to 3 are built, with the list, detail and "How this works" views pulled forward from step 4 in plain form (no map-and-list highlighting or tap-a-road yet) and a simple stacked phone layout. For now the site shows all 87 lane drops and names roads from the data. The basemap and the zoomed-in colours are still open; both are switchable trial options (`web/src/trial.ts`, `?base=none|pale|labels`, `?lanes=pale|ink`).
 - Consequences: web only, no output format change until the pipeline fields above are added. The site loses its at-a-glance utilisation colours; anyone wanting per-road capacity taps the road. The road-sign face differs slightly by device (DIN Alternate on Apple, Bahnschrift on Windows, a condensed fallback elsewhere).

@@ -10,7 +10,7 @@ Read this (and `CONTENT.md` for wording) before any change under `web/`. Design 
 - **One view at a time.** The column shows exactly one of:
   - **Landing**: orb and name, headline, one sentence, "Run the analysis", the three-dot key, links to "See all lane drops" and "How this works".
   - **Running**: the live counter, "Path n of m", "Skip to the result".
-  - **Result**: the result sentence, the bottleneck, the tested fix, "Replay".
+  - **Result**: the result sentence, the bottleneck, the tested fix, "Replay", "Hide flow", and the same two links as the landing view.
   - **All lane drops**, **one lane drop** and **How this works**: each replaces the column and has a Back button. Escape also goes back.
 - No tabs and no map popups. Clicking a marker or a road opens its detail in the column.
 - **Landing shows lanes only.** The drive is a grey line. The bottleneck turns red after "Run the analysis", because the lane-drop finding leads (decision 0004).
@@ -44,7 +44,9 @@ Defined once: CSS variables in `web/src/style.css` (`:root`). `web/src/colors.ts
 - **No utilisation colours.** Spare versus nearly full is shown by how many dots flow along a road. The old `--spare`, `--full`, `--idle` and `--path` tokens are retired.
 - **Lane-drop markers are ink, never red:** ringed dot = confirmed jam, solid dot = lane drop, hollow dot = lane count guessed.
 - **Route markers**: KESAS and LDP carry the yellow hexagon "E5" / "E11" used on Malaysian expressway signs, ink outline and ink number.
-- Not decided yet (0013): the basemap, and road and car colours once lanes are drawn (decision 0012). Until then cars stay white with an ink outline.
+- Not decided yet (0013): the basemap, and road and car colours once lanes are drawn (decision 0012). Both are built as trial options in `web/src/trial.ts`, switched by URL parameter: `?base=none|pale|labels` and `?lanes=pale|ink`. The defaults are `pale` and `pale`. When Tim picks, delete the losing options, the parameters and the `--map-*` tokens.
+- Labels on the map that use the road-sign face (place names, route markers, "Confirmed jam", "Bottleneck, 3 lanes") are HTML markers, not map text layers: a map text layer can only use the tile server's fonts.
+- An expressway gets a route marker once it carries at least 3 km of the drive, so E1 and E6 show one as well as E5 and E11.
 
 ## 5. Type and layout
 - **Road-sign face** for the headline, result sentence, counter, place names and route markers: `"DIN Alternate", "Bahnschrift", "Roboto Condensed", "Arial Narrow", system-ui`, bold. These ship with the device, so there is no font file and no dependency.

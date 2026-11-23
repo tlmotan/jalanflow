@@ -3,54 +3,75 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JalanFlow — where lanes run out on KESAS + LDP</title>
+    <title>JalanFlow — where lanes run out between Kota Kemuning and PJ</title>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
-  <body>
-    <div id="map"></div>
-    <aside id="panel">
-      <h1>Where lanes run out: Kota Kemuning → PJ</h1>
-      <section id="run" class="run" hidden>
-        <div class="run-row">
-          <button id="run-btn" type="button" class="primary">▶ Run the analysis</button>
-          <button id="flow-btn" type="button" aria-pressed="false" hidden>Show flow</button>
+  <body data-state="home" data-view="main">
+    <div id="map" role="application" aria-label="Map of the roads between Kota Kemuning and Petaling Jaya"></div>
+    <div id="veil"></div>
+
+    <main id="text">
+      <div class="mark"><canvas id="orb" aria-hidden="true"></canvas><span>JalanFlow</span></div>
+
+      <div data-s="home">
+        <h1>Where lanes run out between Kota Kemuning and PJ</h1>
+        <p id="lede">Places around KESAS and LDP where more lanes come in than carry on.</p>
+        <button type="button" class="primary" id="run-btn" hidden>Run the analysis</button>
+        <div class="key">
+          <span><i class="ring"></i>Confirmed jam</span><span><i></i>Lane drop</span><span><i class="hollow"></i>Lanes guessed</span>
         </div>
-        <div id="run-status" aria-live="polite" hidden>
-          <div class="counter"><b id="run-count">0</b> of <span id="run-max"></span> veh/h through</div>
-          <p id="run-caption"></p>
+        <div class="row-of">
+          <button type="button" class="link" data-open-list>See all lane drops</button>
+          <button type="button" class="link" data-open-how>How this works</button>
         </div>
-        <p id="flow-note" class="note" hidden>Dots show how much each road can carry (max flow), not live traffic.</p>
-      </section>
-      <p class="note">
-        Places on KESAS (E5), LDP (E11) and their ramps where <b>more lanes come in than carry on</b>.
-        Ranked by size of the squeeze. This counts lanes, not cars, so it can't say which one jams worst.
-        <a href="#method">How this works</a>
-      </p>
-      <div class="legend">
-        <span><i class="dot confirmed"></i>Confirmed by a local driver</span>
-        <span><i class="dot"></i>Lane drop</span>
-        <span><i class="dot guessed"></i>Lane count guessed</span>
       </div>
 
-      <h2>Confirmed jam spots</h2>
-      <ol id="confirmed" class="drops"></ol>
+      <div data-s="running">
+        <div class="count" id="run-count" aria-hidden="true">0</div>
+        <p>vehicles an hour can get through so far. <span id="run-caption"></span></p>
+        <button type="button" id="skip-btn">Skip to the result</button>
+      </div>
 
-      <h2 id="all-heading">All lane drops</h2>
-      <ol id="drops" class="drops"></ol>
+      <div data-s="result">
+        <p class="say" id="result-say"></p>
+        <p id="result-cut-line"><span class="swatch"></span><b id="result-cut"></b></p>
+        <p id="result-fix"></p>
+        <p id="result-fix-why" class="small"></p>
+        <div class="row-of">
+          <button type="button" id="replay-btn">Replay</button>
+          <button type="button" class="link" id="flow-btn" aria-pressed="true" style="margin-left: 10px">Hide flow</button>
+        </div>
+        <div class="row-of">
+          <button type="button" class="link" data-open-list>See all lane drops</button>
+          <button type="button" class="link" data-open-how>How this works</button>
+        </div>
+      </div>
 
-      <section id="fixes-section" hidden>
-        <h2>Top fixes</h2>
-        <ol id="fixes"></ol>
-      </section>
+      <div data-v="list">
+        <button type="button" class="link back" data-back>Back</button>
+        <p class="say">Lane drops, biggest squeeze first</p>
+        <ol id="list" class="scroll"></ol>
+      </div>
 
-      <details id="method">
-        <summary>How this works</summary>
-        <p id="ranking" class="note"></p>
-        <ul id="assumptions" class="note"></ul>
-        <p class="note" id="osm-date"></p>
-      </details>
-      <footer>© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> · data ODbL</footer>
-    </aside>
+      <div data-v="detail">
+        <button type="button" class="link back" data-back>Back</button>
+        <p class="say" id="detail-title"></p>
+        <p><b id="detail-body"></b></p>
+        <p id="detail-roads"></p>
+        <p id="detail-note"></p>
+        <p class="links" id="detail-links"></p>
+      </div>
+
+      <div data-v="how">
+        <button type="button" class="link back" data-back>Back</button>
+        <p class="say">How this works</p>
+        <ul id="how" class="scroll" tabindex="0"></ul>
+      </div>
+
+      <!-- Spoken updates during the replay (DESIGN.md §8). -->
+      <p id="live" aria-live="polite" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%)"></p>
+      <p id="foot">This shows what the roads can carry, not live traffic.</p>
+    </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
