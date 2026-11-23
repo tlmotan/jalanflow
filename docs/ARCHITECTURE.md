@@ -206,11 +206,18 @@ type LaneDrops struct {
 ```go
 type Direction string // "inbound" | "outbound"
 
-type FlowResult struct {
+type FlowResult struct {          // fixes.Result
     Direction  Direction
     MaxFlowVPH int
     EdgeFlow   []int    // indexed by EdgeID
     CutEdges   []EdgeID
+    Steps      []Step   // baseline augmenting paths, in the order found
+}
+
+type Step struct {                // one augmenting path on road edges
+    Phase     int                 // Dinic phase (BFS level graph), from 1
+    AmountVPH int
+    Edges     []EdgeDelta         // {EdgeID, Delta}: +AmountVPH, or -AmountVPH where flow was cancelled
 }
 
 type Difficulty string // "easy" | "medium" | "hard"
@@ -228,6 +235,7 @@ type Fix struct {
     WhyNoGain     string   // plain words when !Helps: other equally tight cut, other equally narrow part, or unknown lanes
 }
 ```
+- `flow.MaxFlowTrace` is `MaxFlow` that also records every augmenting path (`flow.Augment{Phase, Amount, Arcs, Reverse}`). `fixes.Rank` traces the baseline run only; the +1 lane re-runs use plain `MaxFlow`. Summing a direction's step deltas per edge gives `EdgeFlow` exactly (tested). Written to `replay.json` (§4.4).
 
 ### 4.3b Lane drops (`internal/lanedrop`) — the site headline (decision 0004)
 
@@ -252,7 +260,7 @@ type Drop struct {
 
 ### 4.4 Output files (`web/public/data/<corridor>/`)
 
-**`edges.geojson`** — FeatureCollection, one LineString per edge **per direction analysed**, only edges carrying flow in that direction (cut edges always do). Compact JSON, coordinates rounded to 6 decimals: the whole bbox would be ~19 MB.
+**`edges.geojson`** — FeatureCollection, one LineString per edge **per direction analysed**, only edges carrying flow in that direction (cut edges always do), plus any edge a replay step touched (it may end with `flow_vph` 0 if a later path cancelled its flow). Compact JSON, coordinates rounded to 6 decimals: the whole bbox would be ~19 MB.
 ```json
 { "type": "Feature",
   "geometry": { "type": "LineString", "coordinates": [[101.5, 3.07], ...] },
@@ -264,6 +272,13 @@ type Drop struct {
 ```
 
 **`fixes.json`** — `{ "inbound": Fix[], "outbound": Fix[] }`, sorted by `GainVPH` desc (then edge id). One entry per source-side cut edge, including `helps: false` ones so the site can say why they gain nothing.
+
+**`replay.json`** — the baseline max flow search, path by path, for the site's "Run the analysis" replay (decision 0011). Compact JSON (`export.ReplayFile`). Edges are `[edge id, delta veh/h]` pairs, source to sink; delta < 0 where the path cancelled earlier flow. Per direction, summing deltas per edge gives `flow_vph` in `edges.geojson`, and summing `amount_vph` gives `max_flow_vph` (the committed-data test checks both).
+```json
+{ "inbound": { "max_flow_vph": 6000, "phases": 7,
+               "steps": [ { "phase": 1, "amount_vph": 1200, "edges": [[293, 1200], [295, 1200]] } ] },
+  "outbound": { "...": "same shape" } }
+```
 
 **`lane_drops.json`** — `{ corridor, osm_date, generated_at, ranking, assumptions[], drops: Drop[] }` (`export.LaneDropsFile`), drops in rank order.
 

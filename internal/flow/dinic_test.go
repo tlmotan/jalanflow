@@ -179,3 +179,106 @@ func equal(a, b []int) bool {
 	}
 	return true
 }
+
+func TestMaxFlowTrace(t *testing.T) {
+	tests := []struct {
+		name        string
+		n           int
+		arcs        []arcSpec
+		s, t        int
+		want        int
+		wantPhases  int
+		wantReverse bool // some path cancels flow
+	}{
+		{
+			name: "single pinch",
+			n:    4,
+			arcs: []arcSpec{{0, 1, 4000}, {1, 2, 2000}, {2, 3, 4000}},
+			s:    0, t: 3, want: 2000, wantPhases: 1,
+		},
+		{
+			name: "CLRS classic",
+			n:    6,
+			arcs: []arcSpec{
+				{0, 1, 16}, {0, 2, 13}, {2, 1, 4}, {1, 3, 12}, {3, 2, 9},
+				{2, 4, 14}, {4, 3, 7}, {3, 5, 20}, {4, 5, 4},
+			},
+			s: 0, t: 5, want: 23,
+		},
+		{
+			// s=0 a=1 b=2 c=3 d=4 t=5. Phase 1 sends s-a-b-t. Phase 2's
+			// only route is s-c-b-a-d-t, which cancels the flow on a->b.
+			name: "second phase cancels a->b",
+			n:    6,
+			arcs: []arcSpec{{0, 1, 1}, {1, 2, 1}, {2, 5, 1}, {0, 3, 1}, {3, 2, 1}, {1, 4, 1}, {4, 5, 1}},
+			s:    0, t: 5, want: 2, wantPhases: 2, wantReverse: true,
+		},
+		{
+			name: "disconnected",
+			n:    3,
+			arcs: []arcSpec{{0, 1, 10}},
+			s:    0, t: 2, want: 0,
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			g, plain := New(tc.n), New(tc.n)
+			for _, a := range tc.arcs {
+				g.AddArc(a.u, a.v, a.c)
+				plain.AddArc(a.u, a.v, a.c)
+			}
+			got, trace := g.MaxFlowTrace(tc.s, tc.t)
+			if got != tc.want {
+				t.Fatalf("max flow = %d, want %d", got, tc.want)
+			}
+			if p := plain.MaxFlow(tc.s, tc.t); p != got {
+				t.Fatalf("MaxFlow = %d, MaxFlowTrace = %d", p, got)
+			}
+			sum, phases, reverse := 0, 0, false
+			flow := make([]int, len(tc.arcs))
+			for i, a := range trace {
+				if a.Amount <= 0 || len(a.Arcs) == 0 || len(a.Arcs) != len(a.Reverse) {
+					t.Fatalf("path %d malformed: %+v", i, a)
+				}
+				if a.Phase < phases {
+					t.Fatalf("path %d phase %d after phase %d", i, a.Phase, phases)
+				}
+				phases = a.Phase
+				sum += a.Amount
+				// The path must be connected from s to t.
+				at := tc.s
+				for j, id := range a.Arcs {
+					from, to := tc.arcs[id].u, tc.arcs[id].v
+					if a.Reverse[j] {
+						from, to = to, from
+						flow[id] -= a.Amount
+						reverse = true
+					} else {
+						flow[id] += a.Amount
+					}
+					if from != at {
+						t.Fatalf("path %d breaks at arc %d", i, id)
+					}
+					at = to
+				}
+				if at != tc.t {
+					t.Fatalf("path %d ends at %d, want %d", i, at, tc.t)
+				}
+			}
+			if sum != got {
+				t.Fatalf("sum of amounts %d != max flow %d", sum, got)
+			}
+			for id := range tc.arcs {
+				if flow[id] != g.Flow(id) {
+					t.Fatalf("replayed flow on arc %d = %d, Flow = %d", id, flow[id], g.Flow(id))
+				}
+			}
+			if tc.wantPhases > 0 && phases != tc.wantPhases {
+				t.Fatalf("phases = %d, want %d", phases, tc.wantPhases)
+			}
+			if tc.wantReverse && !reverse {
+				t.Fatalf("expected a path that cancels flow")
+			}
+		})
+	}
+}

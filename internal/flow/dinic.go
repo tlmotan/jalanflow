@@ -7,6 +7,16 @@ const Inf = int(^uint(0) >> 2)
 
 type arc struct {
 	to, rev, cap, orig int
+	id                 int // arc id for forward arcs, -(id+1) for their reverse
+}
+
+// Augment is one augmenting path found by MaxFlowTrace, in the order
+// Dinic's found it.
+type Augment struct {
+	Phase   int    // Dinic phase (one BFS level graph), from 1
+	Amount  int    // flow pushed along the path
+	Arcs    []int  // arc ids along the path, source to sink
+	Reverse []bool // true where the path cancelled flow on that arc
 }
 
 // Network is a directed flow network on vertices 0..n-1.
@@ -14,7 +24,11 @@ type Network struct {
 	adj   [][]arc
 	level []int
 	iter  []int
+	queue []int    // BFS scratch, reused across phases
 	ids   [][2]int // arc id -> (vertex, index in adj)
+
+	tracing bool  // record augmenting paths (MaxFlowTrace only)
+	path    []int // arc ids of the current path, sink to source
 }
 
 // New creates a network with n vertices.
@@ -24,10 +38,11 @@ func New(n int) *Network {
 
 // AddArc adds a directed arc u->v with capacity c and returns its arc id.
 func (g *Network) AddArc(u, v, c int) int {
-	g.adj[u] = append(g.adj[u], arc{to: v, rev: len(g.adj[v]), cap: c, orig: c})
-	g.adj[v] = append(g.adj[v], arc{to: u, rev: len(g.adj[u]) - 1, cap: 0, orig: 0})
+	id := len(g.ids)
+	g.adj[u] = append(g.adj[u], arc{to: v, rev: len(g.adj[v]), cap: c, orig: c, id: id})
+	g.adj[v] = append(g.adj[v], arc{to: u, rev: len(g.adj[u]) - 1, cap: 0, orig: 0, id: -(id + 1)})
 	g.ids = append(g.ids, [2]int{u, len(g.adj[u]) - 1})
-	return len(g.ids) - 1
+	return id
 }
 
 // Flow returns the flow currently on arc id.
@@ -38,15 +53,16 @@ func (g *Network) Flow(id int) int {
 }
 
 func (g *Network) bfs(s, t int) bool {
-	g.level = make([]int, len(g.adj))
+	if len(g.level) != len(g.adj) {
+		g.level = make([]int, len(g.adj))
+	}
 	for i := range g.level {
 		g.level[i] = -1
 	}
 	g.level[s] = 0
-	q := []int{s}
-	for len(q) > 0 {
-		u := q[0]
-		q = q[1:]
+	q := append(g.queue[:0], s)
+	for head := 0; head < len(q); head++ {
+		u := q[head]
 		for _, a := range g.adj[u] {
 			if a.cap > 0 && g.level[a.to] < 0 {
 				g.level[a.to] = g.level[u] + 1
@@ -54,6 +70,7 @@ func (g *Network) bfs(s, t int) bool {
 			}
 		}
 	}
+	g.queue = q
 	return g.level[t] >= 0
 }
 
@@ -67,6 +84,9 @@ func (g *Network) dfs(u, t, f int) int {
 			if d := g.dfs(a.to, t, min(f, a.cap)); d > 0 {
 				a.cap -= d
 				g.adj[a.to][a.rev].cap += d
+				if g.tracing {
+					g.path = append(g.path, a.id)
+				}
 				return d
 			}
 		}
@@ -76,14 +96,54 @@ func (g *Network) dfs(u, t, f int) int {
 
 // MaxFlow computes the max flow from s to t. Call once per Network.
 func (g *Network) MaxFlow(s, t int) int {
+	return g.run(s, t, nil)
+}
+
+// MaxFlowTrace is MaxFlow that also returns every augmenting path in the
+// order it was found, so the search can be replayed. Summing each path's
+// Amount (negated where Reverse) per arc gives exactly Flow(id).
+// Call once per Network, instead of MaxFlow.
+func (g *Network) MaxFlowTrace(s, t int) (int, []Augment) {
+	var trace []Augment
+	total := g.run(s, t, &trace)
+	return total, trace
+}
+
+func (g *Network) run(s, t int, trace *[]Augment) int {
 	total := 0
-	for g.bfs(s, t) {
-		g.iter = make([]int, len(g.adj))
-		for f := g.dfs(s, t, Inf); f > 0; f = g.dfs(s, t, Inf) {
+	g.iter = make([]int, len(g.adj))
+	g.tracing = trace != nil
+	for phase := 1; g.bfs(s, t); phase++ {
+		clear(g.iter)
+		for {
+			g.path = g.path[:0]
+			f := g.dfs(s, t, Inf)
+			if f <= 0 {
+				break
+			}
 			total += f
+			if trace != nil {
+				*trace = append(*trace, g.augment(phase, f))
+			}
 		}
 	}
+	g.tracing = false
 	return total
+}
+
+// augment turns g.path (sink to source) into an Augment (source to sink).
+func (g *Network) augment(phase, f int) Augment {
+	n := len(g.path)
+	a := Augment{Phase: phase, Amount: f, Arcs: make([]int, n), Reverse: make([]bool, n)}
+	for i, id := range g.path {
+		j := n - 1 - i
+		if id < 0 {
+			a.Arcs[j], a.Reverse[j] = -id-1, true
+		} else {
+			a.Arcs[j] = id
+		}
+	}
+	return a
 }
 
 // MinCut returns the ids of arcs crossing the source-side min cut.

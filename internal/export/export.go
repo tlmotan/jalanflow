@@ -1,5 +1,5 @@
-// Package export writes edges.geojson, fixes.json, lane_drops.json and
-// manifest.json.
+// Package export writes edges.geojson, fixes.json, replay.json,
+// lane_drops.json and manifest.json.
 package export
 
 import (
@@ -16,7 +16,7 @@ import (
 )
 
 // PipelineVersion is written to manifest.json; bump on output changes.
-const PipelineVersion = "0.2.0"
+const PipelineVersion = "0.3.0"
 
 // ConfigHash is the manifest's capacity_config_hash for the bytes of
 // config/capacity-defaults.json. The committed-data test uses it to spot
@@ -102,18 +102,26 @@ type featureCollection struct {
 }
 
 // edgeFeatures builds one GeoJSON feature per edge that carries flow in
-// that direction (cut edges always do). Roads with no flow are left out:
-// the map shows what the max flow uses, and the whole bbox twice over is
-// ~19 MB. Coordinates are rounded to 6 decimals (~0.1 m).
+// that direction (cut edges always do), plus edges that carried flow at
+// some step of the replay and lost it again when a later path cancelled
+// it (flow_vph 0), so replay.json never names an edge with no geometry.
+// Other roads are left out: the map shows what the max flow uses, and the
+// whole bbox twice over is ~19 MB. Coordinates are rounded to 6 decimals.
 func edgeFeatures(g *graph.Graph, r fixes.Result) []feature {
 	cut := map[graph.EdgeID]bool{}
 	for _, id := range r.CutEdges {
 		cut[id] = true
 	}
+	replayed := map[graph.EdgeID]bool{}
+	for _, st := range r.Steps {
+		for _, d := range st.Edges {
+			replayed[d.EdgeID] = true
+		}
+	}
 	var out []feature
 	for _, e := range g.Edges {
 		f := r.EdgeFlow[e.ID]
-		if f <= 0 || e.CapacityVPH <= 0 || len(e.Geometry) < 2 {
+		if (f <= 0 && !replayed[e.ID]) || e.CapacityVPH <= 0 || len(e.Geometry) < 2 {
 			continue
 		}
 		coords := make([][2]float64, len(e.Geometry))
@@ -160,6 +168,54 @@ func WriteFixes(dir string, results []fixes.Result) error {
 		m[r.Direction] = fs
 	}
 	return writeJSON(filepath.Join(dir, "fixes.json"), m)
+}
+
+// ReplayFile is replay.json: the baseline max flow search per direction,
+// path by path, for the site's "Run the analysis" replay (decision 0011).
+// Mirror in web/src/types.ts.
+type ReplayFile map[fixes.Direction]Replay
+
+// Replay is one direction's search.
+type Replay struct {
+	MaxFlowVPH int          `json:"max_flow_vph"`
+	Phases     int          `json:"phases"`
+	Steps      []ReplayStep `json:"steps"`
+}
+
+// ReplayStep is one augmenting path. Edges are [edge id, delta veh/h]
+// pairs, source to sink; delta is negative where the path cancelled
+// earlier flow. Summing deltas per edge gives edges.geojson flow_vph.
+type ReplayStep struct {
+	Phase     int      `json:"phase"`
+	AmountVPH int      `json:"amount_vph"`
+	Edges     [][2]int `json:"edges"`
+}
+
+// Replays converts the analysis results to replay.json's shape.
+func Replays(results []fixes.Result) ReplayFile {
+	out := ReplayFile{}
+	for _, r := range results {
+		rp := Replay{MaxFlowVPH: r.MaxFlowVPH, Steps: make([]ReplayStep, 0, len(r.Steps))}
+		for _, st := range r.Steps {
+			es := make([][2]int, len(st.Edges))
+			for i, d := range st.Edges {
+				es[i] = [2]int{int(d.EdgeID), d.Delta}
+			}
+			rp.Steps = append(rp.Steps, ReplayStep{Phase: st.Phase, AmountVPH: st.AmountVPH, Edges: es})
+			rp.Phases = max(rp.Phases, st.Phase)
+		}
+		out[r.Direction] = rp
+	}
+	return out
+}
+
+// WriteReplay writes dir/replay.json, compact like edges.geojson.
+func WriteReplay(dir string, results []fixes.Result) error {
+	b, err := json.Marshal(Replays(results))
+	if err != nil {
+		return fmt.Errorf("encode replay.json: %w", err)
+	}
+	return writeFile(filepath.Join(dir, "replay.json"), b)
 }
 
 // WriteManifest writes dir/manifest.json.

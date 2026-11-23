@@ -107,6 +107,40 @@ func TestCommittedData(t *testing.T) {
 				}
 			})
 
+			t.Run("replay", func(t *testing.T) {
+				var fc featureCollection
+				decodeStrict(t, filepath.Join(dir, "edges.geojson"), &fc)
+				var rf ReplayFile
+				decodeStrict(t, filepath.Join(dir, "replay.json"), &rf)
+				for _, d := range []fixes.Direction{fixes.Inbound, fixes.Outbound} {
+					flow := map[int]int{}
+					for _, f := range fc.Features {
+						if f.Props.Dir == string(d) {
+							flow[f.Props.ID] = f.Props.FlowVPH
+						}
+					}
+					rp := rf[d]
+					sum, total := map[int]int{}, 0
+					for _, st := range rp.Steps {
+						total += st.AmountVPH
+						for _, e := range st.Edges {
+							if _, ok := flow[e[0]]; !ok {
+								t.Errorf("%s: replay names edge %d with no feature in edges.geojson", d, e[0])
+							}
+							sum[e[0]] += e[1]
+						}
+					}
+					if total != rp.MaxFlowVPH {
+						t.Errorf("%s: steps sum to %d veh/h, max_flow_vph %d; %s", d, total, rp.MaxFlowVPH, regenerateHint)
+					}
+					for id, f := range flow {
+						if sum[id] != f {
+							t.Errorf("%s: edge %d replays to %d veh/h, flow_vph %d; %s", d, id, sum[id], f, regenerateHint)
+						}
+					}
+				}
+			})
+
 			t.Run("fixes", func(t *testing.T) {
 				var fx map[fixes.Direction][]fixes.Fix
 				decodeStrict(t, filepath.Join(dir, "fixes.json"), &fx)

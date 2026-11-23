@@ -3,6 +3,7 @@ package fixes
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 
 	"github.com/tlmotan/jalanflow/internal/flow"
@@ -79,6 +80,24 @@ type Result struct {
 	EdgeFlow   []int          // indexed by EdgeID
 	CutEdges   []graph.EdgeID // source-side min cut
 	Fixes      []Fix          // one per cut edge, best gain first
+	// Steps are the augmenting paths of the baseline max flow in the order
+	// Dinic's found them, for replaying the search on the site. Summing
+	// every step's deltas per edge gives EdgeFlow.
+	Steps []Step
+}
+
+// Step is one augmenting path mapped to road edges.
+type Step struct {
+	Phase     int         // Dinic phase, from 1
+	AmountVPH int         // flow pushed along the path
+	Edges     []EdgeDelta // road edges on the path, source to sink; gate arcs dropped
+}
+
+// EdgeDelta is the change in flow on one edge in one Step: +AmountVPH, or
+// -AmountVPH where the path cancelled earlier flow.
+type EdgeDelta struct {
+	EdgeID graph.EdgeID
+	Delta  int
 }
 
 // Rank runs max flow from sources to sinks, then tests "+1 lane" on every
@@ -86,11 +105,13 @@ type Result struct {
 // are marked Helps=false without a re-run: their gain is provably zero.
 // The rest are re-run to measure the gain and where the bottleneck moves.
 func Rank(g *graph.Graph, dir Direction, sources, sinks []graph.NodeID) (Result, error) {
-	net, err := newNetwork(g, sources, sinks, nil)
+	idx := nodeIndex(g)
+	net, err := newNetwork(g, idx, sources, sinks, nil)
 	if err != nil {
 		return Result{}, err
 	}
-	res := Result{Direction: dir, MaxFlowVPH: net.f.MaxFlow(net.s, net.t)}
+	total, trace := net.f.MaxFlowTrace(net.s, net.t)
+	res := Result{Direction: dir, MaxFlowVPH: total, Steps: net.steps(trace)}
 	res.EdgeFlow = make([]int, len(g.Edges))
 	for i := range g.Edges {
 		if id := net.arc[i]; id >= 0 {
@@ -98,7 +119,7 @@ func Rank(g *graph.Graph, dir Direction, sources, sinks []graph.NodeID) (Result,
 		}
 	}
 	res.CutEdges = net.edges(net.f.MinCut(net.s))
-	every := map[graph.EdgeID]bool{}
+	every := make([]bool, len(g.Edges)) // indexed by EdgeID
 	for _, e := range net.edges(net.f.InEveryMinCut(net.s, net.t)) {
 		every[e] = true
 	}
@@ -120,7 +141,7 @@ func Rank(g *graph.Graph, dir Direction, sources, sinks []graph.NodeID) (Result,
 		case !every[eid]:
 			fx.WhyNoGain = WhyOtherCut
 		default:
-			after, err := newNetwork(g, sources, sinks, map[graph.EdgeID]int{eid: widened})
+			after, err := newNetwork(g, idx, sources, sinks, map[graph.EdgeID]int{eid: widened})
 			if err != nil {
 				return Result{}, err
 			}
@@ -172,28 +193,36 @@ func plusOneLane(e graph.Edge) (int, bool) {
 type network struct {
 	f    *flow.Network
 	s, t int
-	arc  []int                // EdgeID -> arc id, -1 if no arc
-	edge map[int]graph.EdgeID // arc id -> EdgeID (road arcs only)
+	arc  []int          // EdgeID -> arc id, -1 if no arc
+	edge []graph.EdgeID // arc id -> EdgeID; road arcs come first, gate arcs after
 }
 
-// newNetwork builds the flow network. override replaces edge capacities.
-// Junctions are unlimited; gates link to a super-source / super-sink.
-func newNetwork(g *graph.Graph, sources, sinks []graph.NodeID, override map[graph.EdgeID]int) (*network, error) {
-	if len(sources) == 0 || len(sinks) == 0 {
-		return nil, fmt.Errorf("fixes: need at least one source and one sink")
-	}
+// nodeIndex numbers the graph's nodes 0..n-1 in id order. Rank builds it
+// once and shares it between the baseline network and every re-run.
+func nodeIndex(g *graph.Graph) map[graph.NodeID]int {
 	ids := make([]graph.NodeID, 0, len(g.Nodes))
 	for id := range g.Nodes {
 		ids = append(ids, id)
 	}
-	sort.Slice(ids, func(i, j int) bool { return ids[i] < ids[j] })
+	slices.Sort(ids)
 	idx := make(map[graph.NodeID]int, len(ids))
 	for i, id := range ids {
 		idx[id] = i
 	}
-	n := &network{f: flow.New(len(ids) + 2), s: len(ids), t: len(ids) + 1,
-		arc: make([]int, len(g.Edges)), edge: map[int]graph.EdgeID{}}
-	for i, e := range g.Edges {
+	return idx
+}
+
+// newNetwork builds the flow network on the vertices of idx (nodeIndex).
+// override replaces edge capacities. Junctions are unlimited; gates link to
+// a super-source / super-sink.
+func newNetwork(g *graph.Graph, idx map[graph.NodeID]int, sources, sinks []graph.NodeID, override map[graph.EdgeID]int) (*network, error) {
+	if len(sources) == 0 || len(sinks) == 0 {
+		return nil, fmt.Errorf("fixes: need at least one source and one sink")
+	}
+	n := &network{f: flow.New(len(idx) + 2), s: len(idx), t: len(idx) + 1,
+		arc: make([]int, len(g.Edges)), edge: make([]graph.EdgeID, 0, len(g.Edges))}
+	for i := range g.Edges {
+		e := &g.Edges[i]
 		n.arc[i] = -1
 		u, okU := idx[e.From]
 		v, okV := idx[e.To]
@@ -207,9 +236,8 @@ func newNetwork(g *graph.Graph, sources, sinks []graph.NodeID, override map[grap
 		if c <= 0 {
 			continue
 		}
-		id := n.f.AddArc(u, v, c)
-		n.arc[i] = id
-		n.edge[id] = e.ID
+		n.arc[i] = n.f.AddArc(u, v, c)
+		n.edge = append(n.edge, e.ID)
 	}
 	for _, s := range sources {
 		u, ok := idx[s]
@@ -228,12 +256,32 @@ func newNetwork(g *graph.Graph, sources, sinks []graph.NodeID, override map[grap
 	return n, nil
 }
 
+// steps maps a max flow trace to road edges, dropping gate arcs.
+func (n *network) steps(trace []flow.Augment) []Step {
+	out := make([]Step, 0, len(trace))
+	for _, a := range trace {
+		st := Step{Phase: a.Phase, AmountVPH: a.Amount, Edges: make([]EdgeDelta, 0, len(a.Arcs))}
+		for i, id := range a.Arcs {
+			if id >= len(n.edge) {
+				continue
+			}
+			d := a.Amount
+			if a.Reverse[i] {
+				d = -d
+			}
+			st.Edges = append(st.Edges, EdgeDelta{EdgeID: n.edge[id], Delta: d})
+		}
+		out = append(out, st)
+	}
+	return out
+}
+
 // edges maps arc ids to road edges, dropping gate arcs.
 func (n *network) edges(arcs []int) []graph.EdgeID {
 	out := []graph.EdgeID{}
 	for _, id := range arcs {
-		if e, ok := n.edge[id]; ok {
-			out = append(out, e)
+		if id < len(n.edge) {
+			out = append(out, n.edge[id])
 		}
 	}
 	return out

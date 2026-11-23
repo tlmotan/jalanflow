@@ -1,24 +1,26 @@
-html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
+:root { --spare: #4a90a4; --full: #ff9f1c; --cut: #d62728; --idle: #9aa5b1; --path: #1f3b57;
+  --ink: #222; --muted: #555; --surface: #fff; --hover: #f1f3f5; }
+html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; color: var(--ink); }
 #map { position: absolute; inset: 0; }
 #panel { position: absolute; top: 12px; left: 12px; width: 320px; max-height: calc(100% - 24px);
-  overflow: auto; background: #fff; border-radius: 8px; padding: 12px 16px; box-shadow: 0 2px 8px #0003; }
+  overflow: auto; background: var(--surface); border-radius: 8px; padding: 12px 16px; box-shadow: 0 2px 8px #0003; }
 #panel h1 { font-size: 18px; margin: 0 0 8px; }
 #panel h2 { font-size: 15px; margin: 16px 0 6px; }
-.note, footer { font-size: 12px; color: #555; }
+.note, footer { font-size: 12px; color: var(--muted); }
 #panel { width: 340px; }
 .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; margin: 8px 0; }
 .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px;
-  vertical-align: -1px; background: #ff9f1c; border: 2px solid #fff; box-shadow: 0 0 0 1px #ccc; }
-.dot.confirmed { background: #d62728; }
-.dot.guessed { background: #fff; border-color: #ff9f1c; box-shadow: none; }
+  vertical-align: -1px; background: var(--full); border: 2px solid #fff; box-shadow: 0 0 0 1px #ccc; }
+.dot.confirmed { background: var(--cut); }
+.dot.guessed { background: var(--surface); border-color: var(--full); box-shadow: none; }
 .drops { padding-left: 28px; margin: 0; }
 .drops li { margin: 2px 0; font-size: 13px; }
-.drops li.confirmed::marker { color: #d62728; font-weight: bold; }
+.drops li.confirmed::marker { color: var(--cut); font-weight: bold; }
 .drop { display: block; width: 100%; text-align: left; background: none; border: 0; padding: 4px 6px;
   border-radius: 4px; cursor: pointer; font: inherit; color: inherit; }
-.drop:hover, .drop:focus-visible { background: #f1f3f5; }
+.drop:hover, .drop:focus-visible { background: var(--hover); }
 .drop .name { display: block; font-weight: 600; }
-.drop .lanes { display: block; font-size: 12px; color: #555; }
+.drop .lanes { display: block; font-size: 12px; color: var(--muted); }
 .drops li.confirmed .name { color: #b01e1f; }
 #method { margin: 16px 0 8px; font-size: 13px; }
 #method summary { cursor: pointer; font-weight: 600; }
@@ -32,3 +34,17 @@ html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
 @media (max-width: 600px) {
   #panel { top: auto; bottom: 0; left: 0; right: 0; width: auto; max-height: 45%; border-radius: 8px 8px 0 0; }
 }
+
+/* Run the analysis (replay.ts) and flow dots (particles.ts) */
+.run { margin: 4px 0 10px; }
+.run-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.run button { font: inherit; font-size: 14px; border-radius: 6px; padding: 7px 12px; cursor: pointer;
+  border: 1px solid var(--path); background: var(--surface); color: var(--path); }
+.run button.primary { background: var(--path); color: #fff; font-weight: 600; }
+.run button[aria-pressed="true"] { background: #e6edf3; }
+.run button:hover { filter: brightness(1.1); }
+.run button:focus-visible, .drop:focus-visible { outline: 3px solid var(--full); outline-offset: 2px; }
+.counter { margin-top: 8px; font-size: 13px; }
+.counter b { font-size: 18px; font-variant-numeric: tabular-nums; color: var(--path); }
+#run-caption { margin: 4px 0 0; min-height: 2.6em; font-size: 13px; color: var(--ink); }
+.dot.idle { background: var(--idle); }

@@ -34,6 +34,24 @@ export interface Fix {
 
 export type FixesFile = Record<Direction, Fix[]>;
 
+/** One augmenting path of the max flow search (export.ReplayStep). */
+export interface ReplayStep {
+  phase: number;
+  amount_vph: number;
+  /** [edge id, delta veh/h] pairs, source to sink; negative = flow cancelled. */
+  edges: [number, number][];
+}
+
+/** One direction's search (export.Replay). */
+export interface Replay {
+  max_flow_vph: number;
+  phases: number;
+  steps: ReplayStep[];
+}
+
+/** replay.json (export.ReplayFile), decision 0011. */
+export type ReplayFile = Record<Direction, Replay>;
+
 export interface Manifest {
   corridor: string;
   generated_at: string;

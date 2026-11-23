@@ -67,3 +67,53 @@ func readJSON(t *testing.T, path string, v any) {
 		t.Fatal(err)
 	}
 }
+
+func TestWriteReplay(t *testing.T) {
+	g := &graph.Graph{Edges: []graph.Edge{
+		{ID: 0, Lanes: 2, CapacityVPH: 4000, Geometry: []graph.LatLon{{Lat: 3, Lon: 101}, {Lat: 3.1, Lon: 101}}},
+		{ID: 1, Lanes: 1, CapacityVPH: 2000, Geometry: []graph.LatLon{{Lat: 3.1, Lon: 101}, {Lat: 3.2, Lon: 101}}},
+		{ID: 2, Lanes: 1, CapacityVPH: 2000, Geometry: []graph.LatLon{{Lat: 3.2, Lon: 101}, {Lat: 3.3, Lon: 101}}},
+	}}
+	// Edge 1 carries flow in step 1 and loses it in step 2: it ends at 0
+	// but must still be exported so the replay can draw it.
+	results := []fixes.Result{{
+		Direction: fixes.Inbound, MaxFlowVPH: 2000, EdgeFlow: []int{2000, 0, 2000},
+		Steps: []fixes.Step{
+			{Phase: 1, AmountVPH: 1000, Edges: []fixes.EdgeDelta{{EdgeID: 0, Delta: 1000}, {EdgeID: 1, Delta: 1000}, {EdgeID: 2, Delta: 1000}}},
+			{Phase: 2, AmountVPH: 1000, Edges: []fixes.EdgeDelta{{EdgeID: 0, Delta: 1000}, {EdgeID: 1, Delta: -1000}, {EdgeID: 2, Delta: 1000}}},
+		},
+	}}
+	dir := t.TempDir()
+	if err := WriteEdges(dir, g, results); err != nil {
+		t.Fatal(err)
+	}
+	if err := WriteReplay(dir, results); err != nil {
+		t.Fatal(err)
+	}
+	var fc featureCollection
+	readJSON(t, filepath.Join(dir, "edges.geojson"), &fc)
+	flowOf := map[int]int{}
+	for _, f := range fc.Features {
+		flowOf[f.Props.ID] = f.Props.FlowVPH
+	}
+	if _, ok := flowOf[1]; !ok || len(fc.Features) != 3 {
+		t.Fatalf("features %v: want edges 0, 1, 2 (1 replayed with flow 0)", flowOf)
+	}
+	var rf ReplayFile
+	readJSON(t, filepath.Join(dir, "replay.json"), &rf)
+	rp := rf[fixes.Inbound]
+	if rp.MaxFlowVPH != 2000 || rp.Phases != 2 || len(rp.Steps) != 2 {
+		t.Fatalf("replay = %+v", rp)
+	}
+	sum := map[int]int{}
+	for _, st := range rp.Steps {
+		for _, e := range st.Edges {
+			sum[e[0]] += e[1]
+		}
+	}
+	for id, f := range flowOf {
+		if sum[id] != f {
+			t.Errorf("edge %d: replay sums to %d, flow_vph %d", id, sum[id], f)
+		}
+	}
+}
