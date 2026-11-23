@@ -2,6 +2,11 @@
 # (plus gofmt and the committed-data test). CD: a green push to main deploys
 # web/dist to GitHub Pages at https://tlmotan.github.io/jalanflow/.
 #
+# Deploy is PAUSED while the repo is private (GitHub Free has no Pages for
+# private repos). It runs only when the repo variable DEPLOY_PAGES is "true":
+#   gh variable set DEPLOY_PAGES --body true
+# Turn Pages on first (Settings -> Pages -> Source: GitHub Actions).
+#
 # Data is NOT regenerated here: raw OSM extracts are not committed and Overpass
 # is flaky. Instead internal/export's committed-data test checks that
 # web/public/data/ still matches the Go output structs and the capacity config.
@@ -53,17 +58,19 @@ jobs:
           cache: npm
           cache-dependency-path: web/package-lock.json
       - run: npm ci
+      # Node's built-in test runner on web/test/*.test.mjs (no dependency).
+      - run: npm test
       # tsc --noEmit && vite build; base matches the GitHub Pages project path.
       - run: npm run build -- --base=/jalanflow/
       - name: Upload Pages artifact
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: vars.DEPLOY_PAGES == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
           path: web/dist
 
   deploy:
     needs: [go, web]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: vars.DEPLOY_PAGES == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       pages: write
