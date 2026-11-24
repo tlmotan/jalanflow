@@ -1,4 +1,4 @@
-// The text column shows one view at a time (docs/DESIGN.md §1): the main
+// The text column shows one view at a time (docs/design/project/DESIGN_BRIEF.md §1): the main
 // view (landing, running or result, by state) or one of list, detail and
 // "How this works", each with a Back button. Escape also goes back. Opening
 // a view moves focus to its Back button; going back returns focus to where

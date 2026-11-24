@@ -10,8 +10,9 @@ import type { FeatureCollection, LineString } from "geojson";
 import type { EdgeProps, Replay } from "./types";
 import { colors } from "./colors";
 import { roadWidth } from "./lanes";
+import { NEARLY_FULL } from "./copy";
 
-// Display timings (docs/DESIGN.md §6): the whole replay fits in about
+// Display timings (docs/design/project/DESIGN_BRIEF.md §6): the whole replay fits in about
 // TOTAL_MS whatever the number of routes, and never more than STEP_MAX_MS
 // per route so a short trace doesn't crawl.
 const TOTAL_MS = 12000;
@@ -40,6 +41,8 @@ export interface ReplayControls {
   play: () => void;
   /** Jump to the result. Does nothing unless a run is in progress. */
   skip: () => void;
+  /** Show the result without replaying the search (a shared link to it). */
+  result: () => void;
 }
 
 const reducedMotion = (): boolean => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -80,6 +83,18 @@ export function initReplay(o: ReplayOptions): ReplayControls {
     },
     "edges",
   );
+  // Roads the analysis fills to NEARLY_FULL or more, shown with the result.
+  map.addLayer(
+    {
+      id: "full-line",
+      type: "line",
+      source: "edges",
+      filter: ["all", [">=", ["get", "utilisation"], NEARLY_FULL], ["!", ["get", "is_cut"]], [">", ["get", "flow_vph"], 0]],
+      layout: { "line-cap": "round", "line-join": "round", visibility: "none" },
+      paint: { "line-color": c.full, "line-width": roadWidth(3) },
+    },
+    "edges",
+  );
   map.addLayer(
     {
       id: "cut-line",
@@ -87,12 +102,12 @@ export function initReplay(o: ReplayOptions): ReplayControls {
       source: "edges",
       filter: ["==", ["get", "is_cut"], true],
       layout: { "line-cap": "round", "line-join": "round", visibility: "none" },
-      paint: { "line-color": c.cut, "line-width": roadWidth(1.5) },
+      paint: { "line-color": c.cut, "line-width": roadWidth(3) },
     },
     o.beforeLayer,
   );
   const showCut = (on: boolean): void => {
-    for (const id of ["replay-cut", "cut-line"]) map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
+    for (const id of ["replay-cut", "full-line", "cut-line"]) map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
   };
 
   let run = 0; // bumped on every start / skip; stale loops stop
@@ -177,6 +192,11 @@ export function initReplay(o: ReplayOptions): ReplayControls {
     skip() {
       if (!running) return;
       run++; // stop the loop
+      finish(false);
+    },
+    result() {
+      run++;
+      o.onStart();
       finish(false);
     },
   };

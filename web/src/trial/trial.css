@@ -1,0 +1,276 @@
+/* TRIAL page (web/trial.html). The only place its colours and tokens live.
+   The shell tokens follow the neutral palette in docs/design/DESIGN.md §2;
+   the map tokens follow the project brief that came with it. The map tokens
+   keep the names src/colors.ts and src/basemap.ts read, so that code is
+   reused. Every size, space, radius, border and timing below is a token:
+   rules use the tokens, not their own numbers. */
+:root {
+  /* ---- colour: the dark shell ---- */
+  --canvas: #111318;
+  --surface: #1c2028; /* controls and the map card */
+  --raised: #252a34; /* a surface under the pointer or pressed */
+  --text: #ffffff;
+  --text-muted: #a1a7b0;
+  --divider: #2b303a; /* separators: decoration only */
+  --control: #6b7480; /* edges of controls: 3:1 or better on the canvas */
+  --edge: #3a3f47; /* the map card's hairline */
+  --shadow: rgb(0 0 0 / 0.24); /* the map card's lift off the map */
+  /* ---- colour: the light map ---- */
+  --bg: #f7f8f8; /* map background and knock-outs */
+  --ink: #24292f; /* lane-drop markers, map labels */
+  --road: #dde1e5; /* modelled roads the analysis does not use */
+  --route: #6b7785; /* roads the analysis uses */
+  --full: #f5b800; /* nearly full in the analysis */
+  --cut: #ef4035; /* where it jams: a jam a driver confirmed (ringed dot), the bottleneck (thick line) */
+  --cut-words: #f08078; /* the same red, lightened so small words pass contrast on the dark shell */
+  --map-street: #e9ecee;
+  --map-water: #e3e7ea;
+  --marker: #ffd100; /* expressway route markers */
+
+  /* ---- type: one family, plus monospace for units and data labels ---- */
+  --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --data: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --fs-display: 3.25rem; /* the one big number */
+  --fs-title: 1.375rem; /* a view's heading */
+  --fs-figure: 1.25rem; /* a secondary number: the tested lane, a card's lanes */
+  --fs-body: 0.9375rem; /* 15 px: findings, rows, controls */
+  --fs-small: 0.875rem; /* qualifiers, the key, facts' labels */
+  --fs-meta: 0.8125rem; /* tags beside rows, a card's note */
+  --fs-label: 0.75rem; /* a card's kind, map tags */
+  --lh-tight: 1.15;
+  --lh-snug: 1.3;
+  --lh-body: 1.5;
+  --track-display: -0.03em;
+  --track-title: -0.015em;
+
+  /* ---- space: a 4 px scale ---- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --gap: var(--s-4); /* between the shell's regions */
+  --section: var(--s-5); /* between the panel's sections, each side of a divider */
+
+  /* ---- shape ---- */
+  --r-sm: 6px; /* a control inside a control */
+  --r-md: 8px; /* buttons, rows, the map card */
+  --r-lg: 12px; /* the map */
+  --r-pill: 999px; /* swatches: a road is a line */
+  --line: 1px solid var(--divider);
+
+  /* ---- controls ---- */
+  --control-h: 44px; /* buttons */
+  --row-h: 40px; /* list rows and the direction switch */
+  --link-h: 32px;
+  --dur: 150ms;
+  --ease: ease-out;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; }
+body {
+  height: 100dvh; overflow: hidden; background: var(--canvas); color: var(--text);
+  font: var(--fs-body)/var(--lh-body) var(--font);
+  -webkit-font-smoothing: antialiased;
+  display: grid; gap: 0 var(--gap);
+  grid-template: "bar bar" auto "map panel" minmax(0, 1fr) / minmax(0, 1fr) clamp(300px, 32vw, 392px);
+  padding: 0 max(var(--gap), env(safe-area-inset-right)) max(var(--gap), env(safe-area-inset-bottom))
+    max(var(--gap), env(safe-area-inset-left));
+}
+p, h1, h2, ul, ol, dl, dd { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+button { font: inherit; color: inherit; }
+.sr, .skip:not(:focus) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);
+  white-space: nowrap; }
+.skip:focus { position: fixed; left: var(--s-3); top: var(--s-3); z-index: 10; padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-md); background: var(--text); color: var(--canvas); }
+
+/* ---------- identity bar ---------- */
+#bar { grid-area: bar; display: flex; align-items: center; gap: var(--s-3); min-height: 60px;
+  padding-top: env(safe-area-inset-top); }
+.word { font-weight: 700; font-size: 1.125rem; letter-spacing: -0.02em; }
+.corridor { color: var(--text-muted); font-size: var(--fs-small); padding-left: var(--s-3); border-left: var(--line); }
+/* Outer radius = inner radius + the 2 px inset, so the corners nest. */
+.seg { margin-left: auto; display: flex; border: 1px solid var(--control); border-radius: var(--r-md); padding: 2px; gap: 2px; }
+.seg button { font-weight: 600; font-size: var(--fs-small); line-height: 1; background: none; border: 0;
+  border-radius: var(--r-sm); min-height: calc(var(--row-h) - 4px); padding: 0 var(--s-3); cursor: pointer;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease); }
+.seg button:hover { background: var(--surface); }
+.seg button:active { background: var(--raised); }
+.seg button[aria-pressed="true"] { background: var(--text); color: var(--canvas); }
+
+/* ---------- the map: a light card in the dark shell ---------- */
+#map { grid-area: map; min-height: 0; border-radius: var(--r-lg); overflow: hidden; background: var(--bg); }
+.place, .tag { font-family: var(--font); line-height: 1; color: var(--ink); white-space: nowrap; pointer-events: none;
+  text-shadow: 0 0 3px var(--bg), 0 0 3px var(--bg), 0 0 3px var(--bg); }
+.place { font-size: var(--fs-small); font-weight: 700; }
+.tag { font-size: var(--fs-label); font-weight: 600; }
+/* The bottleneck is named in words on a dark pill, so it does not rest on red alone. */
+.tag.limit-tag { background: var(--ink); color: var(--bg); text-shadow: none; padding: 5px var(--s-2); border-radius: var(--r-sm); }
+.shield { display: block; pointer-events: none; }
+.shield polygon { fill: var(--marker); stroke: var(--ink); stroke-width: 1.3; }
+.shield text { font: 700 12px var(--font); fill: var(--ink); text-anchor: middle; }
+.maplibregl-ctrl-attrib { font-size: 11px; }
+
+/* ---------- the map card: a quick look at one marker or road ---------- */
+.trial-card { font: var(--fs-body)/var(--lh-snug) var(--font); }
+.trial-card .maplibregl-popup-content { background: var(--surface); color: var(--text); padding: var(--s-4);
+  border: 1px solid var(--edge); border-radius: var(--r-md); box-shadow: 0 6px 18px var(--shadow);
+  animation: card-in 140ms var(--ease); }
+.trial-card.leaving { opacity: 0; transition: opacity 120ms; }
+@keyframes card-in { from { opacity: 0; transform: translateY(3px); } }
+.trial-card.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+.trial-card.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+.trial-card.maplibregl-popup-anchor-top-right .maplibregl-popup-tip { border-bottom-color: var(--surface); }
+.trial-card.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+.trial-card.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+.trial-card.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip { border-top-color: var(--surface); }
+.trial-card.maplibregl-popup-anchor-left .maplibregl-popup-tip { border-right-color: var(--surface); }
+.trial-card.maplibregl-popup-anchor-right .maplibregl-popup-tip { border-left-color: var(--surface); }
+.card-kind { display: flex; align-items: center; gap: var(--s-2); color: var(--text-muted); }
+.card-kind .dot { margin: 0 var(--s-1); }
+.card-kind b { font-weight: 600; font-size: var(--fs-label); text-transform: uppercase; letter-spacing: 0.06em; }
+.card-kind.seen b { color: var(--cut-words); }
+.card-title { margin-top: var(--s-2); }
+.card-main { margin-top: 2px; font-size: var(--fs-figure); font-weight: 700; line-height: var(--lh-snug);
+  font-variant-numeric: tabular-nums; letter-spacing: var(--track-title); }
+.card-note { margin-top: var(--s-2); font-size: var(--fs-meta); color: var(--text-muted); }
+.card-acts { margin-top: var(--s-3); display: flex; gap: var(--s-5); }
+.card-acts .link { font-size: var(--fs-small); }
+#peek { display: none; }
+
+/* ---------- the panel: one view at a time ---------- */
+#panel { grid-area: panel; min-height: 0; overflow-y: auto; padding: var(--s-2) var(--s-1); outline: none; }
+[data-v] { display: none; }
+body[data-load="ready"][data-view="summary"] [data-v="summary"],
+body[data-load="ready"][data-view="list"] [data-v="list"],
+body[data-load="ready"][data-view="detail"] [data-v="detail"],
+body[data-load="ready"][data-view="how"] [data-v="how"] { display: block; }
+/* Before, during and after the analysis: only that state's blocks show. */
+body:not([data-state="home"]) [data-s="home"], body:not([data-state="running"]) [data-s="running"],
+body:not([data-state="result"]) [data-s="result"] { display: none !important; }
+body[data-state="running"] .more-body, body[data-state="running"] .more { display: none; }
+body:not([data-load="loading"]) #status { display: none; }
+#status, #failed p { color: var(--text-muted); }
+
+/* Type roles. The statement above the number is a lead-in, so it is quiet;
+   a view's own heading is the title; a section inside a view is h2. */
+h1 { font-size: var(--fs-body); font-weight: 500; line-height: var(--lh-snug); color: var(--text-muted); }
+h1.title { font-size: var(--fs-title); font-weight: 700; line-height: var(--lh-snug); color: var(--text);
+  letter-spacing: var(--track-title); text-wrap: balance; margin: var(--s-3) 0 var(--s-2); }
+h2 { font-size: var(--fs-body); font-weight: 600; line-height: var(--lh-snug); }
+.num { font-variant-numeric: tabular-nums; }
+.unit { font-family: var(--data); font-size: var(--fs-meta); font-weight: 400; letter-spacing: 0; color: var(--text-muted); }
+.metric { margin-top: var(--s-1); line-height: var(--lh-tight); }
+.metric .num { font-size: var(--fs-display); font-weight: 700; letter-spacing: var(--track-display); }
+.metric .unit { font-size: var(--fs-body); white-space: nowrap; }
+.qual, .small { color: var(--text-muted); font-size: var(--fs-small); }
+.qual { margin-top: var(--s-2); }
+
+/* Controls share one set of states: hover lifts the surface, pressed lifts it
+   further, focus is the outline below, disabled stays put. */
+.limit, .btn { transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease); }
+
+/* The limiting stretch: a control, so it gets a surface. The only box in the panel. */
+.limit { display: flex; align-items: flex-start; gap: var(--s-3); width: 100%; text-align: left; margin-top: var(--s-4);
+  padding: var(--s-3) var(--s-4); border-radius: var(--r-md); border: 1px solid var(--control); background: var(--surface);
+  font-weight: 600; line-height: 1.4; cursor: pointer; }
+.limit:hover:not(:disabled) { border-color: var(--text); background: var(--raised); }
+.limit:active:not(:disabled) { background: var(--raised); }
+.limit:disabled { cursor: default; }
+.limit .hint { display: block; margin-top: 2px; font-weight: 400; font-size: var(--fs-small); color: var(--text-muted);
+  text-decoration: underline; text-underline-offset: 3px; }
+.limit:hover .hint { color: var(--text); }
+.limit .sw { margin-top: var(--s-2); }
+
+/* Sections: space and one hairline, no boxes. */
+.whatif, .key { margin-top: var(--section); padding-top: var(--section); border-top: var(--line); }
+.whatif .small { margin-top: 2px; }
+.compare { margin: var(--s-3) 0 var(--s-2); font-size: var(--fs-figure); font-weight: 700; line-height: var(--lh-tight);
+  letter-spacing: var(--track-title); display: flex; align-items: baseline; gap: var(--s-2); flex-wrap: wrap; }
+.compare [aria-hidden] { color: var(--text-muted); font-weight: 400; }
+.whatif p + p { margin-top: var(--s-1); }
+#whatif-hard { margin-top: var(--s-2); }
+
+/* Swatches match the map: same colours, same shapes. */
+.sw { flex: none; display: inline-block; width: 22px; height: 6px; border-radius: var(--r-pill); background: var(--route); }
+.sw.cut { background: var(--cut); }
+.sw.full { background: var(--full); box-shadow: 0 0 0 1.5px var(--ink), 0 0 0 2.5px var(--text-muted); }
+.sw.dash { background: repeating-linear-gradient(90deg, var(--route) 0 6px, transparent 6px 10px); }
+.dot { flex: none; display: inline-block; width: 9px; height: 9px; margin: 0 6.5px; border-radius: 50%;
+  background: var(--text); }
+.dot.ring { background: var(--cut); box-shadow: 0 0 0 3px var(--canvas), 0 0 0 4.5px var(--cut); }
+.trial-card .dot.ring { box-shadow: 0 0 0 3px var(--surface), 0 0 0 4.5px var(--cut); }
+.flowdots { flex: none; display: inline-block; width: 4px; height: 4px; margin-right: 18px; border-radius: 50%;
+  background: var(--text); box-shadow: 9px 0 0 var(--text), 18px 0 0 var(--text); }
+.key { display: grid; gap: var(--s-2); font-size: var(--fs-small); line-height: var(--lh-snug); color: var(--text-muted); }
+.key li { display: flex; align-items: center; gap: var(--s-3); }
+
+.links { margin-top: var(--s-5); display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-5); }
+.link, .links a { font-weight: 500; font-size: var(--fs-body); line-height: var(--lh-snug); color: var(--text); background: none;
+  border: 0; padding: 0; min-height: var(--link-h); cursor: pointer; text-decoration: underline; text-decoration-color: var(--control);
+  text-underline-offset: 3px; display: inline-flex; align-items: center;
+  transition: text-decoration-color var(--dur) var(--ease); }
+.link:hover, .links a:hover { text-decoration-color: var(--text); }
+.link:active, .links a:active { color: var(--text-muted); }
+.btn { font-weight: 600; line-height: 1; background: none; border: 1px solid var(--control);
+  border-radius: var(--r-md); min-height: var(--control-h); padding: 0 var(--s-4); cursor: pointer; margin-top: var(--s-4); }
+.btn:hover { border-color: var(--text); background: var(--surface); }
+.btn:active { background: var(--raised); }
+.btn.primary { background: var(--text); color: var(--canvas); border-color: var(--text); padding: 0 var(--s-5); }
+.btn.primary:hover { background: var(--bg); }
+.btn.primary:active { background: var(--road); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+#lede { margin-top: var(--s-1); }
+#lede b { font-variant-numeric: tabular-nums; }
+[data-s="home"] .qual { margin-top: var(--s-3); }
+.more { display: none; }
+
+:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.seg button[aria-pressed="true"]:focus-visible { outline-offset: 4px; }
+
+/* ---------- lists and details ---------- */
+.rows { margin: var(--s-3) calc(-1 * var(--s-2)) 0; }
+.rows button { display: flex; gap: var(--s-3); align-items: baseline; width: 100%; text-align: left; border: 0;
+  background: none; line-height: var(--lh-snug); padding: var(--s-2); border-radius: var(--r-md);
+  cursor: pointer; min-height: var(--row-h); transition: background-color var(--dur) var(--ease); }
+.rows button:hover, .rows button:focus-visible, .rows button.hot { background: var(--surface); }
+.rows button:active { background: var(--raised); }
+.rows b { flex: none; min-width: 3.4em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rows em { margin-left: auto; padding-left: var(--s-2); font-style: normal; font-size: var(--fs-meta); color: var(--text-muted);
+  white-space: nowrap; }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: var(--s-2) var(--s-4); margin: var(--s-2) 0 var(--s-4); }
+.facts dt { color: var(--text-muted); font-size: var(--fs-small); padding-top: 1px; }
+.facts dd { font-variant-numeric: tabular-nums; }
+#detail-note { color: var(--text-muted); max-width: 46ch; }
+.notes { margin-top: var(--s-2); display: grid; gap: var(--s-3); color: var(--text-muted); max-width: 52ch; }
+.notes a { color: var(--text); }
+.back { margin-bottom: var(--s-1); }
+
+/* ---------- phones: map on top, a compact sheet below it ---------- */
+@media (max-width: 760px) and (orientation: portrait), (max-width: 560px) {
+  :root { --gap: var(--s-2); --section: var(--s-4); --fs-display: 2.5rem; --fs-title: 1.25rem; --link-h: 44px; --row-h: 44px; }
+  body { display: flex; flex-direction: column; padding-bottom: 0; }
+  #bar { min-height: 56px; gap: var(--s-2); }
+  .corridor { display: none; }
+  .seg button { min-height: var(--control-h); padding: 0 var(--s-2); font-size: var(--fs-meta); }
+  #map { flex: 1 1 auto; min-height: 220px; }
+  #panel { flex: 0 1 auto; max-height: 58dvh; padding: var(--s-4) var(--s-2) max(var(--s-4), env(safe-area-inset-bottom)); }
+  .limit { margin-top: var(--s-3); padding: var(--s-3); }
+  body[data-more="closed"] .more-body { display: none; }
+  /* The quick look takes the sheet's place until it is closed; the view under it is kept. */
+  body[data-peek="on"] #peek { display: block; }
+  body[data-peek="on"] [data-v] { display: none !important; }
+  .more { display: block; width: 100%; margin-top: var(--s-3); }
+}
+/* Fingers need room on any screen size. */
+@media (pointer: coarse) {
+  :root { --link-h: 44px; --row-h: 44px; }
+  .seg button { min-height: var(--control-h); }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

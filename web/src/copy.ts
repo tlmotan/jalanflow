@@ -119,6 +119,102 @@ export function fixDifficulty(fixes: Fix[]): string {
   return `Rated ${best.difficulty} to build${why}.`;
 }
 
+/** A road counts as nearly full from this share of what it can carry (shown yellow on the map). */
+export const NEARLY_FULL = 0.9;
+
+/** A road on the map, as edges.geojson describes it. */
+export interface RoadFacts extends CutRoad {
+  lanes_inferred: boolean;
+  capacity_vph: number;
+  flow_vph: number;
+  is_cut: boolean;
+}
+
+/** A road's name for a title: "E5 Lebuhraya Shah Alam", or what kind of road it is. */
+export function roadTitle(r: RoadFacts): string {
+  const named = [r.ref, r.name].filter(Boolean).join(" ");
+  if (named) return named;
+  return r.class.endsWith("_link") ? "Ramp" : "Unnamed road";
+}
+
+/** "3 lanes, able to carry about 6,000 veh/h." */
+export function roadBody(r: RoadFacts): string {
+  const lanes = `${r.lanes} lane${r.lanes === 1 ? "" : "s"}`;
+  return `${lanes}, able to carry about ${fmtVph(r.capacity_vph)} veh/h.`;
+}
+
+/**
+ * What else to say about a road. The share it carries and whether it is the
+ * bottleneck are results of the analysis, so they are held back until it
+ * has run (`solved`). `cutCount` is how many roads make up the bottleneck.
+ */
+export function roadNotes(r: RoadFacts, solved: boolean, cutCount: number): string[] {
+  const notes: string[] = [];
+  if (r.lanes_inferred) notes.push("The lane count is guessed from the road type. Check on Street View.");
+  if (!solved) return notes;
+  if (r.is_cut) {
+    notes.push(
+      cutCount <= 1
+        ? "This is the bottleneck. Every route from Kota Kemuning to PJ has to cross this stretch, and the analysis fills it completely, so nothing more gets through."
+        : "This is part of the bottleneck. Every route from Kota Kemuning to PJ has to cross one of the red stretches, and the analysis fills them all, so nothing more gets through.",
+    );
+  } else if (r.flow_vph > 0) {
+    const full = r.capacity_vph > 0 && r.flow_vph / r.capacity_vph >= NEARLY_FULL;
+    notes.push(
+      full
+        ? `The analysis sends ${fmtVph(r.flow_vph)} veh/h along it, so it is nearly full. It is not what sets the limit: the bottleneck is.`
+        : `The analysis sends ${fmtVph(r.flow_vph)} veh/h along it, so it has room to spare.`,
+    );
+  }
+  return notes;
+}
+
 export function pathCaption(i: number, n: number): string {
   return `Path ${Math.min(i, n)} of ${n}.`;
+}
+
+/** A stretch of the lane strip (profile.ts), as far as the wording needs it. */
+export interface ProfilePart {
+  lanes: number;
+  km: number;
+  cut: boolean;
+  full: boolean;
+}
+
+/** The roads' shared name ("E5 Lebuhraya Shah Alam"), or "" if they differ. */
+export function sharedName(roads: CutRoad[]): string {
+  const names = new Set(roads.map(cutName));
+  return names.size === 1 ? [...names][0]! : "";
+}
+
+/** "Lanes along the first 4.9 km of E5 Lebuhraya Shah Alam, which every route uses:" */
+export function profileTitle(parts: ProfilePart[], road: string): string {
+  const km = parts.reduce((sum, p) => sum + p.km, 0).toFixed(1);
+  return `Lanes along the first ${km} km of ${road || "the drive"}, which every route uses:`;
+}
+
+/**
+ * What the lane strip shows, in words. The lesson (wide parts do not help
+ * while a narrow one limits them) is said only when the data shows it: the
+ * bottleneck is on the strip and every wider part has room to spare.
+ */
+export function profileSentence(parts: ProfilePart[]): string {
+  if (parts.length === 0) return "";
+  const lanes = parts.map((p) => p.lanes);
+  const most = Math.max(...lanes);
+  const fewest = Math.min(...lanes);
+  if (most === fewest) return `${most} lane${most === 1 ? "" : "s"} all the way.`;
+  const cut = parts.filter((p) => p.cut);
+  const cutLanes = Math.min(...cut.map((p) => p.lanes));
+  const wider = parts.filter((p) => !p.cut && p.lanes > cutLanes);
+  if (cut.length && wider.length && wider.every((p) => !p.full)) {
+    return `Up to ${most} lanes wide, but the ${cutLanes}-lane bottleneck decides how much gets through. The wider parts have room to spare, so more lanes there would add nothing.`;
+  }
+  return `Between ${fewest} and ${most} lanes wide.`;
+}
+
+/** The strip read out: "Lanes in order: 3 (bottleneck), 4, 5, 3 (nearly full), 5." */
+export function profileLabel(parts: ProfilePart[]): string {
+  const said = parts.map((p) => `${p.lanes}${p.cut ? " (bottleneck)" : p.full ? " (nearly full)" : ""}`);
+  return `Lanes in order: ${said.join(", ")}.`;
 }

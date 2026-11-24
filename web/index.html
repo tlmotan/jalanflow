@@ -2,8 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>JalanFlow — where lanes run out between Kota Kemuning and PJ</title>
+    <meta name="description" content="Where the lanes run out on KESAS and LDP between Kota Kemuning and PJ, and the one stretch that limits how much traffic can get through. It shows what the roads can carry, not live traffic." />
+    <!-- Share preview for WhatsApp, X and others (DESIGN_BRIEF.md §11). Preview
+         images need a full address: update these if the site moves. The image
+         is made from og-card.html; see DESIGN_BRIEF.md §11 for how to redo it. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="JalanFlow" />
+    <meta property="og:url" content="https://tlmotan.github.io/jalanflow/" />
+    <meta property="og:title" content="Where lanes run out between Kota Kemuning and PJ" />
+    <meta property="og:description" content="The places on KESAS and LDP where more lanes come in than carry on, and the one stretch that limits how much traffic can get through." />
+    <meta property="og:image" content="https://tlmotan.github.io/jalanflow/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A line map of the roads between Kota Kemuning and Petaling Jaya, with dots where lanes run out." />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body data-state="home" data-view="main">
@@ -35,8 +49,18 @@
       <div data-s="result">
         <p class="say" id="result-say"></p>
         <p id="result-cut-line"><span class="swatch"></span><b id="result-cut"></b></p>
+        <!-- The lane strip (DESIGN_BRIEF.md §13): filled by main.ts from edges.geojson. -->
+        <div id="profile" hidden>
+          <p class="small" id="profile-title"></p>
+          <div class="profile" id="profile-strip" role="img"></div>
+          <p class="small" id="profile-say"></p>
+        </div>
         <p id="result-fix"></p>
         <p id="result-fix-why" class="small"></p>
+        <div class="key result-key">
+          <span><i class="bar cut"></i>Bottleneck</span><span><i class="bar"></i>Nearly full</span><span><i class="ring"></i>Confirmed jam</span>
+          <span><i class="flow"></i>More dots, more vehicles</span><span><i></i>Lane drop</span>
+        </div>
         <div class="row-of">
           <button type="button" id="replay-btn">Replay</button>
           <button type="button" class="link" id="flow-btn" aria-pressed="true" style="margin-left: 10px">Hide flow</button>
@@ -68,7 +92,7 @@
         <ul id="how" class="scroll" tabindex="0"></ul>
       </div>
 
-      <!-- Spoken updates during the replay (DESIGN.md §8). -->
+      <!-- Spoken updates during the replay (DESIGN_BRIEF.md §8). -->
       <p id="live" aria-live="polite" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%)"></p>
       <p id="foot">This shows what the roads can carry, not live traffic.</p>
     </main>

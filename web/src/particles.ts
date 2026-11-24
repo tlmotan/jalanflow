@@ -6,13 +6,12 @@
 import type maplibregl from "maplibre-gl";
 import type { Feature, FeatureCollection, LineString, Point } from "geojson";
 import type { EdgeProps } from "./types";
-import { colors } from "./colors";
-import type { LaneColours } from "./trial";
+import { colors, type LaneColours } from "./colors";
 import { advance, heading, pointAt, segmentAt, shift } from "./track";
 import { byLaneWidth, laneIndex, lanePx, lerpStops, metresPerPixel } from "./lanes";
 import { buildRoutes, lateral, makeVehicles, spaceOut, spanAt, type Vehicle } from "./vehicles";
 
-// Display constants (docs/DESIGN.md §9-10), not traffic numbers.
+// Display constants (docs/design/project/DESIGN_BRIEF.md §9-10), not traffic numbers.
 const PER_KM_PER_1000_VPH = 15; // every vehicle: 2,000 veh/h in a lane → one per 33 m
 const MAX_VEHICLES = 3000; // keep phones smooth; density scales down to fit
 // Share of the vehicles shown at each zoom. Zoomed out, one in three (6,000
@@ -84,7 +83,7 @@ export function initFlowDots(
       layout: { visibility: "none" },
       paint: {
         // The same ink dot as everywhere else; red only on the bottleneck.
-        // How full a road is shows in how many dots it carries (DESIGN.md §4).
+        // How full a road is shows in how many dots it carries (DESIGN_BRIEF.md §4).
         "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 1.5, 15, 3],
         "circle-color": ["case", ["get", "cut"], c.cut, c.ink],
         "circle-opacity": ["interpolate", ["linear"], ["zoom"], CARS_MIN_ZOOM, 1, DOTS_MAX_ZOOM, 0],

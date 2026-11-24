@@ -1,4 +1,4 @@
-/* The only place a colour lives (docs/DESIGN.md §4). colors.ts reads these
+/* The only place a colour lives (docs/design/project/DESIGN_BRIEF.md §4). colors.ts reads these
    for the map; never repeat a hex value elsewhere. */
 :root {
   --bg: #f6f7f7; /* the page; knock-out behind markers and labels */
@@ -6,11 +6,11 @@
   --muted: #5d646b; /* secondary text */
   --road: #dcdfe2; /* modelled roads that are not on the drive */
   --line: #c5cace; /* borders of secondary buttons */
-  --cut: #d7261e; /* the bottleneck (min cut), and nothing else */
+  --cut: #d7261e; /* where it jams: a jam a driver confirmed (ringed dot), the bottleneck (thick line) */
+  --full: #f2b200; /* roads the analysis fills to 90 % or more */
   --marker: #ffd100; /* expressway route markers only */
-  /* Trial basemap tints (?base=pale|labels), until one is chosen (0013). */
-  --map-street: #e9ebed;
-  --map-water: #e3e7ea;
+  --map-street: #e9ebed; /* basemap streets: just visible on the page */
+  --map-water: #e3e7ea; /* basemap rivers and lakes */
   --sign: "DIN Alternate", "Bahnschrift", "Roboto Condensed", "Arial Narrow", system-ui, sans-serif;
 }
 * { box-sizing: border-box; }
@@ -21,7 +21,7 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
 #veil { position: fixed; inset: 0; pointer-events: none;
   background: linear-gradient(90deg, var(--bg) 0, var(--bg) 400px, transparent 540px); }
 
-/* Text column: straight on the page, one view at a time (DESIGN.md §1, §5). */
+/* Text column: straight on the page, one view at a time (DESIGN_BRIEF.md §1, §5). */
 #text { position: fixed; left: 44px; top: 36px; width: 372px; max-height: calc(100% - 72px);
   display: flex; flex-direction: column; }
 .mark { display: flex; align-items: center; gap: 10px; margin: 0 0 26px -8px;
@@ -49,7 +49,12 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .key { font-size: 12.5px; color: var(--muted); margin-top: 24px; display: flex; gap: 16px; flex-wrap: wrap; }
 .key i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ink);
   margin-right: 6px; vertical-align: 1px; }
-.key i.ring { width: 5px; height: 5px; box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--ink); margin-right: 8px; }
+.key i.ring { width: 5px; height: 5px; background: var(--cut);
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--cut); margin-right: 9px; }
+.key i.bar { width: 16px; height: 5px; border-radius: 3px; background: var(--full); vertical-align: 2px; }
+.key i.bar.cut { background: var(--cut); }
+.key i.flow { width: 3px; height: 3px; box-shadow: 6px 0 0 var(--ink), 12px 0 0 var(--ink); margin-right: 18px; vertical-align: 2px; }
+.key.result-key { margin-top: 8px; gap: 6px 16px; }
 .key i.hollow { background: none; border: 1.2px solid var(--ink); }
 
 /* Exactly one block shows: by state on the main view, else by view. */
@@ -60,6 +65,9 @@ body[data-view="main"][data-state="result"] [data-s~="result"],
 body[data-view="list"] [data-v="list"],
 body[data-view="detail"] [data-v="detail"],
 body[data-view="how"] [data-v="how"] { display: flex; flex-direction: column; align-items: flex-start; min-height: 0; }
+/* When the screen is too short for a main view, it scrolls inside the column
+   like the lists do. The padding keeps focus rings from being clipped. */
+[data-s] { overflow-y: auto; align-self: stretch; margin: 0 -6px; padding: 0 6px 6px; }
 .row-of { display: flex; flex-wrap: wrap; align-items: center; }
 
 .scroll { list-style: none; margin: 0 0 0 -8px; padding: 0; overflow: auto; min-height: 0; align-self: stretch; }
@@ -69,11 +77,31 @@ ul.scroll li { color: var(--muted); margin: 0 0 10px; max-width: 38ch; }
 button.row { display: flex; gap: 12px; align-items: baseline; width: 100%; text-align: left; border: 0;
   border-radius: 6px; height: auto; min-height: 36px; padding: 7px 8px; margin: 0; font-weight: 400;
   line-height: 1.3; }
-button.row:hover, button.row:focus-visible { background: var(--road); }
+button.row:hover, button.row:focus-visible, button.row.hot { background: var(--road); }
 button.row b { font: 700 15px/1.2 var(--sign); min-width: 50px; font-variant-numeric: tabular-nums;
   white-space: nowrap; }
 button.row em { font-style: normal; font-size: 12px; color: var(--muted); margin-left: auto; white-space: nowrap; }
 .links a { margin-right: 16px; white-space: nowrap; }
+
+/* The lane strip (DESIGN_BRIEF.md §13): the part every route uses, one bar per
+   stretch, as tall as its lanes. Same marks as the map zoomed in: pale road
+   with an ink edge, red bottleneck, yellow nearly full, dashed = guessed. */
+#profile { align-self: stretch; margin: 8px 0 4px; }
+#profile p { max-width: none; margin-bottom: 6px; }
+.profile { --lane: 5px; display: flex; gap: 2px; margin: 22px 0 6px; }
+.profile .seg { flex: 1 1 0; min-width: 14px; position: relative; text-align: center; }
+.profile .bed { height: calc(var(--lane) * var(--lanes)); display: flex; align-items: center; }
+.profile i { flex: 1; height: calc(var(--lane) * var(--n)); background: var(--road);
+  border: solid var(--ink); border-width: 1.5px 0; }
+.profile .guessed i { border-style: dashed; }
+.profile .full i { background: var(--full); }
+.profile .cut i { background: var(--cut); }
+.profile span { display: block; margin-top: 3px; font: 600 12.5px/1.2 system-ui, sans-serif; color: var(--muted);
+  font-variant-numeric: tabular-nums; }
+.profile .cut span { color: var(--cut); }
+.profile em { position: absolute; left: 0; bottom: 100%; margin-bottom: 4px; font: 600 12px/1 system-ui, sans-serif;
+  color: var(--cut); white-space: nowrap; }
+.profile em.end { left: auto; right: 0; }
 
 #foot { position: fixed; left: 44px; bottom: 14px; margin: 0; max-width: none; font-size: 11.5px;
   color: var(--muted); }
@@ -84,8 +112,9 @@ button.row em { font-style: normal; font-size: 12px; color: var(--muted); margin
   text-shadow: 0 0 3px var(--bg), 0 0 3px var(--bg), 0 0 3px var(--bg); }
 .tag { font: 600 12px/1 system-ui, sans-serif; color: var(--ink); white-space: nowrap; pointer-events: none;
   text-shadow: 0 0 3px var(--bg), 0 0 3px var(--bg), 0 0 3px var(--bg); }
-.tag.cut { color: var(--cut); }
-body:not([data-state="home"]) .tag.jam, body:not([data-state="result"]) .tag.cut { display: none; }
+.tag.cut, .tag.jam { color: var(--cut); }
+.tag.name { background: var(--bg); padding: 4px 5px; text-shadow: none; z-index: 1; }
+body[data-state="running"] .tag.jam, body:not([data-state="result"]) .tag.cut { display: none; }
 .shield { display: block; pointer-events: none; }
 .shield polygon { fill: var(--marker); stroke: var(--ink); stroke-width: 1.3; }
 .shield text { font: 700 12px var(--sign); fill: var(--ink); text-anchor: middle; }
@@ -96,8 +125,10 @@ body:not([data-state="home"]) .tag.jam, body:not([data-state="result"]) .tag.cut
 @media (max-width: 700px) {
   #map { inset: 0 0 auto 0; height: calc(100% - var(--text-h, 50%)); }
   #veil { display: none; }
-  #text { left: 0; right: 0; top: auto; bottom: 0; width: auto; max-height: 62%; padding: 12px 20px 10px;
-    background: var(--bg); }
+  #text { left: 0; right: 0; top: auto; bottom: 0; width: auto; max-height: 62%;
+    padding: 12px 20px max(10px, env(safe-area-inset-bottom)); background: var(--bg); }
+  button.row { min-height: 44px; }
+  .links a { display: inline-block; padding: 10px 0; }
   .mark { margin: 0 0 12px -6px; }
   #orb { width: 44px; height: 44px; }
   h1, .say { font-size: 22px; }
@@ -107,3 +138,27 @@ body:not([data-state="home"]) .tag.jam, body:not([data-state="result"]) .tag.cut
   #foot { position: static; margin: 10px 0 0; }
 }
 #run-caption { display: block; }
+p:empty { display: none; }
+
+/* Trial: dark shell ("?shell=dark", see main.ts). Not decided; decision 0013's
+   light page is still the look. The page and the text column go dark and the
+   map sits in them as a light card. The text column carries its own colours;
+   :root is untouched, so the map stays light. Delete this block when the
+   trial is settled. */
+[data-shell="dark"] { --shell: #111318; }
+[data-shell="dark"] body { background: var(--shell); }
+[data-shell="dark"] #text {
+  --bg: var(--shell); --ink: #ffffff; --muted: #a1a7b0; --road: #1c2028; --line: #626a73; --cut: #ef4035;
+  background: var(--bg); color: var(--ink);
+}
+[data-shell="dark"] #veil { display: none; }
+[data-shell="dark"] #map { border-radius: 14px; overflow: hidden; }
+@media (min-width: 701px) {
+  [data-shell="dark"] #text { left: 0; top: 0; bottom: 0; width: 400px; max-height: none;
+    padding: 36px 32px 48px; }
+  [data-shell="dark"] #map { inset: 16px 16px 16px 400px; }
+  [data-shell="dark"] #foot { left: 32px; }
+}
+@media (max-width: 700px) {
+  [data-shell="dark"] #map { inset: 8px 8px auto 8px; height: calc(100% - var(--text-h, 50%) - 8px); }
+}

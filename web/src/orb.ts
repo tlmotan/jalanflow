@@ -2,10 +2,9 @@
 // turning slowly at rest. While the analysis runs it scatters, then tightens
 // as flow is found (disorder = 1 − found ÷ max). It never sits on the map,
 // so it cannot be mistaken for a computed result (decisions 0011, 0013).
-// Our own canvas code, ported from docs/design/light-look-mockup.html.
-import { colors } from "./colors";
+// Our own canvas code, ported from docs/design/project/light-look-mockup.html.
 
-// Display constants (docs/DESIGN.md §10).
+// Display constants (docs/design/project/DESIGN_BRIEF.md §10).
 const POINTS = 190;
 const GOLDEN_ANGLE = 2.399963; // radians; spreads points evenly over a sphere
 const EASE = 0.05; // share of the gap to the target closed each frame
@@ -51,6 +50,7 @@ export function initOrb(canvas: HTMLCanvasElement): Orb {
     });
   }
 
+  let ink: string | undefined;
   let target = 0;
   let chaos = 0;
   let spin = 0;
@@ -64,7 +64,10 @@ export function initOrb(canvas: HTMLCanvasElement): Orb {
     if (canvas.width !== size * dpr) canvas.width = canvas.height = size * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, size, size);
-    ctx.fillStyle = colors().ink;
+    // The ink of the place the orb sits in, not of the page: the text column
+    // may carry its own colours.
+    ink ??= getComputedStyle(canvas).getPropertyValue("--ink").trim();
+    ctx.fillStyle = ink;
     const R = size * RADIUS_SHARE;
     const c = size / 2;
     const cs = Math.cos(spin);
