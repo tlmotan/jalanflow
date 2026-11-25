@@ -6,3 +6,10 @@ web/node_modules/
 web/dist/
 .DS_Store
 *.log
+./docs
+
+/screenshots/*
+!/screenshots/flow.mjs
+!/screenshots/motion.mjs
+!/screenshots/package.json
+!/screenshots/package-lock.json

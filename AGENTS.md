@@ -19,6 +19,7 @@ make analyze    # cmd/analyze → web/public/data/kemuning-pj/
 make test       # go vet ./... && go test ./...
 make web        # cd web && npm ci && npm run build
 make all        # everything above, in order
+make shots      # screenshots of the user flow → screenshots/flow (starts the dev server if needed)
 make hooks      # once per clone: pre-commit runs make test / npm test + build for staged Go / web files
 cd web && npm run dev   # local site
 ```
@@ -26,7 +27,7 @@ cd web && npm run dev   # local site
 ## Rules
 - **Phase 1 and Phase 1.5 scope only.** Phase 1.5 = demand + CTM simulator + tested fixes on the same corridor (PRD goals 7–9, decisions 0007–0008): fixed routes, static output, no fix published before the validation gate passes. If a task needs anything in the PRD non-goals (API server, database, route choice or re-routing, removing roads, buses/rail, more corridors, real-time data), stop and ask.
 - **`internal/ctm` stays pure** like `flow`: no I/O, no logging, no internal imports. `corridor` may import only `graph`, `config`, `ctm`.
-- **No new dependencies** without asking. Go: standard library + `paulmach/osm` only. Web: `maplibre-gl`, `vite`, `typescript` only.
+- **No new dependencies** without asking. Go: standard library + `paulmach/osm` only. Web: `maplibre-gl`, `vite`, `typescript` only. `screenshots/` (a dev tool, never shipped): `playwright` only, pinned.
 - **`internal/flow` stays pure**: no I/O, no logging, no imports from other internal packages.
 - **Respect the package dependency rule** in ARCHITECTURE-ESSENTIALS.md.
 - **No magic numbers** for capacity, speeds or factors — they go in `config/capacity-defaults.json` with a `source` field. Phase 1.5 demand, split ratios, signal timings and fix parameters go in JSON under `config/`, also with a `source` field (and year for counts).

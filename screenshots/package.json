@@ -1,0 +1,9 @@
+{
+  "name": "jalanflow-screenshots",
+  "private": true,
+  "description": "Dev tool only: walks the site and saves screenshots (flow.mjs) and motion clips (motion.mjs). Never shipped with the site. Run with make shots.",
+  "type": "module",
+  "devDependencies": {
+    "playwright": "1.64.0"
+  }
+}

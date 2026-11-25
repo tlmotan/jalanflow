@@ -1,13 +1,13 @@
 // Records short motion clips of the site as GIFs: screenshots in a loop,
 // each stamped with the time it was taken, stitched by ffmpeg at real speed.
-// Usage: CHROME_BIN=... node motion.mjs <baseUrl> <outDir>   (needs playwright + ffmpeg)
+// Usage: from screenshots/: node motion.mjs <baseUrl> <outDir>   (needs ffmpeg; Playwright is in screenshots/package.json)
 import { chromium } from "playwright";
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 
-const [base = "http://localhost:5176", outArg = "./motion"] = process.argv.slice(2);
+const [base = "http://localhost:5173", outArg = "./motion"] = process.argv.slice(2);
 const out = resolve(outArg);
 const url = `${base}/`;
 const FPS_CAP = 20; // frames a second in the GIF
