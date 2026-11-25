@@ -215,3 +215,26 @@ Markers and roads are drawn on the map canvas, so they are not in the page.
 - Confirmed jams and the bottleneck have HTML labels 14 px beside them (`pin()` in `main.ts`): taps aim there.
 - Everything else: the script sweeps the visible map with synthetic mouse moves and keeps the points where the map sets the pointer cursor (over a marker or road), then taps those until a card of the wanted kind opens, reading the kind from the card (`.card-kind`). It probes again if the camera moved. No change to `web/` is needed.
 - Guessed-lane markers are not key markers, so none shows at the starting zoom; their detail is shot from a link instead (F7).
+
+## 6. Motion (`screenshots/motion.mjs`)
+
+Stills cannot show what moves, so each motion on the site also has a GIF clip at real speed. When a change adds or changes motion, add or update its clip here and in `motion.mjs`.
+
+Run from `screenshots/` with the dev server up (needs `ffmpeg`): `node motion.mjs http://localhost:5173 <outDir>`. `MOTION_ONLY=card,sheet` records only the clips whose names contain one of those words. It exits non-zero on a page error.
+
+| Clip | What moves | Screens |
+|---|---|---|
+| `desktop-card-hover` | a hover preview fades in on a marker and goes when the pointer leaves | B10 |
+| `desktop-card-open` | a clicked card fades in and its lane diagram draws itself once | B4, E6 |
+| `desktop-run-analysis`, `mobile-run-analysis` | the search replay: routes traced one by one, the count, the segments, then the result | C1–C3, D1 |
+| `desktop-flow-dots`, `mobile-flow-dots` | flow dots on the roads the analysis uses | D1 |
+| `desktop-camera-views` | the camera between views: the bottleneck, back to the drive, every lane drop, back | F1, G1 |
+| `desktop-cars-in-lanes` | dots become cars in lanes when zoomed in | K2 |
+| `desktop-switch-direction`, `mobile-switch-direction` | the drive redrawn for the other direction | D2 |
+| `mobile-sheet-more-detail` | More detail opens the sheet and closes it | B3 |
+| `mobile-sheet-drag` | the grabber dragged up opens the sheet, dragged down closes it; the sheet follows the finger | D5, D6 |
+| `mobile-card-on-map` | a card fades in on the map above the sheet, its diagram drawing | E2 |
+| `mobile-card-in-sheet` | with the sheet open the card takes its place; dragged down, it goes | E7, E8 |
+| `mobile-detail-drag-back` | the camera goes to the bottleneck; dragging the grabber down goes back | F1, F9 |
+
+Not recorded: reduced motion (nothing moves; the stills in the `reduced-*` passes show it), and the card fade when it closes (120 ms, in `desktop-card-hover`).
