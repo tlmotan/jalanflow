@@ -22,13 +22,47 @@ export function track(coords: number[][]): Track {
 }
 
 /**
+ * Index i (1 … vertices-1) of the segment [i-1, i] that holds `km`.
+ * Binary search: routes have hundreds of vertices and this runs per
+ * vehicle per frame.
+ */
+export function segmentAt(t: Track, km: number): number {
+  let lo = 1;
+  let hi = Math.max(1, t.cum.length - 1);
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (t.cum[mid]! < km) lo = mid + 1;
+    else hi = mid;
+  }
+  return lo;
+}
+
+/**
+ * Travel direction of segment i as a unit vector in metres [east, north].
+ * A zero-length segment points north rather than nowhere.
+ */
+export function heading(t: Track, i: number): [number, number] {
+  const [x0, y0] = t.coords[i - 1]!;
+  const [x1, y1] = t.coords[i]!;
+  const east = (x1 - x0) * Math.cos((((y0 + y1) / 2) * Math.PI) / 180);
+  const north = y1 - y0;
+  const len = Math.hypot(east, north);
+  return len > 0 ? [east / len, north / len] : [0, 1];
+}
+
+/** Move a [lon, lat] point by metres east and north. */
+export function shift(p: [number, number], east: number, north: number): [number, number] {
+  const m = KM_PER_DEG * 1000;
+  return [p[0] + east / (m * Math.cos((p[1] * Math.PI) / 180)), p[1] + north / m];
+}
+
+/**
  * Point `km` along the track. `km` is clamped to the track, so a caller's
  * mistake can never draw anything beyond the ends of the road.
  */
 export function pointAt(t: Track, km: number): [number, number] {
   const at = Math.min(Math.max(km, 0), t.km);
-  let i = 1;
-  while (i < t.cum.length - 1 && t.cum[i]! < at) i++;
+  const i = segmentAt(t, at);
   const a = t.cum[i - 1]!;
   const span = t.cum[i]! - a || 1;
   const k = Math.min(Math.max((at - a) / span, 0), 1);

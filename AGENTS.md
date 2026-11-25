@@ -6,7 +6,7 @@ This is the canonical agent instruction file. `CLAUDE.md` imports it.
 1. `docs/ARCHITECTURE-ESSENTIALS.md` — always, before any change.
 2. `docs/PRD.md` §4 (goals / non-goals) — before adding any feature.
 3. `docs/ARCHITECTURE.md` — only the section relevant to your task.
-4. `docs/DESIGN.md` and `docs/CONTENT.md` — before any change under `web/`.
+4. The design guides and `WORKFLOW.md` in `docs/design/` (see "UI and design" below) and `docs/CONTENT.md` — before any change under `web/`.
 
 ## Project in one line
 Go pipeline turns an OpenStreetMap clip of one Klang Valley corridor into a directed flow network, finds the min-cut bottleneck with Dinic's, ranks "+1 lane" fixes, and writes static JSON for a MapLibre site.
@@ -34,6 +34,20 @@ cd web && npm run dev   # local site
 - **Output format changes**: update the Go struct, `web/src/types.ts` and ARCHITECTURE.md §4 in the same change.
 - **Never commit** `data/raw/` or `data/interim/`. Do commit `web/public/data/`.
 - Keep OSM attribution on the site.
+
+## UI and design
+Before implementing or modifying any user interface:
+
+1. Always read `docs/design/DESIGN.md` (shared design foundation).
+2. For desktop interfaces, read `docs/design/DESKTOP.md`.
+3. For mobile interfaces, read `docs/design/MOBILE.md`.
+4. For responsive web applications, apply both platform guides where appropriate. The JalanFlow site is one.
+5. Follow `docs/design/project/DESIGN_BRIEF.md` for project-specific design requirements. Where it is more specific than the shared guides, it wins. Wording follows `docs/CONTENT.md`.
+6. Follow `docs/design/WORKFLOW.md` for the order of work: design on the canvas (`docs/design/project/design.fig`), human review, then implement, then verify in the browser. **No change under `web/` for a new design before Tim approves it in chat.** How to drive the canvas is in `docs/design/integrations/OPENPENCIL.md`.
+
+- Reuse existing design tokens and components. Preserve application functionality and data integrity when making visual changes.
+- Evaluate the implementation against the relevant design acceptance checklists (`DESKTOP.md` §7, `MOBILE.md` §9, `DESIGN_BRIEF.md` §12) before considering the task complete.
+- Do not introduce unnecessary UI elements, dependencies, or abstractions.
 
 ## Code style
 - Go: `gofmt`, `go vet` clean. Small packages, exported types documented. Errors wrapped with `fmt.Errorf("...: %w", err)`. No panics outside `main`.
