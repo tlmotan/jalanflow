@@ -141,6 +141,12 @@ button { font: inherit; color: inherit; }
 .card-acts { margin-top: var(--s-3); display: flex; gap: var(--s-5); }
 .card-acts .link { font-size: var(--fs-small); }
 #peek { display: none; }
+/* A map too small for a card (under 320 × 300 px showing: a phone's sheet, a
+   short window, a phone on its side) puts the quick look in the panel instead,
+   until it is closed; the view under it is kept (decision 0015). Any layout,
+   since main.ts decides by the map's size, not the screen's. */
+body[data-peek="on"] #peek { display: block; }
+body[data-peek="on"] [data-v] { display: none !important; }
 
 /* ---------- the panel: one view at a time ---------- */
 #panel { grid-area: panel; min-height: 0; overflow-y: auto; padding: var(--s-2) var(--s-1); outline: none; }
@@ -240,9 +246,20 @@ h2 { font-size: var(--fs-body); font-weight: 600; line-height: var(--lh-snug); }
 .btn.primary:hover { background: var(--bg); }
 .btn.primary:active { background: var(--road); }
 .btn:disabled { opacity: 0.5; cursor: default; }
-#lede { margin-top: var(--s-1); }
-#lede b { font-variant-numeric: tabular-nums; }
-[data-s="home"] .qual { margin-top: var(--s-3); }
+/* The landing (DESIGN_BRIEF.md §1): headline, corridor, the two counts led by
+   their map marks, then Run the analysis as the one filled control. */
+.corridor-line { margin-top: var(--s-1); color: var(--text-muted); }
+.counts { margin-top: var(--s-4); display: grid; gap: var(--s-2); line-height: var(--lh-snug); }
+.counts li { display: flex; align-items: flex-start; gap: var(--s-3); }
+.counts .dot { margin-top: 5.5px; }
+.counts .dot.ring { margin-top: 5.5px; box-shadow: 0 0 0 3px var(--canvas), 0 0 0 4.5px var(--cut); }
+.counts b { font-variant-numeric: tabular-nums; }
+.btn.run { margin-top: var(--s-5); }
+[data-s="home"] .qual { margin-top: var(--s-2); }
+/* Before the analysis the key and links step back: smaller and muted. */
+body[data-state="home"] .key, body[data-state="home"] .links .link { font-size: var(--fs-small); }
+body[data-state="home"] .links .link { color: var(--text-muted); }
+body[data-state="home"] .links .link:hover { color: var(--text); }
 .more { display: none; }
 
 :focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
@@ -277,10 +294,9 @@ h2 { font-size: var(--fs-body); font-weight: 600; line-height: var(--lh-snug); }
   #panel { flex: 0 1 auto; max-height: 58dvh; padding: var(--s-4) var(--s-2) max(var(--s-4), env(safe-area-inset-bottom)); }
   .limit { margin-top: var(--s-3); padding: var(--s-3); }
   body[data-more="closed"] .more-body { display: none; }
-  /* The quick look takes the sheet's place until it is closed; the view under it is kept. */
-  body[data-peek="on"] #peek { display: block; }
-  body[data-peek="on"] [data-v] { display: none !important; }
   .more { display: block; width: 100%; margin-top: var(--s-3); }
+  .btn.run { width: 100%; margin-top: var(--s-4); }
+  .counts { margin-top: var(--s-3); }
 }
 /* Fingers need room on any screen size. */
 @media (pointer: coarse) {

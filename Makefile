@@ -4,7 +4,7 @@ CORRIDOR ?= kemuning-pj
 # The pure-Go zlib path needs no system libraries.
 export CGO_ENABLED ?= 0
 
-.PHONY: fetch graph analyze calibrate test web all clean hooks
+.PHONY: fetch graph analyze calibrate test web all clean hooks shots
 
 fetch:
 	scripts/fetch-osm.sh $(CORRIDOR)
@@ -32,6 +32,13 @@ web:
 	cd web && npm ci && npm run build
 
 all: fetch graph analyze test web
+
+# Screenshot the user flow (desktop, phone, short phone) into screenshots/flow,
+# for comparing with the approved design (docs/design/WORKFLOW.md step 7).
+# Uses the dev server at SHOTS_URL if it is up, otherwise starts one. Not part of `make all`.
+SHOTS_URL ?= http://localhost:5173
+shots:
+	scripts/shots.sh $(SHOTS_URL)
 
 # Run make test / npm run build before each commit (scripts/git-hooks/pre-commit).
 hooks:

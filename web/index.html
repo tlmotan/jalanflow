@@ -49,10 +49,12 @@
       <section data-v="summary" aria-label="Findings">
         <!-- Before the analysis: lanes only. Nothing computed is shown yet. -->
         <div data-s="home">
-          <h1 class="title">Where lanes run out between Kota Kemuning and Petaling Jaya</h1>
-          <p id="lede"></p>
-          <button type="button" class="btn primary" id="run-btn">Run the analysis</button>
-          <p class="qual">It works out the most these roads can carry <span id="run-dir"></span>, from lane counts. It is not live traffic.</p>
+          <h1 class="title">Where the road runs out of room.</h1>
+          <p class="corridor-line">The drive <span id="run-dir"></span>, around KESAS and LDP.</p>
+          <!-- The counts, each led by its map mark (DESIGN_BRIEF.md §1). Filled by main.ts. -->
+          <ul class="counts" id="counts"></ul>
+          <button type="button" class="btn primary run" id="run-btn">Run the analysis</button>
+          <p class="qual">It works out the most these roads can carry, from lane counts. It is not live traffic.</p>
         </div>
 
         <!-- While it runs: the real search, route by route. -->
