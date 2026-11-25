@@ -39,6 +39,6 @@ Read with `design/project/DESIGN_BRIEF.md` before changing any text on the site.
 - The landing sentence counts every lane drop in the data and says where they are, not that they are on the drive: "87 places around KESAS and LDP where more lanes come in than carry on. A local driver confirmed two of them as daily jams." Tighten it once the pipeline says which drops are on the drive.
 - Roads are named from the data ("E5 Lebuhraya Shah Alam") until the pipeline adds a common name ("KESAS"). No ref-to-name table in `web/`.
 - The result is one sentence a commuter could repeat: "At most 6,000 vehicles an hour can get from Kota Kemuning to PJ." Then the bottleneck in a second sentence, then the fix.
-- No all-caps labels above headings, and no strings of facts joined by dots; write a sentence. One exception, on the trial page only: the one- to three-word label at the top of a map card ("CONFIRMED JAM", "BOTTLENECK") is shown in capitals (decision 0015, Tim, 2026-11-24).
+- No all-caps labels above headings, and no strings of facts joined by dots; write a sentence. One exception: the one- to three-word label at the top of a map card ("CONFIRMED JAM", "BOTTLENECK") is shown in capitals (decision 0015, Tim, 2026-11-24).
 - A fix is named by its road, as lane drops are ("E5 Lebuhraya Shah Alam: +1 lane"), then lanes before → after, gain in veh/h, difficulty.
 - Captions during the replay are one short sentence each.

@@ -28,7 +28,7 @@ Wording rules are in `docs/CONTENT.md`; design decisions with a story are ADRs i
 4. **Check the design.** Run the tool's lint, apply the safe fixes, and fix or explain what is left. Export a PNG of each frame to `screenshots/<tool>/` for review.
 5. **Human design review (gate).** Tim approves, asks for changes, or rejects. Nothing under `web/` changes before an approval in chat. Approval of one frame is not approval of the rest. A decision with a story becomes an ADR.
 6. **Implement.** Change `web/` to match the approved frames, reusing the existing tokens and components. AGENTS.md rules still hold: no new dependencies, plain DOM, `strict` TypeScript, colours only in CSS `:root`.
-7. **Verify in the browser.** Run the dev server, capture the same screens and states (`screenshots/flow.mjs` walks the trial page), and compare them with the approved PNGs. Then run the acceptance checks: `DESKTOP.md` §7, `MOBILE.md` §9, `project/DESIGN_BRIEF.md` §12. Report every difference, and every width or state not checked.
+7. **Verify in the browser.** Run the dev server, capture the same screens and states (`screenshots/flow.mjs` walks the site), and compare them with the approved PNGs. Then run the acceptance checks: `DESKTOP.md` §7, `MOBILE.md` §9, `project/DESIGN_BRIEF.md` §12. Report every difference, and every width or state not checked.
 
 ## Rules for every step
 

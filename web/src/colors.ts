@@ -3,8 +3,8 @@
 // never repeats a hex value (docs/design/project/DESIGN_BRIEF.md §4).
 
 export interface Colors {
-  bg: string; // the page; knock-out behind markers
-  ink: string; // the drive, markers, flow dots, the orb
+  bg: string; // the map background; knock-out behind markers
+  ink: string; // lane-drop markers, map labels, car and road edges
   road: string; // modelled roads that are not on the drive
   cut: string; // where it jams: confirmed jams and the bottleneck
   full: string; // roads the analysis fills to 90 % or more
@@ -29,22 +29,4 @@ export function colors(): Colors {
     mapWater: read("--map-water"),
   };
   return cached;
-}
-
-/**
- * Colours for the road and its cars once lanes are drawn (decisions 0012,
- * 0013): a pale road with an ink edge, and small ink cars.
- */
-export interface LaneColours {
-  surface: string;
-  edge: string; // road edge (casing)
-  laneLine: string;
-  carEdge: string; // knock-out around a car
-  carBody: string;
-  carGlass: string;
-}
-
-export function laneColours(): LaneColours {
-  const c = colors();
-  return { surface: c.road, edge: c.ink, laneLine: c.bg, carEdge: c.bg, carBody: c.ink, carGlass: c.bg };
 }

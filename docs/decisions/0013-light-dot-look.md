@@ -1,6 +1,6 @@
 # 0013 — The site's look: light page, ink dots, one red
 
-- Status: accepted · 2026-11-24 (Tim: "lock it in for now, there can always be improvements"). The colour rule ("red means the bottleneck and nothing else", ink jam markers, no utilisation colour) is replaced by decision 0014.
+- Status: accepted · 2026-11-24 (Tim: "lock it in for now, there can always be improvements"). The colour rule ("red means the bottleneck and nothing else", ink jam markers, no utilisation colour) is replaced by decision 0014. The light page, the text column with no panel, the road-sign type, the orb and "the result is a sentence" are replaced by decision 0016 (dark shell); the light map, the markers and the route markers still hold.
 - Reference: `docs/design/project/light-look-mockup.html`. Open it in a browser; it is one file with a snapshot of the real corridor data inside. It is a picture of the target, not code to copy: it draws on a plain canvas with no MapLibre.
 - Context: The panel-and-legend design read as a stock layout. Two measures (lanes and capacity) shared red and orange, so red meant both "bottleneck" and "confirmed jam", and five colours needed a legend. Tim liked the "solving" thinking-orb indicator: a cloud of dots that settles into order, which is what the max-flow search does. We tried a dark version and a light one; Tim chose light.
 - Decision:

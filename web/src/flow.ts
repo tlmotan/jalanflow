@@ -1,34 +1,24 @@
-// Flow: vehicles in proportion to the max flow each road carries, all at
-// one speed. Zoomed out they are dots on the road line; zoomed in they are
-// small cars, each in its own lane. Packed roads are full, sparse roads
-// have room. This shows capacity, not live traffic, and never queues
-// (decisions 0011, 0012).
+// The flow dots. Dots in proportion to what the analysis sends down each
+// road, all at one speed: a packed road is full, a sparse one has room. They
+// show the model's result, not real cars, and never queue (decision 0011).
+// The routes and spacing come from the pure helpers (vehicles.ts, track.ts,
+// lanes.ts); this file only draws. Zoomed out they are dots on the road
+// line; zoomed in they are small cars, each in its own lane (decision 0012).
 import type maplibregl from "maplibre-gl";
 import type { Feature, FeatureCollection, LineString, Point } from "geojson";
-import type { EdgeProps } from "./types";
-import { colors, type LaneColours } from "./colors";
+import type { Direction, EdgeProps } from "./types";
 import { advance, heading, pointAt, segmentAt, shift } from "./track";
 import { byLaneWidth, laneIndex, lanePx, lerpStops, metresPerPixel } from "./lanes";
 import { buildRoutes, lateral, makeVehicles, spaceOut, spanAt, type Vehicle } from "./vehicles";
 
-// Display constants (docs/design/project/DESIGN_BRIEF.md §9-10), not traffic numbers.
-const PER_KM_PER_1000_VPH = 15; // every vehicle: 2,000 veh/h in a lane → one per 33 m
-const MAX_VEHICLES = 3000; // keep phones smooth; density scales down to fit
-// Share of the vehicles shown at each zoom. Zoomed out, one in three (6,000
-// veh/h → 30 dots per km); all of them once lanes are wide enough.
-const SHOWN: [number, number][] = [
-  [13, 1 / 3],
-  [14, 0.5],
-  [15, 0.75],
-  [16, 1],
-];
-// Screen speed (px per second) by zoom, the same for every vehicle.
-const SPEED_PX: [number, number][] = [
-  [11, 16],
-  [14, 34],
-  [16, 60],
-  [18, 90],
-];
+// Display constants, not traffic numbers. Same density and speed as the site.
+const PER_KM_PER_1000_VPH = 15;
+const MAX_VEHICLES = 3000;
+// Share of the dots by zoom. The share is taken by rank, evenly on every road,
+// so a road with twice the flow still shows twice the dots at any zoom; zoomed
+// out the map just shows fewer of them, so the road colours stay readable.
+const SHOWN: [number, number][] = [[11, 0.2], [12, 0.25], [13, 1 / 3], [14, 0.5], [15, 0.75], [16, 1]];
+const SPEED_PX: [number, number][] = [[11, 16], [14, 34], [16, 60], [18, 90]]; // screen px a second by zoom
 const FRAME_MS = 33; // ~30 fps
 const DOTS_MAX_ZOOM = 14.25; // dots fade out …
 const CARS_MIN_ZOOM = 13.5; // … as cars fade in
@@ -38,61 +28,79 @@ const CAR_MIN_PX = 4;
 const CAR_GAP = 1.3; // nose-to-nose spacing in car lengths when cars share a lane
 const GLASS_MIN_LANE_PX = 5; // draw the windscreen once a car is big enough
 
-const EMPTY: FeatureCollection = { type: "FeatureCollection", features: [] };
-
-export interface FlowDots {
-  /** animate false: draw the vehicles once, still (prefers-reduced-motion). */
-  start: (animate: boolean) => void;
-  stop: () => void;
-  readonly on: boolean;
-}
-
 interface Seen {
   v: Vehicle;
   span: number;
   local: number; // km from the start of the span
 }
 
-export function initFlowDots(
-  map: maplibregl.Map,
-  edges: FeatureCollection<LineString, EdgeProps>,
-  car: LaneColours,
-  beforeLayer?: string,
-): FlowDots {
-  const c = colors();
-  const carrying = edges.features.filter((f) => f.properties.flow_vph > 0 && f.geometry.coordinates.length >= 2);
-  const routes = buildRoutes(
-    carrying.map((f) => ({
-      coords: f.geometry.coordinates,
-      lanes: f.properties.lanes,
-      flow: f.properties.flow_vph,
-      utilisation: f.properties.utilisation,
-      cut: f.properties.is_cut,
-    })),
-  );
-  const vehicles = makeVehicles(routes, PER_KM_PER_1000_VPH, MAX_VEHICLES);
+const EMPTY: FeatureCollection = { type: "FeatureCollection", features: [] };
 
-  map.addSource("flow-dots", { type: "geojson", data: EMPTY });
+export interface Flow {
+  /** Dots for one direction. animate false draws them once, still (reduced motion). */
+  show: (dir: Direction, animate: boolean) => void;
+  hide: () => void;
+}
+
+export interface FlowColours {
+  dot: string;
+  edge: string;
+}
+
+export function initFlow(
+  map: maplibregl.Map,
+  edges: Feature<LineString, EdgeProps>[],
+  colour: FlowColours,
+  beforeLayer?: string,
+): Flow {
+  // Built the first time a direction is shown.
+  const built = new Map<Direction, Vehicle[]>();
+  const vehiclesFor = (dir: Direction): Vehicle[] => {
+    let v = built.get(dir);
+    if (!v) {
+      const carrying = edges.filter(
+        (f) => f.properties.dir === dir && f.properties.flow_vph > 0 && f.geometry.coordinates.length >= 2,
+      );
+      const routes = buildRoutes(
+        carrying.map((f) => ({
+          coords: f.geometry.coordinates,
+          lanes: f.properties.lanes,
+          flow: f.properties.flow_vph,
+          utilisation: f.properties.utilisation,
+          cut: f.properties.is_cut,
+        })),
+      );
+      v = makeVehicles(routes, PER_KM_PER_1000_VPH, MAX_VEHICLES);
+      built.set(dir, v);
+    }
+    return v;
+  };
+
+  map.addSource("flow", { type: "geojson", data: EMPTY });
   map.addSource("flow-cars", { type: "geojson", data: EMPTY });
+  const fadeIn: maplibregl.ExpressionSpecification = ["interpolate", ["linear"], ["zoom"], CARS_MIN_ZOOM, 0, DOTS_MAX_ZOOM, 1];
   map.addLayer(
     {
-      id: "flow-dots",
+      id: "flow",
       type: "circle",
-      source: "flow-dots",
+      source: "flow",
       maxzoom: DOTS_MAX_ZOOM,
       layout: { visibility: "none" },
       paint: {
-        // The same ink dot as everywhere else; red only on the bottleneck.
-        // How full a road is shows in how many dots it carries (DESIGN_BRIEF.md §4).
-        "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 1.5, 15, 3],
-        "circle-color": ["case", ["get", "cut"], c.cut, c.ink],
-        "circle-opacity": ["interpolate", ["linear"], ["zoom"], CARS_MIN_ZOOM, 1, DOTS_MAX_ZOOM, 0],
+        // Small and pale with a dark edge: readable on grey, amber and red alike.
+        // Zoomed out they are smaller and their edge fainter, so the red bottleneck
+        // and the amber nearly-full roads show through; they fade out into cars.
+        "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 1, 12, 1.4, DOTS_MAX_ZOOM, 2.3],
+        "circle-color": colour.dot,
+        "circle-stroke-color": colour.edge,
+        "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 10, 0.4, 13, 0.6],
+        "circle-opacity": ["interpolate", ["linear"], ["zoom"], 10, 0.85, CARS_MIN_ZOOM, 1, DOTS_MAX_ZOOM, 0],
+        "circle-stroke-opacity": ["interpolate", ["linear"], ["zoom"], 10, 0.45, 12, 0.6, CARS_MIN_ZOOM, 0.85, DOTS_MAX_ZOOM, 0],
       },
     },
     beforeLayer,
   );
   // A car is three short lines along the road: outline, body, windscreen.
-  const fadeIn: maplibregl.ExpressionSpecification = ["interpolate", ["linear"], ["zoom"], CARS_MIN_ZOOM, 0, DOTS_MAX_ZOOM, 1];
   const carLayer = (id: string, part: number, color: string, width: (px: number) => number, opacity = 1): void => {
     map.addLayer(
       {
@@ -111,18 +119,24 @@ export function initFlowDots(
       beforeLayer,
     );
   };
-  carLayer("flow-cars-edge", 0, car.carEdge, (px) => CAR_WIDTH_LANES * px + 2);
-  carLayer("flow-cars", 1, car.carBody, (px) => CAR_WIDTH_LANES * px);
-  carLayer("flow-cars-glass", 2, car.carGlass, (px) => Math.max(0.5, CAR_WIDTH_LANES * px - 1.6), 0.6);
-  const layers = ["flow-dots", "flow-cars-edge", "flow-cars", "flow-cars-glass"];
-  const dotSrc = map.getSource("flow-dots") as maplibregl.GeoJSONSource;
+  // Pale cars with a dark outline: the same mark as the dots, on roads of any colour.
+  carLayer("flow-cars-edge", 0, colour.edge, (px) => CAR_WIDTH_LANES * px + 2);
+  carLayer("flow-cars", 1, colour.dot, (px) => CAR_WIDTH_LANES * px);
+  carLayer("flow-cars-glass", 2, colour.edge, (px) => Math.max(0.5, CAR_WIDTH_LANES * px - 1.6), 0.6);
+  const layers = ["flow", "flow-cars-edge", "flow-cars", "flow-cars-glass"];
+  const src = map.getSource("flow") as maplibregl.GeoJSONSource;
   const carSrc = map.getSource("flow-cars") as maplibregl.GeoJSONSource;
-
   const line = (a: [number, number], b: [number, number], part: number): Feature<LineString> => ({
     type: "Feature",
     geometry: { type: "LineString", coordinates: [a, b] },
     properties: { part },
   });
+
+  let vehicles: Vehicle[] = [];
+  let on = false;
+  let moving = false;
+  let last = 0;
+  let lastDraw = 0;
 
   let dotsDrawn = false;
   let carsDrawn = false;
@@ -136,8 +150,7 @@ export function initFlowDots(
     const padX = (b.getEast() - b.getWest()) * 0.1;
     const padY = (b.getNorth() - b.getSouth()) * 0.1;
     const [w, e, s, n] = [b.getWest() - padX, b.getEast() + padX, b.getSouth() - padY, b.getNorth() + padY];
-
-    const dotFeatures: Feature<Point>[] = [];
+    const features: Feature<Point>[] = [];
     const lanes = new Map<number, Seen[]>(); // road and lane → cars in it
     for (const v of vehicles) {
       if (v.rank >= shown) continue;
@@ -146,11 +159,7 @@ export function initFlowDots(
       const si = spanAt(v.route, v.at);
       const span = v.route.spans[si]!;
       if (wantDots) {
-        dotFeatures.push({
-          type: "Feature",
-          geometry: { type: "Point", coordinates: p },
-          properties: { cut: span.cut },
-        });
+        features.push({ type: "Feature", geometry: { type: "Point", coordinates: p }, properties: { cut: span.cut } });
       }
       if (wantCars) {
         const k = span.road * 64 + laneIndex(v.share, span.lanes);
@@ -161,7 +170,7 @@ export function initFlowDots(
       }
     }
 
-    const carFeatures: Feature<LineString>[] = [];
+    const cars: Feature<LineString>[] = [];
     if (wantCars) {
       const px = lanePx(zoom);
       const mpp = metresPerPixel(zoom, map.getCenter().lat);
@@ -182,37 +191,32 @@ export function initFlowDots(
           const side = lateral(route, c.span, km, share) * px * mpp; // metres right of centre
           const mid = shift(pointAt(route.track, km), north * side, -east * side);
           const along = (m: number): [number, number] => shift(mid, east * m, north * m);
-          carFeatures.push(line(along(-length / 2 - mpp), along(length / 2 + mpp), 0));
-          carFeatures.push(line(along(-length / 2), along(length / 2), 1));
-          if (glass) carFeatures.push(line(along(length * 0.1), along(length * 0.3), 2));
+          cars.push(line(along(-length / 2 - mpp), along(length / 2 + mpp), 0));
+          cars.push(line(along(-length / 2), along(length / 2), 1));
+          if (glass) cars.push(line(along(length * 0.1), along(length * 0.3), 2));
         });
       }
     }
 
-    if (wantDots || dotsDrawn) dotSrc.setData({ type: "FeatureCollection", features: dotFeatures });
-    if (wantCars || carsDrawn) carSrc.setData({ type: "FeatureCollection", features: carFeatures });
+    if (wantDots || dotsDrawn) src.setData({ type: "FeatureCollection", features });
+    if (wantCars || carsDrawn) carSrc.setData({ type: "FeatureCollection", features: cars });
     dotsDrawn = wantDots;
     carsDrawn = wantCars;
   };
 
-  let on = false;
-  let moving = false;
-  let raf = 0;
-  let last = 0;
-  let lastDraw = 0;
+  // requestAnimationFrame stops by itself while the tab is hidden.
   const tick = (now: number): void => {
-    if (!on) return;
+    if (!on || !moving) return;
     const dt = last ? Math.min(now - last, 100) / 1000 : 0; // clamp after a hidden tab
     last = now;
     const zoom = map.getZoom();
     const step = (lerpStops(SPEED_PX, zoom) * metresPerPixel(zoom, map.getCenter().lat) * dt) / 1000; // km
-    // advance wraps by modulo: one frame can be longer than a short route.
     for (const v of vehicles) v.at = advance(v.at, step, v.route.track.km);
     if (now - lastDraw >= FRAME_MS) {
       lastDraw = now;
       draw();
     }
-    raf = requestAnimationFrame(tick);
+    requestAnimationFrame(tick);
   };
   // Standing still (reduced motion), the picture still has to follow the map.
   map.on("move", () => {
@@ -220,22 +224,22 @@ export function initFlowDots(
   });
 
   return {
-    get on() {
-      return on;
-    },
-    start(animate) {
-      if (on) return;
+    show(dir, animate) {
+      vehicles = vehiclesFor(dir);
+      const wasMoving = on && moving;
       on = true;
       moving = animate;
       last = 0;
       draw();
       for (const id of layers) map.setLayoutProperty(id, "visibility", "visible");
-      if (animate) raf = requestAnimationFrame(tick);
+      if (animate && !wasMoving) requestAnimationFrame(tick);
     },
-    stop() {
+    hide() {
       on = false;
-      cancelAnimationFrame(raf);
       for (const id of layers) map.setLayoutProperty(id, "visibility", "none");
+      src.setData(EMPTY);
+      carSrc.setData(EMPTY);
+      dotsDrawn = carsDrawn = false;
     },
   };
 }

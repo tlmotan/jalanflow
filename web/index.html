@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#111318" />
     <title>JalanFlow — where lanes run out between Kota Kemuning and PJ</title>
     <meta name="description" content="Where the lanes run out on KESAS and LDP between Kota Kemuning and PJ, and the one stretch that limits how much traffic can get through. It shows what the roads can carry, not live traffic." />
     <!-- Share preview for WhatsApp, X and others (DESIGN_BRIEF.md §11). Preview
@@ -20,82 +21,125 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="stylesheet" href="/src/style.css" />
   </head>
-  <body data-state="home" data-view="main">
-    <div id="map" role="application" aria-label="Map of the roads between Kota Kemuning and Petaling Jaya"></div>
-    <div id="veil"></div>
+  <body data-view="summary" data-state="home" data-load="loading" data-more="closed">
+    <a class="skip" href="#panel">Skip to the findings</a>
 
-    <main id="text">
-      <div class="mark"><canvas id="orb" aria-hidden="true"></canvas><span>JalanFlow</span></div>
+    <header id="bar">
+      <p class="word">jalanflow</p>
+      <p class="corridor">Kota Kemuning and Petaling Jaya</p>
+      <div class="seg" role="group" aria-label="Direction of travel">
+        <button type="button" data-dir="inbound" aria-pressed="true">To Petaling Jaya</button>
+        <button type="button" data-dir="outbound" aria-pressed="false">To Kota Kemuning</button>
+      </div>
+    </header>
 
-      <div data-s="home">
-        <h1>Where lanes run out between Kota Kemuning and PJ</h1>
-        <p id="lede">Places around KESAS and LDP where more lanes come in than carry on.</p>
-        <button type="button" class="primary" id="run-btn" hidden>Run the analysis</button>
-        <div class="key">
-          <span><i class="ring"></i>Confirmed jam</span><span><i></i>Lane drop</span><span><i class="hollow"></i>Lanes guessed</span>
-        </div>
-        <div class="row-of">
-          <button type="button" class="link" data-open-list>See all lane drops</button>
-          <button type="button" class="link" data-open-how>How this works</button>
-        </div>
+    <div id="map" role="region" aria-label="Map of the roads between Kota Kemuning and Petaling Jaya. Everything on it is also in the findings beside it."></div>
+
+    <main id="panel" tabindex="-1">
+      <p id="status" role="status">Loading the road data…</p>
+      <div id="failed" hidden>
+        <p>The road data did not load, so there is nothing to show yet.</p>
+        <button type="button" class="btn" id="retry-btn">Try again</button>
       </div>
 
-      <div data-s="running">
-        <div class="count" id="run-count" aria-hidden="true">0</div>
-        <p>vehicles an hour can get through so far. <span id="run-caption"></span></p>
-        <button type="button" id="skip-btn">Skip to the result</button>
-      </div>
+      <!-- Phones: the quick look at a tapped marker or road sits here, in the
+           sheet, in place of a card over the small map. -->
+      <div id="peek" hidden></div>
 
-      <div data-s="result">
-        <p class="say" id="result-say"></p>
-        <p id="result-cut-line"><span class="swatch"></span><b id="result-cut"></b></p>
-        <!-- The lane strip (DESIGN_BRIEF.md §13): filled by main.ts from edges.geojson. -->
-        <div id="profile" hidden>
-          <p class="small" id="profile-title"></p>
-          <div class="profile" id="profile-strip" role="img"></div>
-          <p class="small" id="profile-say"></p>
+      <section data-v="summary" aria-label="Findings">
+        <!-- Before the analysis: lanes only. Nothing computed is shown yet. -->
+        <div data-s="home">
+          <h1 class="title">Where lanes run out between Kota Kemuning and Petaling Jaya</h1>
+          <p id="lede"></p>
+          <button type="button" class="btn primary" id="run-btn">Run the analysis</button>
+          <p class="qual">It works out the most these roads can carry <span id="run-dir"></span>, from lane counts. It is not live traffic.</p>
         </div>
-        <p id="result-fix"></p>
-        <p id="result-fix-why" class="small"></p>
-        <div class="key result-key">
-          <span><i class="bar cut"></i>Bottleneck</span><span><i class="bar"></i>Nearly full</span><span><i class="ring"></i>Confirmed jam</span>
-          <span><i class="flow"></i>More dots, more vehicles</span><span><i></i>Lane drop</span>
-        </div>
-        <div class="row-of">
-          <button type="button" id="replay-btn">Replay</button>
-          <button type="button" class="link" id="flow-btn" aria-pressed="true" style="margin-left: 10px">Hide flow</button>
-        </div>
-        <div class="row-of">
-          <button type="button" class="link" data-open-list>See all lane drops</button>
-          <button type="button" class="link" data-open-how>How this works</button>
-        </div>
-      </div>
 
-      <div data-v="list">
-        <button type="button" class="link back" data-back>Back</button>
-        <p class="say">Lane drops, biggest squeeze first</p>
-        <ol id="list" class="scroll"></ol>
-      </div>
+        <!-- While it runs: the real search, route by route. -->
+        <div data-s="running">
+          <h1>Found so far <span id="running-dir"></span></h1>
+          <p class="metric"><span class="num" id="run-count">0</span> <span class="unit">vehicles an hour</span></p>
+          <p class="qual" id="run-caption"></p>
+          <button type="button" class="btn" id="skip-btn">Skip to the result</button>
+        </div>
 
-      <div data-v="detail">
-        <button type="button" class="link back" data-back>Back</button>
-        <p class="say" id="detail-title"></p>
-        <p><b id="detail-body"></b></p>
-        <p id="detail-roads"></p>
+        <div data-s="result">
+          <h1 id="sum-h">The most these roads can carry <span id="sum-dir"></span></h1>
+          <p class="metric"><span class="num" id="cap"></span> <span class="unit">vehicles an hour</span></p>
+          <p class="qual">Worked out from lane counts. It is not live traffic.</p>
+
+          <button type="button" class="limit" id="limit-btn">
+            <i class="sw cut" aria-hidden="true"></i>
+            <span><span id="limit-text"></span> <span class="hint">Show it on the map</span></span>
+          </button>
+        </div>
+
+        <div class="more-body">
+          <!-- The lane strip (DESIGN_BRIEF.md §13): filled by main.ts from edges.geojson. -->
+          <div class="strip" id="profile" data-s="result" hidden>
+            <h2 id="profile-title"></h2>
+            <div class="profile" id="profile-strip" role="img"></div>
+            <p class="small" id="profile-say"></p>
+          </div>
+          <div class="whatif" id="whatif" data-s="result">
+            <h2>If one lane were added there</h2>
+            <p class="small">A test in the model. Nothing is planned or built.</p>
+            <p class="compare" id="compare">
+              <span class="num" id="cmp-now"></span>
+              <span aria-hidden="true">→</span><span class="sr">would become</span>
+              <span class="num" id="cmp-then"></span>
+              <span class="unit">veh/h</span>
+            </p>
+            <p id="whatif-say"></p>
+            <p class="small" id="whatif-hard"></p>
+          </div>
+
+          <h2 class="sr" id="key-h">What the map shows</h2>
+          <ul class="key" aria-labelledby="key-h">
+            <li data-s="result"><i class="sw cut"></i>Bottleneck</li>
+            <li data-s="result"><i class="sw full"></i>Nearly full in the analysis</li>
+            <li data-s="result"><i class="sw route"></i>Roads the analysis uses</li>
+            <li data-s="result" id="key-flow"><i class="flowdots"></i>More dots, more vehicles in the analysis. Not real cars.</li>
+            <li data-s="home"><i class="sw route"></i>Roads between the two places</li>
+            <li><i class="sw dash"></i>Lane count guessed</li>
+            <li><i class="dot"></i>Lane drop</li>
+            <li><i class="dot ring"></i>Jam a local driver confirmed</li>
+          </ul>
+
+          <p class="links">
+            <button type="button" class="link" data-open="list" id="open-list">See all lane drops</button>
+            <button type="button" class="link" data-open="how">How this works and sources</button>
+            <button type="button" class="link" id="replay-btn" data-s="result">Replay the analysis</button>
+            <button type="button" class="link" id="flow-btn" data-s="result">Hide flow</button>
+          </p>
+        </div>
+        <button type="button" class="btn more" id="more-btn" aria-expanded="false">More detail</button>
+      </section>
+
+      <section data-v="list" aria-labelledby="list-h">
+        <button type="button" class="link back" data-back>Back to the summary</button>
+        <h1 id="list-h" class="title">Lane drops, biggest squeeze first</h1>
+        <p class="small">Places where more lanes come in than carry on. This counts lanes, not cars.</p>
+        <ol id="list" class="rows"></ol>
+      </section>
+
+      <section data-v="detail" aria-labelledby="detail-title">
+        <button type="button" class="link back" data-back>Back to the summary</button>
+        <h1 id="detail-title" class="title"></h1>
+        <dl id="detail-facts" class="facts"></dl>
         <p id="detail-note"></p>
         <p class="links" id="detail-links"></p>
-      </div>
+      </section>
 
-      <div data-v="how">
-        <button type="button" class="link back" data-back>Back</button>
-        <p class="say">How this works</p>
-        <ul id="how" class="scroll" tabindex="0"></ul>
-      </div>
+      <section data-v="how" aria-labelledby="how-h">
+        <button type="button" class="link back" data-back>Back to the summary</button>
+        <h1 id="how-h" class="title">How this works</h1>
+        <ul id="how" class="notes"></ul>
+      </section>
 
-      <!-- Spoken updates during the replay (DESIGN_BRIEF.md §8). -->
-      <p id="live" aria-live="polite" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%)"></p>
-      <p id="foot">This shows what the roads can carry, not live traffic.</p>
+      <p id="live" class="sr" aria-live="polite"></p>
     </main>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

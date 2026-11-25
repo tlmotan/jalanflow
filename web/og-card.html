@@ -9,7 +9,14 @@
     <title>JalanFlow share image</title>
     <link rel="stylesheet" href="/src/style.css" />
     <style>
+      /* The card keeps the light map look: it takes the map tokens from
+         style.css and lays itself out here, apart from the site's dark shell. */
+      :root { --sign: "DIN Alternate", "Bahnschrift", "Roboto Condensed", "Arial Narrow", system-ui, sans-serif; }
       html, body { width: 1200px; height: 630px; overflow: hidden; }
+      body { display: block; margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, sans-serif; }
+      #words .mark { display: flex; align-items: center; font-family: var(--sign); font-weight: 700; }
+      #words h1 { font-family: var(--sign); font-weight: 700; }
+      #words p { margin: 0; }
       #card { position: fixed; inset: 0; }
       #words { position: fixed; left: 72px; top: 64px; width: 470px; }
       #words .mark { font-size: 30px; gap: 16px; margin: 0 0 54px -10px; }

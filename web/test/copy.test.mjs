@@ -11,6 +11,9 @@ import {
   lanesText,
   pathCaption,
   resultSentence,
+  roadBody,
+  roadNotes,
+  roadTitle,
 } from "../src/copy.ts";
 
 const kesas = { id: 6641, ref: "E5", name: "Lebuhraya Shah Alam", class: "motorway", lanes: 3 };
@@ -123,4 +126,30 @@ test("lane drop wording", () => {
 test("pathCaption never counts past the last path", () => {
   assert.equal(pathCaption(1, 8), "Path 1 of 8.");
   assert.equal(pathCaption(9, 8), "Path 8 of 8.");
+});
+
+test("a tapped road: name, lanes, capacity, and the result only once the analysis has run", () => {
+  const road = (over) => ({ ...kesas, lanes_inferred: false, capacity_vph: 6000, flow_vph: 6000, is_cut: false, ...over });
+  assert.equal(roadTitle(road()), "E5 Lebuhraya Shah Alam");
+  assert.equal(roadTitle(road({ ref: "", name: "", class: "motorway_link" })), "Ramp");
+  assert.equal(roadTitle(road({ ref: "", name: "", class: "tertiary" })), "Unnamed road");
+  assert.equal(roadBody(road()), "3 lanes, able to carry about 6,000 veh/h.");
+  assert.equal(roadBody(road({ lanes: 1, capacity_vph: 1200 })), "1 lane, able to carry about 1,200 veh/h.");
+
+  const cases = [
+    { name: "before the run nothing about the result is said", r: road({ is_cut: true }), solved: false, cuts: 1, want: [] },
+    { name: "guessed lanes are always flagged", r: road({ lanes_inferred: true }), solved: false, cuts: 1, want: [/guessed/] },
+    { name: "the bottleneck says why", r: road({ is_cut: true }), solved: true, cuts: 1, want: [/This is the bottleneck\. Every route/] },
+    { name: "one of several bottleneck roads", r: road({ is_cut: true }), solved: true, cuts: 2, want: [/part of the bottleneck/] },
+    { name: "a road with room", r: road({ flow_vph: 1100 }), solved: true, cuts: 1, want: [/sends 1,100 veh\/h along it, so it has room to spare/] },
+    { name: "a full road that is not the bottleneck", r: road(), solved: true, cuts: 1, want: [/nearly full\. It is not what sets the limit/] },
+    { name: "just under nearly full", r: road({ flow_vph: 5399 }), solved: true, cuts: 1, want: [/room to spare/] },
+    { name: "exactly nearly full", r: road({ flow_vph: 5400 }), solved: true, cuts: 1, want: [/nearly full/] },
+    { name: "a road carrying nothing", r: road({ flow_vph: 0 }), solved: true, cuts: 1, want: [] },
+  ];
+  for (const c of cases) {
+    const got = roadNotes(c.r, c.solved, c.cuts);
+    assert.equal(got.length, c.want.length, c.name);
+    c.want.forEach((re, i) => assert.match(got[i], re, c.name));
+  }
 });
