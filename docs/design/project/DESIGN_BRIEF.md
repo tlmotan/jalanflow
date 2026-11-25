@@ -19,7 +19,7 @@ Visual work never changes route geometry, calculations, sources or what the mode
 - **No boxes in the panel.** Text sits straight on the shell, with one hairline between sections. Only controls and the map card have a surface.
 - **A direction switch**, "To Petaling Jaya" / "To Kota Kemuning", because the data holds both directions separately (§10).
 - **One view at a time.** The panel shows exactly one of:
-  - **Start**: headline, one sentence with the number of lane drops, "Run the analysis", the key, links to the lane-drop list and "How this works".
+  - **Start** (design.fig page 6, approved by Tim 2026-11-25): headline, a muted corridor line, two count lines each led by its map mark (lane drops, confirmed jams; numbers in bold, from the data), "Run the analysis" as the one filled control (full width on phones), the not-live-traffic line right under it, then the key and the links, smaller and muted.
   - **Running**: the live counter, "Route n of m", "Skip to the result".
   - **Result**: the most the roads can carry as the one big number, the bottleneck (a button that shows it on the map), the lane strip (§13), the tested lane as a what-if, the key, "Replay the analysis", "Hide flow", and the same two links.
   - **All lane drops**, **one lane drop or road** and **How this works**: each replaces the panel and has a Back button. Escape also goes back.

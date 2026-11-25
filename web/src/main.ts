@@ -11,7 +11,7 @@ import { initFlow, type Flow } from "./flow";
 import { LANES_FULL_ZOOM, laneLineOffset, roadWidth } from "./lanes";
 import { dropSlug, hashFor, parseHash } from "./links";
 import { sharedRoads, stretches } from "./profile";
-import { NEARLY_FULL, profileLabel, profileSentence, profileTitle, sharedName, bottleneckSentence, confirmedSentence, dropTitle, fixDifficulty, fixSentence, fmtVph, lanesText, roadLabel, roadTitle } from "./copy";
+import { NEARLY_FULL, countWord, profileLabel, profileSentence, profileTitle, sharedName, bottleneckSentence, confirmedSentence, dropTitle, fixDifficulty, fixSentence, fmtVph, lanesText, roadLabel, roadTitle } from "./copy";
 
 const DATA = `${import.meta.env.BASE_URL}data/kemuning-pj`;
 
@@ -615,12 +615,25 @@ function renderList(): void {
   byId("open-list").textContent = `See all ${drops.length} lane drops`;
   byId("open-list").hidden = drops.length === 0;
   const confirmed = drops.filter((d) => d.confirmed).length;
-  if (drops.length === 0) byId("lede").textContent = "The lane-drop data did not load.";
+  // The landing counts: one line per mark, the number in bold (DESIGN_BRIEF.md §1).
+  const row = (mark: string, ...parts: (string | Node)[]): HTMLElement => {
+    const li = el("li");
+    const i = el("i", undefined, mark);
+    i.setAttribute("aria-hidden", "true");
+    li.append(i, el("span"));
+    li.lastElementChild!.append(...parts);
+    return li;
+  };
+  if (drops.length === 0) byId("counts").replaceChildren(el("li", "The lane-drop data did not load."));
   else {
-    byId("lede").replaceChildren(
-      el("b", String(drops.length)),
-      ` places around KESAS and LDP where more lanes come in than carry on. ${confirmedSentence(confirmed)}`,
-    );
+    const lines = [row("dot", el("b", `${drops.length} places`), " where more lanes come in than carry on.")];
+    const said = confirmedSentence(confirmed);
+    const word = countWord(confirmed);
+    if (said) {
+      const at = said.indexOf(` ${word} `);
+      lines.push(at < 0 ? row("dot ring", said) : row("dot ring", said.slice(0, at + 1), el("b", word), said.slice(at + 1 + word.length)));
+    }
+    byId("counts").replaceChildren(...lines);
   }
   byId("list").replaceChildren(
     ...drops.map((d) => {

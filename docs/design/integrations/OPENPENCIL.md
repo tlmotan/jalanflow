@@ -13,7 +13,7 @@
 | Page | Holds |
 |---|---|
 | 0 Components and tokens | Map layers, cards, markers, controls, the token sheet with proposed changes |
-| 1 Desktop baseline | The current site, drawn faithfully |
+| 1 Desktop baseline | The current site, the dark shell (decision 0016), drawn faithfully from the running site |
 | 2 Desktop proposed | Proposed desktop frames, with a notes frame |
 | 3 Mobile proposed | Proposed phone frames (390 × 844), with a notes frame |
 | 4 Run analysis states | Every state of Run the analysis the code supports |
