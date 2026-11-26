@@ -65,6 +65,8 @@
   --row-h: 40px; /* list rows and the direction switch */
   --link-h: 32px;
   --dur: 150ms;
+  --dur-sheet: 220ms; /* the phone sheet settling at a height after a drag or a tap */
+  --dur-draw: 600ms; /* the lane diagram drawing itself once: explains, so longer than a state change */
   --ease: ease-out;
 }
 
@@ -133,15 +135,37 @@ button { font: inherit; color: inherit; }
 .card-kind { display: flex; align-items: center; gap: var(--s-2); color: var(--text-muted); }
 .card-kind .dot { margin: 0 var(--s-1); }
 .card-kind b { font-weight: 600; font-size: var(--fs-label); text-transform: uppercase; letter-spacing: 0.06em; }
-.card-kind.seen b { color: var(--cut-words); }
-.card-title { margin-top: var(--s-2); }
+.card-kind.red b { color: var(--cut-words); }
+/* The name, after the road's route shields: the sign itself, as on the map. */
+.card-title { margin-top: var(--s-2); display: flex; align-items: flex-start; gap: var(--s-2); }
+.card-title .shield { flex: none; }
+/* The lane diagram (src/lanediagram.ts): a piece of the light map, lanes as
+   the zoomed-in map draws them, travel left to right. */
+.lane-diagram { display: block; max-width: 100%; height: auto; margin-top: var(--s-3); border-radius: var(--r-sm);
+  background: var(--bg); }
+.lane-diagram .road { fill: var(--route); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
+.lane-diagram.guessed .road { stroke-dasharray: 5 3; }
+.lane-diagram .lane { stroke: var(--bg); stroke-width: 1.5; stroke-dasharray: 7 6; }
+.lane-diagram .gore { stroke: var(--bg); stroke-width: 3; }
+.lane-diagram text { font: var(--fs-label) var(--data); fill: var(--ink); }
+.lane-diagram .out { font-weight: 700; text-anchor: end; }
+/* Drawn once, left to right, when the card is opened on purpose (decision 0015, cards v2). */
+.lane-diagram.draw .reveal { animation: lanes-draw var(--dur-draw) var(--ease) both; }
+.lane-diagram.draw .out { animation: lanes-out var(--dur) var(--ease) var(--dur-draw) both; }
+@keyframes lanes-draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes lanes-out { from { opacity: 0; } }
+.card-flag { margin-top: 2px; display: flex; align-items: center; gap: var(--s-2); font-size: var(--fs-meta);
+  color: var(--text-muted); }
+.card-flag .sw { width: var(--s-4); height: var(--s-1); }
+.card-cap { margin-top: 2px; font-size: var(--fs-meta); color: var(--text-muted); }
+.card-cap b { font-size: var(--fs-body); font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
 .card-main { margin-top: 2px; font-size: var(--fs-figure); font-weight: 700; line-height: var(--lh-snug);
   font-variant-numeric: tabular-nums; letter-spacing: var(--track-title); }
 .card-note { margin-top: var(--s-2); font-size: var(--fs-meta); color: var(--text-muted); }
 .card-acts { margin-top: var(--s-3); display: flex; gap: var(--s-5); }
 .card-acts .link { font-size: var(--fs-small); }
-#peek { display: none; }
-/* A map too small for a card (under 320 × 300 px showing: a phone's sheet, a
+#peek, .grab, #mini { display: none; }
+/* A map too small for a card (under 320 × 420 px showing: a phone's sheet, a
    short window, a phone on its side) puts the quick look in the panel instead,
    until it is closed; the view under it is kept (decision 0015). Any layout,
    since main.ts decides by the map's size, not the screen's. */
@@ -193,7 +217,20 @@ h2 { font-size: var(--fs-body); font-weight: 600; line-height: var(--lh-snug); }
 .limit .sw { margin-top: var(--s-2); }
 
 /* Sections: space and one hairline, no boxes. */
-.strip, .whatif, .key { margin-top: var(--section); padding-top: var(--section); border-top: var(--line); }
+.whatif, .key { margin-top: var(--section); padding-top: var(--section); border-top: var(--line); }
+/* A disclosure: closed until asked for. The summary reads as a link; the
+   mark turns when it is open. */
+.disc { margin-top: var(--s-2); }
+.disc summary { display: inline-flex; align-items: center; gap: var(--s-2); min-height: var(--link-h); cursor: pointer;
+  list-style: none; font-weight: 500; text-decoration: underline; text-decoration-color: var(--control);
+  text-underline-offset: 3px; border-radius: var(--r-sm); transition: text-decoration-color var(--dur) var(--ease); }
+.disc summary::-webkit-details-marker { display: none; }
+.disc summary::before { content: ""; flex: none; width: 6px; height: 6px; border-right: 1.5px solid var(--text-muted);
+  border-bottom: 1.5px solid var(--text-muted); transform: rotate(-45deg); transition: transform var(--dur) var(--ease); }
+.disc[open] summary::before { transform: rotate(45deg); }
+.disc summary:hover { text-decoration-color: var(--text); }
+.disc h2 { margin-top: var(--s-3); }
+.disc .notes { margin-top: var(--s-2); font-size: var(--fs-small); gap: var(--s-2); }
 /* The lane strip (DESIGN_BRIEF.md §13): the part every route uses, one bar per
    stretch, as tall as its lanes. Same marks as the map: pale road, red
    bottleneck, yellow nearly full, broken bar = lane count guessed. */
@@ -211,11 +248,17 @@ h2 { font-size: var(--fs-body); font-weight: 600; line-height: var(--lh-snug); }
   font-size: var(--fs-label); line-height: 1; white-space: nowrap; }
 .profile em.end { left: auto; right: 0; }
 .whatif .small { margin-top: 2px; }
-.compare { margin: var(--s-3) 0 var(--s-2); font-size: var(--fs-figure); font-weight: 700; line-height: var(--lh-tight);
-  letter-spacing: var(--track-title); display: flex; align-items: baseline; gap: var(--s-2); flex-wrap: wrap; }
-.compare [aria-hidden] { color: var(--text-muted); font-weight: 400; }
-.whatif p + p { margin-top: var(--s-1); }
-#whatif-hard { margin-top: var(--s-2); }
+/* The what-if bars: today and with one more lane, from the same zero on one
+     scale. Neutral: the gain is the lighter part of the second bar. */
+.bars { display: grid; gap: var(--s-3); margin: var(--s-4) 0 var(--s-3); }
+.bar { display: grid; grid-template-columns: 1fr auto; gap: var(--s-1) var(--s-3); align-items: baseline; }
+.bar-name { font-size: var(--fs-small); color: var(--text-muted); }
+.bar-val b { font-size: var(--fs-figure); font-weight: 700; letter-spacing: var(--track-title); }
+.bar-gain { font-family: var(--data); font-size: var(--fs-meta); color: var(--text-muted); }
+.bar-track { grid-column: 1 / -1; display: flex; height: var(--s-2); border-radius: var(--r-pill); overflow: hidden;
+  background: var(--surface); }
+.bar-track i { background: var(--control); }
+.bar-track i.gain { background: var(--text); }
 
 /* Swatches match the map: same colours, same shapes. */
 .sw { flex: none; display: inline-block; width: 22px; height: 6px; border-radius: var(--r-pill); background: var(--route); }
@@ -224,7 +267,8 @@ h2 { font-size: var(--fs-body); font-weight: 600; line-height: var(--lh-snug); }
 .sw.dash { background: repeating-linear-gradient(90deg, var(--route) 0 6px, transparent 6px 10px); }
 .dot { flex: none; display: inline-block; width: 9px; height: 9px; margin: 0 6.5px; border-radius: 50%;
   background: var(--text); }
-.dot.ring { background: var(--cut); box-shadow: 0 0 0 3px var(--canvas), 0 0 0 4.5px var(--cut); }
+.dot.hollow { background: none; box-shadow: inset 0 0 0 1.5px var(--text); }
+.dot.ring { background: var(--cut);box-shadow: 0 0 0 3px var(--canvas), 0 0 0 4.5px var(--cut); }
 .map-card .dot.ring { box-shadow: 0 0 0 3px var(--surface), 0 0 0 4.5px var(--cut); }
 .flowdots { flex: none; display: inline-block; width: 4px; height: 4px; margin-right: 18px; border-radius: 50%;
   background: var(--text); box-shadow: 9px 0 0 var(--text), 18px 0 0 var(--text); }
@@ -256,6 +300,19 @@ h2 { font-size: var(--fs-body); font-weight: 600; line-height: var(--lh-snug); }
 .counts b { font-variant-numeric: tabular-nums; }
 .btn.run { margin-top: var(--s-5); }
 [data-s="home"] .qual { margin-top: var(--s-2); }
+/* While it runs: one segment per route the search found (decision 0011).
+   Done routes are white, the one being traced is muted, the rest are edges.
+   A count of real steps, never a percentage or a fill inside a segment. */
+.routes { display: flex; align-items: center; gap: var(--s-3); margin-top: var(--s-4); }
+.segs { display: flex; flex: 1; gap: var(--s-1); }
+.segs i { flex: 1; height: var(--s-1); border-radius: var(--r-pill); background: var(--edge);
+  transition: background-color var(--dur) var(--ease); }
+.segs i.now { background: var(--text-muted); }
+.segs i.done { background: var(--text); }
+.routes-label { font-family: var(--data); font-size: var(--fs-meta); color: var(--text-muted); white-space: nowrap;
+  font-variant-numeric: tabular-nums; }
+.run-caption { margin-top: var(--s-2); line-height: var(--lh-body); min-height: calc(2 * var(--lh-body) * 1em); }
+#skip-btn { margin-top: var(--s-4); }
 /* Before the analysis the key and links step back: smaller and muted. */
 body[data-state="home"] .key, body[data-state="home"] .links .link { font-size: var(--fs-small); }
 body[data-state="home"] .links .link { color: var(--text-muted); }
@@ -283,18 +340,61 @@ body[data-state="home"] .links .link:hover { color: var(--text); }
 .notes a { color: var(--text); }
 .back { margin-bottom: var(--s-1); }
 
-/* ---------- phones: map on top, a compact sheet below it ---------- */
+/* ---------- phones: a full-height map, the sheet floating over its bottom ----------
+   Decisions 0017, 0018. The map never changes size; the sheet covers its
+   lower part at one of three heights (body[data-sheet]) and never moves the
+   camera. main.ts pads the camera by the part covered when the reader asks to
+   go somewhere. */
 @media (max-width: 760px) and (orientation: portrait), (max-width: 560px) {
-  :root { --gap: var(--s-2); --section: var(--s-4); --fs-display: 2.5rem; --fs-title: 1.25rem; --link-h: 44px; --row-h: 44px; }
+  :root { --gap: var(--s-2); --section: var(--s-4); --fs-display: 2.5rem; --fs-title: 1.25rem; --link-h: 44px; --row-h: 44px;
+    --map-keep: 220px; /* map always left showing above the sheet */
+    --grab-h: 32px; /* the sheet's handle; it spans the sheet's full width */
+    --sheet-max: min(64dvh, 100dvh - 56px - var(--map-keep)); }
   body { display: flex; flex-direction: column; padding-bottom: 0; }
   #bar { min-height: 56px; gap: var(--s-2); }
   .corridor { display: none; }
   .seg button { min-height: var(--control-h); padding: 0 var(--s-2); font-size: var(--fs-meta); }
-  #map { flex: 1 1 auto; min-height: 220px; }
-  #panel { flex: 0 1 auto; max-height: 58dvh; padding: var(--s-4) var(--s-2) max(var(--s-4), env(safe-area-inset-bottom)); }
+  #map { flex: 1 1 auto; min-height: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  /* The credit and any bottom control sit just above the sheet (main.ts sets --sheet-cover). */
+  #map .maplibregl-ctrl-bottom-left, #map .maplibregl-ctrl-bottom-right { bottom: var(--sheet-cover, 0px); }
+  #panel { position: fixed; left: 0; right: 0; bottom: 0; z-index: 2; max-height: var(--sheet-max);
+    overscroll-behavior: contain; background: var(--canvas); border-top: 1px solid var(--edge);
+    border-radius: var(--r-lg) var(--r-lg) 0 0; box-shadow: 0 -6px 18px var(--shadow), 0 var(--s-4) 0 var(--canvas); /* the second fills under a sheet pulled up */
+    padding: 0 max(var(--s-4), env(safe-area-inset-right)) max(var(--s-4), env(safe-area-inset-bottom))
+      max(var(--s-4), env(safe-area-inset-left)); }
+  /* The handle: a button. A tap hides the findings or brings them back; a
+     drag changes the sheet's height and nothing else (decision 0018). */
+  .grab { display: block; position: sticky; top: 0; z-index: 2; height: var(--grab-h); width: calc(100% + 2 * var(--s-4));
+    margin: 0 calc(-1 * var(--s-4)); padding: 0; border: 0; border-radius: var(--r-lg) var(--r-lg) 0 0;
+    background: var(--canvas); cursor: grab; touch-action: none; }
+  .grab:focus-visible { outline-offset: -4px; }
+  .grab::before { content: ""; display: block; width: 36px; height: var(--s-1); margin: var(--s-3) auto 0;
+    border-radius: var(--r-pill); background: var(--control); transition: background-color var(--dur) var(--ease); }
+  .grab:hover::before, body[data-drag] .grab::before { background: var(--text-muted); }
+  body[data-drag] .grab { cursor: grabbing; }
+  /* While dragged the sheet's height follows the finger, over everything the
+     view holds; let go and it settles at the nearest of its heights. */
+  body[data-drag] #panel { overflow: hidden; user-select: none; }
+  body[data-settle] #panel { overflow: hidden; transition: height var(--dur-sheet) var(--ease); }
+  /* Collapsed: one line on what the page shows, and that it is not live traffic. */
+  body[data-sheet="collapsed"]:not([data-drag]) #mini { display: block; padding-bottom: var(--s-1); }
+  body[data-sheet="collapsed"]:not([data-drag]) :is([data-v], #peek, #status, #failed) { display: none !important; }
+  #mini-title { font-weight: 600; line-height: var(--lh-snug); }
+  #mini .qual { margin-top: 2px; }
+  body[data-drag][data-more="closed"]:not([data-state="running"]) .more-body { display: block; }
+  body[data-drag][data-more="closed"] .more { display: none; }
   .limit { margin-top: var(--s-3); padding: var(--s-3); }
   body[data-more="closed"] .more-body { display: none; }
   .more { display: block; width: 100%; margin-top: var(--s-3); }
+  /* Expanded: "Less detail" moves to the top and stays there while the findings scroll under it. */
+  body[data-load="ready"][data-view="summary"][data-more="open"] [data-v="summary"] { display: flex; flex-direction: column; }
+  body[data-more="open"] .more { order: -1; position: sticky; top: calc(var(--grab-h) + var(--s-2)); z-index: 1; margin: 0 0 var(--s-3);
+    background: var(--canvas); box-shadow: 0 0 0 var(--s-2) var(--canvas); }
+  body[data-more="open"] .more:hover { background: var(--surface); }
+  body[data-more="open"] .more:active { background: var(--raised); }
+  /* The way back stays in reach in a long list or detail. */
+  #panel .back { position: sticky; top: var(--grab-h); z-index: 1; display: block; width: 100%; text-align: left;
+    background: var(--canvas); box-shadow: 0 var(--s-2) 0 var(--canvas); }
   .btn.run { width: 100%; margin-top: var(--s-4); }
   .counts { margin-top: var(--s-3); }
 }

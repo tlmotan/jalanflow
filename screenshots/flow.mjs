@@ -246,6 +246,11 @@ async function session(name, viewport, { touch = false, reduced = false, expectL
     await page.mouse.up();
     await s.settle(700);
   };
+  /** Where a place label sits on the screen: it moves if, and only if, the camera does. */
+  s.placeAt = async () => page.evaluate(() => {
+    const r = document.querySelector(".place")?.getBoundingClientRect();
+    return r ? `${Math.round(r.x)},${Math.round(r.y)}` : "";
+  });
   s.dir = async () => page.locator('.seg button[aria-pressed="true"]').getAttribute("data-dir");
   s.setDir = async (d) => {
     if ((await s.dir()) !== d) { await s.click(`.seg button[data-dir="${d}"]`); await s.settle(1500); }
@@ -277,12 +282,17 @@ async function fullWalk(name, viewport, touch) {
     await s.setMore("open");
     await s.shot("home-more-detail-open");
     await s.setMore("closed");
-    // D7: a tap on the grabber does what More detail does.
+    // D7: a tap on the handle hides the findings to show more of the map; another brings them back.
+    const before = await s.placeAt();
     await s.click("#grab");
     await s.settle(600);
-    s.check((await s.body("more")) === "open", "grabber tap did not open the sheet");
-    await s.shot("home-grabber-tapped-open");
-    await s.setMore("closed");
+    s.check((await s.body("sheet")) === "collapsed", "handle tap did not collapse the sheet");
+    s.check(await page.locator("#mini .qual").isVisible(), "collapsed sheet does not say it is not live traffic");
+    await s.shot("home-handle-tapped-collapsed");
+    await s.click("#grab");
+    await s.settle(600);
+    s.check((await s.body("sheet")) === "summary", "handle tap did not bring the findings back");
+    s.check((await s.placeAt()) === before, "the map moved when the sheet was collapsed and brought back");
   }
   await s.setDir("outbound");
   await s.shot("home-to-kota-kemuning");
@@ -370,10 +380,21 @@ async function fullWalk(name, viewport, touch) {
     await s.settle(300);
     await s.shot("result-more-detail-scrolled");
     await page.evaluate(() => { document.getElementById("panel").scrollTop = 0; });
+    // D5, D6, K4: the sheet's three heights by drag; the map stays where it is throughout.
+    const still = await s.placeAt();
     await s.dragSheet(160, "result-dragging-down");
+    // On a short phone summary is nearly as tall as expanded, so the nearest height may be collapsed.
+    s.check((await s.body("sheet")) !== "expanded", "dragging down from expanded left the sheet expanded");
     await s.shot("result-dragged-closed");
+    await s.dragSheet(300);
+    s.check((await s.body("sheet")) === "collapsed", "dragging down from summary did not collapse the sheet");
+    await s.shot("result-dragged-collapsed");
+    await s.dragSheet(-260);
+    s.check((await s.body("sheet")) === "summary", "dragging up from collapsed did not rest at summary");
     await s.dragSheet(-120);
+    s.check((await s.body("sheet")) === "expanded", "dragging up from summary did not expand the sheet");
     await s.shot("result-dragged-open");
+    s.check((await s.placeAt()) === still, "the map moved while the sheet was dragged");
   } else {
     // D10: the lower panel on the desktop.
     await page.evaluate(() => { document.getElementById("panel").scrollTop = 10000; });
@@ -399,10 +420,14 @@ async function fullWalk(name, viewport, touch) {
   await s.expectBody({ view: "detail" }, "bottleneck detail");
   await s.expectHash("#inbound/result", "road detail");
   if (phone) {
-    await s.dragSheet(160); // F9: down goes back, like Back
-    s.check((await s.body("view")) === "summary", "dragging down from a detail did not go back");
-    await s.shot("detail-dragged-back");
-  } else await s.back();
+    await s.dragSheet(400); // F9: down collapses the sheet; it does not go back (decision 0018)
+    s.check((await s.body("view")) === "detail", "dragging down from a detail went back");
+    s.check((await s.body("sheet")) === "collapsed", "dragging down from a detail did not collapse the sheet");
+    await s.shot("detail-dragged-collapsed");
+    await s.click("#grab");
+    await s.settle(600);
+  }
+  await s.back();
 
   // E1, F2: its card on the map, then View details from the card.
   if (await s.openCardAt(await s.nearTags("Bottleneck"), "bottleneck-road-card")) {
@@ -463,12 +488,17 @@ async function fullWalk(name, viewport, touch) {
 
   if (phone) {
     // E7–E9: with the sheet open the map showing is too small for a card, so the
-    // quick look takes the sheet's place; dragging down or Close takes it away.
+    // quick look takes the sheet's place; Close takes it away. A drag only
+    // changes the sheet's height (decision 0018): the quick look stays open.
     await s.setMore("open");
     if (await s.openCardAt(await s.nearTags("Confirmed jam"), "jam-card-in-sheet")) {
       await s.shot("jam-card-in-sheet");
-      await s.dragSheet(160);
-      await s.shot("jam-card-dragged-away");
+      await s.dragSheet(400);
+      s.check((await s.body("peek")) === "on", "dragging the sheet down closed the quick look");
+      await s.shot("jam-card-sheet-collapsed");
+      await s.click("#grab");
+      await s.settle(600);
+      await s.closeCard();
     }
     await s.setMore("open");
     if (await s.openCardAt(await s.nearTags("Confirmed jam"), "jam-card-in-sheet-close")) {
@@ -538,9 +568,13 @@ async function fullWalk(name, viewport, touch) {
   await s.settle(400);
   await s.shot("how-this-works-end");
   if (phone) {
-    await s.dragSheet(160); // down goes back, like the Back button
-    await s.shot("how-dragged-back");
-  } else await s.back();
+    await s.dragSheet(400); // down collapses the sheet; Back is the button
+    s.check((await s.body("view")) === "how", "dragging down from How this works went back");
+    await s.shot("how-dragged-collapsed");
+    await s.click("#grab");
+    await s.settle(600);
+  }
+  await s.back();
 
   // D11, C6: replay, then skip.
   await s.setMore("open");

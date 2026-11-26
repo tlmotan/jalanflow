@@ -29,7 +29,7 @@ Read with `design/project/DESIGN_BRIEF.md` before changing any text on the site.
 - Jargon without a plain gloss (Dinic's, residual graph, CTM) outside "How this works".
 
 ## Numbers and dates
-- Round veh/h to the nearest 100 on the site; use thousands separators ("6,000 veh/h").
+- Round veh/h to the nearest 100 on the site; use thousands separators ("6,000 veh/h"). One exception (Tim, 2026-11-25): while the analysis runs, the counter and the route captions show the exact amounts from `replay.json` (they come in steps of 50), so a caption and the counter beside it never disagree. The result is rounded as usual.
 - Lane counts as "3 → 2 lanes".
 - Always show the OpenStreetMap data date.
 
@@ -42,3 +42,4 @@ Read with `design/project/DESIGN_BRIEF.md` before changing any text on the site.
 - No all-caps labels above headings, and no strings of facts joined by dots; write a sentence. One exception: the one- to three-word label at the top of a map card ("CONFIRMED JAM", "BOTTLENECK") is shown in capitals (decision 0015, Tim, 2026-11-24).
 - A fix is named by its road, as lane drops are ("E5 Lebuhraya Shah Alam: +1 lane"), then lanes before → after, gain in veh/h, difficulty.
 - Captions during the replay are one short sentence each.
+- Disclosures are named for what they open, in sentence case: "View lane layout", "About this estimate". The what-if is asked as a question, "What if we added one lane?", and always says it is a test in the model, not a plan (decision 0018). The bars are labelled "Today" and "With one more lane". The collapsed phone sheet says the result in one line: "At most 6,000 vehicles an hour, from Kota Kemuning to Petaling Jaya."

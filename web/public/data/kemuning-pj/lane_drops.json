@@ -1,7 +1,7 @@
 {
   "corridor": "kemuning-pj",
   "osm_date": "2026-11-23",
-  "generated_at": "2026-11-23T15:54:49Z",
+  "generated_at": "2026-11-25T12:02:19Z",
   "ranking": "Biggest squeeze first: lanes out ÷ lanes in, smallest first; ties go to the drop losing more lanes.",
   "assumptions": [
     "Counts lanes only. It does not know how many cars use each road, so a small drop with heavy traffic can jam worse than a big one.",
@@ -32,7 +32,8 @@
           "lanes": 3,
           "lanes_inferred": true,
           "leaves": "E13 KK-RE",
-          "joins": "E5"
+          "joins": "E5",
+          "side": "left"
         },
         {
           "osm_way_id": 1165118313,
@@ -42,7 +43,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "to": [
@@ -54,7 +56,8 @@
           "lanes": 3,
           "lanes_inferred": true,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": true,
@@ -81,7 +84,8 @@
           "lanes": 3,
           "lanes_inferred": true,
           "leaves": "",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         },
         {
           "osm_way_id": 1163589694,
@@ -91,7 +95,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "to": [
@@ -103,7 +108,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": true,
@@ -130,7 +136,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Persiaran Kewajipan",
-          "joins": "E5"
+          "joins": "E5",
+          "side": ""
         }
       ],
       "to": [
@@ -142,7 +149,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "Persiaran Kewajipan",
-          "joins": "E5"
+          "joins": "E5",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -169,7 +177,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "3215",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -181,7 +190,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "3215",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -208,7 +218,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan SS 2/3",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -220,7 +231,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "Jalan SS 2/3",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -247,7 +259,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan Kebun",
-          "joins": "E5"
+          "joins": "E5",
+          "side": ""
         }
       ],
       "to": [
@@ -259,7 +272,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "Jalan Kebun",
-          "joins": "E5"
+          "joins": "E5",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -286,7 +300,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan SS 7/2",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -298,7 +313,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "Jalan SS 7/2",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -325,7 +341,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -337,7 +354,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -364,7 +382,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -376,7 +395,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -403,7 +423,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan PJS 7/13",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -415,7 +436,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "Jalan PJS 7/13",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -442,7 +464,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan PJU 1A/4F",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -454,7 +477,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "Jalan PJU 1A/4F",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -481,7 +505,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan PJU 1A/4F",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -493,7 +518,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "Jalan PJU 1A/4F",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -520,7 +546,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -532,7 +559,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -559,7 +587,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "Jalan Perindustrian Puchong"
+          "joins": "Jalan Perindustrian Puchong",
+          "side": ""
         }
       ],
       "to": [
@@ -571,7 +600,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "Jalan Perindustrian Puchong"
+          "joins": "Jalan Perindustrian Puchong",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -598,7 +628,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -610,7 +641,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -637,7 +669,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": "E5"
+          "joins": "E5",
+          "side": ""
         }
       ],
       "to": [
@@ -649,7 +682,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": "E5"
+          "joins": "E5",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -676,7 +710,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan Kebun",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -688,7 +723,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "Jalan Kebun",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -715,7 +751,8 @@
           "lanes": 3,
           "lanes_inferred": true,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 1303695729,
@@ -725,7 +762,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "left"
         }
       ],
       "to": [
@@ -737,7 +775,8 @@
           "lanes": 3,
           "lanes_inferred": true,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": true,
@@ -764,7 +803,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "B11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         },
         {
           "osm_way_id": 780269331,
@@ -774,7 +814,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "to": [
@@ -786,7 +827,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -813,7 +855,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 164421108,
@@ -823,7 +866,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Persiaran Anggerik Eria",
-          "joins": "E5"
+          "joins": "E5",
+          "side": "left"
         }
       ],
       "to": [
@@ -835,7 +879,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -862,7 +907,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 1303695727,
@@ -872,7 +918,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "left"
         }
       ],
       "to": [
@@ -884,7 +931,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -914,7 +962,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -926,7 +975,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -953,7 +1003,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan PJS 1/15",
-          "joins": "E5"
+          "joins": "E5",
+          "side": "left"
         },
         {
           "osm_way_id": 1570431897,
@@ -963,7 +1014,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "to": [
@@ -975,7 +1027,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1002,7 +1055,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 288414107,
@@ -1012,7 +1066,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "left"
         }
       ],
       "to": [
@@ -1024,7 +1079,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1051,7 +1107,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 758712840,
@@ -1061,7 +1118,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         }
       ],
       "to": [
@@ -1073,7 +1131,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1100,7 +1159,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -1112,7 +1172,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1139,7 +1200,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "Jalan PJU 1A/4F",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -1151,7 +1213,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan PJU 1A/4F",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1178,7 +1241,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "Jalan Putra Permai",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -1190,7 +1254,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan Putra Permai",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1217,7 +1282,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "Jalan Putra Permai",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -1229,7 +1295,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan Putra Permai",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1256,7 +1323,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "3215",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -1268,7 +1336,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "3215",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1295,7 +1364,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "E5",
-          "joins": "Persiaran Kewajipan"
+          "joins": "Persiaran Kewajipan",
+          "side": ""
         }
       ],
       "to": [
@@ -1307,7 +1377,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "E5",
-          "joins": "Persiaran Kewajipan"
+          "joins": "Persiaran Kewajipan",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1337,7 +1408,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -1349,7 +1421,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1376,7 +1449,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -1388,7 +1462,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1415,7 +1490,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "Jalan SS 7/2",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -1427,7 +1503,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan SS 7/2",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1454,7 +1531,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -1466,7 +1544,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1493,7 +1572,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "Persiaran Puteri 1",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -1505,7 +1585,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Persiaran Puteri 1",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1532,7 +1613,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -1544,7 +1626,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1571,7 +1654,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -1583,7 +1667,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1610,7 +1695,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "to": [
@@ -1622,7 +1708,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1649,7 +1736,8 @@
           "lanes": 3,
           "lanes_inferred": true,
           "leaves": "",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         },
         {
           "osm_way_id": 767944975,
@@ -1659,7 +1747,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "to": [
@@ -1671,7 +1760,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": true,
@@ -1698,7 +1788,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         },
         {
           "osm_way_id": 765228025,
@@ -1708,7 +1799,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "to": [
@@ -1720,7 +1812,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1747,7 +1840,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 627526153,
@@ -1757,7 +1851,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         }
       ],
       "to": [
@@ -1769,7 +1864,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1796,7 +1892,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 935069054,
@@ -1806,7 +1903,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "Jalan Kebun",
-          "joins": "E5"
+          "joins": "E5",
+          "side": "left"
         }
       ],
       "to": [
@@ -1818,7 +1916,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1845,7 +1944,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "Persiaran Anggerik Eria",
-          "joins": "E5"
+          "joins": "E5",
+          "side": "left"
         },
         {
           "osm_way_id": 921568440,
@@ -1855,7 +1955,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "to": [
@@ -1867,7 +1968,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1894,7 +1996,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 777837019,
@@ -1904,7 +2007,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "E23",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         }
       ],
       "to": [
@@ -1916,7 +2020,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1943,7 +2048,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 327303061,
@@ -1953,7 +2059,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "Persiaran Kemuning Prima",
-          "joins": "E5"
+          "joins": "E5",
+          "side": "left"
         }
       ],
       "to": [
@@ -1965,7 +2072,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -1992,7 +2100,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 779929779,
@@ -2002,7 +2111,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         }
       ],
       "to": [
@@ -2014,7 +2124,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2041,7 +2152,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E5"
+          "joins": "E5",
+          "side": "left"
         },
         {
           "osm_way_id": 477380628,
@@ -2051,7 +2163,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "to": [
@@ -2063,7 +2176,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2090,7 +2204,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2102,7 +2217,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2129,7 +2245,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2141,7 +2258,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2168,7 +2286,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2180,7 +2299,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2207,7 +2327,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2219,7 +2340,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2246,7 +2368,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2258,7 +2381,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2285,7 +2409,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2297,7 +2422,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2324,7 +2450,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2336,7 +2463,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2363,7 +2491,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2375,7 +2504,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2402,7 +2532,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2414,7 +2545,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2441,7 +2573,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2453,7 +2586,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2480,7 +2614,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2492,7 +2627,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2519,7 +2655,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2531,7 +2668,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2558,7 +2696,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2570,7 +2709,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2597,7 +2737,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2609,7 +2750,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2636,7 +2778,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2648,7 +2791,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2675,7 +2819,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2687,7 +2832,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2714,7 +2860,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2726,7 +2873,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2753,7 +2901,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2765,7 +2914,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2792,7 +2942,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Persiaran Harmoni",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         },
         {
           "osm_way_id": 1163599610,
@@ -2802,7 +2953,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "to": [
@@ -2814,7 +2966,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2841,7 +2994,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan Sepadu 25/123",
-          "joins": "E5"
+          "joins": "E5",
+          "side": "left"
         },
         {
           "osm_way_id": 880457611,
@@ -2851,7 +3005,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "to": [
@@ -2863,7 +3018,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2890,7 +3046,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -2902,7 +3059,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "E5",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         },
         {
           "osm_way_id": 984701918,
@@ -2912,7 +3070,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "lanes_inferred": false,
@@ -2939,7 +3098,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 766315842,
@@ -2949,7 +3109,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Persiaran Puchong Perdana",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         }
       ],
       "to": [
@@ -2961,7 +3122,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -2988,7 +3150,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 1171027691,
@@ -2998,7 +3161,8 @@
           "lanes": 2,
           "lanes_inferred": false,
           "leaves": "Jalan PPU 1",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         }
       ],
       "to": [
@@ -3010,7 +3174,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3037,7 +3202,8 @@
           "lanes": 1,
           "lanes_inferred": false,
           "leaves": "Persiaran Taman Tasik Prima",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         },
         {
           "osm_way_id": 1168175130,
@@ -3047,7 +3213,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "to": [
@@ -3059,7 +3226,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3086,7 +3254,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3098,7 +3267,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3125,7 +3295,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3137,7 +3308,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3164,7 +3336,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3176,7 +3349,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3203,7 +3377,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3215,7 +3390,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3242,7 +3418,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3254,7 +3431,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3281,7 +3459,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3293,7 +3472,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3320,7 +3500,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3332,7 +3513,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3359,7 +3541,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3371,7 +3554,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3398,7 +3582,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3410,7 +3595,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3437,7 +3623,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3449,7 +3636,8 @@
           "lanes": 4,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3476,7 +3664,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         },
         {
           "osm_way_id": 780264346,
@@ -3486,7 +3675,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "Jalan Layang-Layang 1",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         }
       ],
       "to": [
@@ -3498,7 +3688,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3525,7 +3716,8 @@
           "lanes": 6,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3537,7 +3729,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3564,7 +3757,8 @@
           "lanes": 6,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3576,7 +3770,8 @@
           "lanes": 5,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,
@@ -3603,7 +3798,8 @@
           "lanes": 7,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3615,7 +3811,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "E11",
-          "joins": "E11"
+          "joins": "E11",
+          "side": "left"
         },
         {
           "osm_way_id": 779924915,
@@ -3625,7 +3822,8 @@
           "lanes": 3,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": "right"
         }
       ],
       "lanes_inferred": false,
@@ -3652,7 +3850,8 @@
           "lanes": 7,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "to": [
@@ -3664,7 +3863,8 @@
           "lanes": 6,
           "lanes_inferred": false,
           "leaves": "",
-          "joins": ""
+          "joins": "",
+          "side": ""
         }
       ],
       "lanes_inferred": false,

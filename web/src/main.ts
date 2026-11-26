@@ -9,9 +9,10 @@ import { colors } from "./colors";
 import { OSM_CREDIT, baseStyle } from "./basemap";
 import { initFlow, type Flow } from "./flow";
 import { LANES_FULL_ZOOM, laneLineOffset, roadWidth } from "./lanes";
-import { dropSlug, hashFor, parseHash } from "./links";
+import { dropSlug, hashFor, parseHash, stopsRun } from "./links";
 import { sharedRoads, stretches } from "./profile";
-import { NEARLY_FULL, countWord, profileLabel, profileSentence, profileTitle, sharedName, bottleneckSentence, confirmedSentence, dropTitle, fixDifficulty, fixSentence, fmtVph, lanesText, roadLabel, roadTitle } from "./copy";
+import { NEARLY_FULL, countWord, fmtExact, ROUTES_DONE, routeCaption, routeProgress, profileLabel, profileSentence, profileTitle, sharedName, bottleneckSentence, confirmedSentence, dropSentence, dropShields, dropTitle, expresswayRefs, fixDifficulty, fixSentence, fmtVph, lanesText, resultLine, roadLabel, roadTitle, whatIfBars } from "./copy";
+import { laneDiagram } from "./lanediagram";
 
 const DATA = `${import.meta.env.BASE_URL}data/kemuning-pj`;
 
@@ -28,8 +29,16 @@ const EDGE_GAP = 8; // what the camera keeps between the map's controls and a ro
 const RUN_TOTAL_MS = 10000; // the whole search, whatever the number of routes
 const RUN_STEP_MAX_MS = 1100; // and never slower than this per route
 const CARD_MIN_MAP_W = 320; // the map card needs this much map to sit in, px
-const CARD_MIN_MAP_H = 300;
+// The tallest card (a lane drop with a lane diagram, a guessed flag and a
+// long name) is about 360 px; with its 16 px offset, tip and edge gaps it
+// needs about 400 px of map. A smaller map shows the card in the sheet.
+const CARD_MIN_MAP_H = 420;
 const CARD_LINGER_MS = 280; // time to move the pointer from a marker onto its card
+const DRAG_SNAP = 48; // a drag of the phone sheet's handle this long leaves the height it started at, px
+const DRAG_FLICK = 0.5; // or one this fast, px per ms
+const DRAG_TAP = 6; // anything shorter is a tap, px
+const SHEET_MIN = 96; // the least a dragged sheet shows: its handle and a line or two, px
+const SHEET_MS = 220; // the sheet settling at a height; --dur-sheet in style.css
 const PHONE = "(max-width: 760px) and (orientation: portrait), (max-width: 560px)";
 
 type View = "summary" | "list" | "detail" | "how";
@@ -90,6 +99,11 @@ let card: { popup: maplibregl.Popup | null; node: HTMLElement; what: LaneDrop | 
 let cardTimer = 0; // closes a hovered card shortly after the pointer leaves // a newer run, a skip or a direction switch cancels the one in progress
 let opener: HTMLElement | null = null; // where focus goes back to
 let userMoved = false; // the reader moved the map since the view last framed it
+/** Phones: the sheet's three heights (decision 0018). Summary is the default. */
+type Sheet = "collapsed" | "summary" | "expanded";
+let mini = false; // the phone sheet is collapsed to its handle and one line
+let settleH: number | null = null; // the height a settling sheet is on its way to, px
+let settleTimer = 0;
 let mapReady = false; // the panel never waits for the map
 const rowOf = new Map<LaneDrop, HTMLButtonElement>();
 
@@ -174,29 +188,54 @@ function fitPadding(): number {
 // carries into the next. Within a view the reader's own pans and zooms are
 // kept: a resize or a card does not snap the map back. Map cards move the
 // map only as far as it takes to show them.
+// The phone sheet never moves the camera (decision 0018): the camera pads by
+// the sheet as it stands when the reader asks to go somewhere (a view, the
+// analysis, a direction, a picked place), and dragging, opening or closing
+// the sheet afterwards leaves the map where it is.
 
 type Frame = { kind: "drive" } | { kind: "drops" } | { kind: "feature"; b: maplibregl.LngLatBounds };
 let frame: Frame = view === "list" ? { kind: "drops" } : { kind: "drive" };
 
 /**
- * Space to keep clear inside the map. The panel sits beside the map on
- * desktop and below it on phones, never over it, so the map's own box is
- * already the space left by the panel or sheet; only the zoom buttons
- * (top right) and the credit line (bottom right) sit on the map.
+ * Phones: how much of the map's height the floating sheet covers (decision
+ * 0017). The map never changes size; the sheet sits over its lower part. 0 on
+ * desktop, where the panel is beside the map.
+ */
+function sheetCover(): number {
+  const m = map.getContainer().getBoundingClientRect();
+  const panel = byId("panel");
+  if (getComputedStyle(panel).position !== "fixed") return 0;
+  // A settling sheet counts at the height it is on its way to, so a camera
+  // move asked for meanwhile works to where the sheet comes to rest.
+  return Math.round(Math.max(0, Math.min(m.height, settleH ?? panel.offsetHeight)));
+}
+
+/** Phones: how much of the map the sheet covers right now, mid-drag included. For the credit line. */
+function sheetShown(): number {
+  const panel = byId("panel");
+  return getComputedStyle(panel).position === "fixed" ? panel.offsetHeight : 0;
+}
+
+/**
+ * Space to keep clear inside the map: the zoom buttons (top right), the
+ * credit line (bottom right) and, on phones, the part under the sheet, so
+ * what a view frames sits in the map that is still showing.
  */
 function padding(): maplibregl.PaddingOptions {
   const box = map.getContainer();
   const base = fitPadding();
+  const cover = sheetCover();
+  const shown = box.clientHeight - cover;
   const corner = (sel: string): HTMLElement | null => box.querySelector<HTMLElement>(sel);
   const buttons = corner(".maplibregl-ctrl-top-right")?.offsetWidth ?? 0;
   const credit = corner(".maplibregl-ctrl-bottom-right")?.offsetHeight ?? 0;
   // Never more than a third of the map per side, or a short phone map has no room left.
   const cap = (v: number, size: number): number => Math.min(v, Math.floor(size / 3));
   return {
-    top: cap(base, box.clientHeight),
+    top: cap(base, shown),
     left: cap(base, box.clientWidth),
     right: cap(Math.max(base, buttons + EDGE_GAP), box.clientWidth),
-    bottom: cap(Math.max(base, credit + EDGE_GAP), box.clientHeight),
+    bottom: cover + cap(Math.max(base, credit + EDGE_GAP), shown),
   };
 }
 
@@ -258,8 +297,11 @@ function focus(b: maplibregl.LngLatBounds): void {
 /** Shift the map the least it takes to bring a box (screen px, relative to the map) inside it. */
 function nudge(left: number, top: number, right: number, bottom: number, margin: number): void {
   const box = map.getContainer();
+  // The sheet (phones) and the credit line above it hide what is under them.
+  const credit = box.querySelector<HTMLElement>(".maplibregl-ctrl-bottom-right")?.offsetHeight ?? 0;
+  const floor = box.clientHeight - sheetCover() - credit - margin;
   const dx = left < margin ? left - margin : right > box.clientWidth - margin ? Math.min(right - (box.clientWidth - margin), left - margin) : 0;
-  const dy = top < margin ? top - margin : bottom > box.clientHeight - margin ? Math.min(bottom - (box.clientHeight - margin), top - margin) : 0;
+  const dy = top < margin ? top - margin : bottom > floor ? Math.min(bottom - floor, top - margin) : 0;
   if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
   map.panBy([dx, dy], { duration: still() ? 0 : CAMERA_MS });
 }
@@ -522,6 +564,8 @@ function setView(next: View, from?: HTMLElement | null): void {
   const changed = next !== view;
   view = next;
   document.body.dataset.view = next;
+  mini = false; // a view the reader asked for is shown
+  syncSheet();
   showAllDrops(next === "list");
   if (next !== "detail") {
     shownDrop = null;
@@ -640,7 +684,7 @@ function renderList(): void {
       const li = el("li");
       const btn = el("button");
       btn.type = "button";
-      btn.append(el("b", lanesText(d).replace(" lanes", "")), el("span", dropTitle(d)));
+      btn.append(el("b", `${d.lanes_in} → ${d.lanes_out}`), el("span", dropTitle(d)));
       if (d.confirmed) btn.append(el("em", "Confirmed jam"));
       else if (d.lanes_inferred) btn.append(el("em", "Lanes guessed"));
       btn.addEventListener("click", () => openDrop(d, btn));
@@ -736,18 +780,30 @@ function renderDirection(announce: boolean): void {
   const tests = fixes?.[dir] ?? [];
   const best = tests.filter((f) => f.helps).sort((a, b) => b.gain_vph - a.gain_vph)[0];
   byId("whatif").hidden = tests.length === 0;
-  byId("compare").hidden = !best;
-  if (best) {
+  // Two bars from the same zero on one scale (copy.ts whatIfBars). No gain
+  // shows equal bars; no baseline shows none.
+  const then = (best ?? tests[0])?.new_max_flow_vph ?? NaN;
+  const bars = whatIfBars(max, then);
+  byId("bars").hidden = !bars;
+  if (bars) {
+    const pct = (share: number): string => `${(share * 100).toFixed(2)}%`;
     byId("cmp-now").textContent = fmtVph(max);
-    byId("cmp-then").textContent = fmtVph(best.new_max_flow_vph);
+    byId("cmp-then").textContent = fmtVph(then);
+    byId("cmp-gain").textContent = then > max ? `+${fmtVph(then - max)}` : "";
+    byId("bar-now").style.width = pct(bars.now);
+    byId("bar-then").style.width = pct(bars.then - bars.gain);
+    byId("bar-gain").style.width = pct(bars.gain);
   }
   const why = tests[0]?.why_no_gain;
   byId("whatif-say").textContent =
     !best && why ? `One more lane there would not raise the limit: ${why}.` : fixSentence(tests, cutProps).join("");
-  byId("whatif-hard").textContent = fixDifficulty(tests);
+  const hard = fixDifficulty(tests);
+  byId("whatif-hard").textContent = hard;
+  byId("whatif-hard").hidden = !hard;
 
   renderProfile();
   renderMap();
+  syncSheet();
   if (!announce) return;
   say(
     state === "result"
@@ -762,8 +818,9 @@ function renderDirection(announce: boolean): void {
 
 type Picked = { drop: LaneDrop; road?: undefined } | { road: Edge; drop?: undefined };
 
-function cardKind(swatch: string, text: string, seen = false): HTMLElement {
-  const p = el("p", undefined, seen ? "card-kind seen" : "card-kind");
+/** red: where it jams (a confirmed jam or the bottleneck); the glyph's shape tells which. */
+function cardKind(swatch: string, text: string, red = false): HTMLElement {
+  const p = el("p", undefined, red ? "card-kind red" : "card-kind");
   const i = el("i", undefined, swatch);
   i.setAttribute("aria-hidden", "true");
   // Shown in capitals by the stylesheet (decision 0015); the words themselves stay
@@ -772,41 +829,106 @@ function cardKind(swatch: string, text: string, seen = false): HTMLElement {
   return p;
 }
 
-/** Room for a card on the map itself. A small map shows the preview in the sheet instead. */
+/** Room for a card on the map that is showing. A small map shows the preview in the sheet instead. */
 function roomForCard(): boolean {
   const box = map.getContainer();
-  return box.clientWidth >= CARD_MIN_MAP_W && box.clientHeight >= CARD_MIN_MAP_H;
+  return box.clientWidth >= CARD_MIN_MAP_W && box.clientHeight - sheetCover() >= CARD_MIN_MAP_H;
+}
+
+/** The card's name, after the road's route shields (only exact E-numbers). */
+function cardName(title: string, refs: string[]): HTMLElement {
+  const p = el("p", undefined, "card-title");
+  for (const ref of refs) p.append(shield(ref));
+  p.append(el("span", title));
+  return p;
+}
+
+/** A guessed lane count, said next to the lanes it is about, with the key's dashed line. */
+function cardGuessed(text: string): HTMLElement {
+  const p = el("p", undefined, "card-flag");
+  const i = el("i", undefined, "sw dash");
+  i.setAttribute("aria-hidden", "true");
+  p.append(i, el("span", text));
+  return p;
+}
+
+// The lane diagram: the drop's own lane counts and, at a merge, the side a
+// road joins on (lane_drops.json). Decorative for screen readers: the lanes
+// are said in words right under it.
+function cardDiagram(d: LaneDrop): SVGSVGElement {
+  const NS = "http://www.w3.org/2000/svg";
+  const g = laneDiagram(d);
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("class", g.guessed ? "lane-diagram guessed" : "lane-diagram");
+  svg.setAttribute("viewBox", `0 0 ${g.width} ${g.height}`);
+  svg.setAttribute("width", String(g.width));
+  svg.setAttribute("height", String(g.height));
+  svg.setAttribute("aria-hidden", "true");
+  const reveal = document.createElementNS(NS, "g");
+  reveal.setAttribute("class", "reveal");
+  const road = document.createElementNS(NS, "path");
+  road.setAttribute("class", "road");
+  road.setAttribute("d", g.road);
+  reveal.append(road);
+  for (const l of g.lines) {
+    const line = document.createElementNS(NS, "line");
+    line.setAttribute("class", l.kind);
+    for (const [k, v] of [["x1", l.x1], ["y1", l.y1], ["x2", l.x2], ["y2", l.y2]] as const) line.setAttribute(k, String(v));
+    reveal.append(line);
+  }
+  const label = (text: string, x: number, cls: string) => {
+    const t = document.createElementNS(NS, "text");
+    t.setAttribute("class", cls);
+    t.setAttribute("x", String(x));
+    t.setAttribute("y", "12");
+    t.textContent = text;
+    return t;
+  };
+  svg.append(reveal, label(g.inLabel, 6, "in"), label(g.outLabel, g.width - 6, "out"));
+  return svg;
 }
 
 function cardBody(what: Picked): HTMLElement {
   const box = el("div", undefined, "card");
   box.setAttribute("role", "group");
-  const notes: string[] = [];
   let title: string;
+  let source: string;
   if (what.drop) {
     const d = what.drop;
     title = dropTitle(d);
-    // Observed, not computed: the ringed dot and its own words.
-    box.append(d.confirmed ? cardKind("dot ring", "Confirmed jam", true) : cardKind("dot", "Lane drop"));
-    box.append(el("p", title, "card-title"), el("p", lanesText(d), "card-main"));
-    if (d.confirmed) notes.push("Seen by a local driver.");
-    notes.push(d.kind === "merge" ? "Roads join here and lanes are lost." : "The road loses lanes here.");
-    if (d.lanes_inferred) notes.push("Some lane counts here are guessed.");
+    // The map's own mark: ring = a jam a driver saw, hollow = lanes guessed, solid = lane drop.
+    box.append(
+      d.confirmed
+        ? cardKind("dot ring", "Confirmed jam", true)
+        : cardKind(d.lanes_inferred ? "dot hollow" : "dot", "Lane drop"),
+    );
+    const g = laneDiagram(d);
+    box.append(cardName(title, dropShields(d)), cardDiagram(d), el("p", lanesText(d), "card-main"));
+    if (d.lanes_inferred) box.append(cardGuessed("Some lane counts here are guessed."));
+    source = `${d.confirmed ? "Seen by a local driver." : "From OpenStreetMap lane counts."} ${dropSentence(d, g.joinSide)}`;
   } else {
     const p = what.road.properties;
     title = roadTitle(p);
+    const refs = expresswayRefs(p.ref);
     // Whether it is the bottleneck, or nearly full, is a result: only after the analysis.
     if (state !== "result") box.append(cardKind("sw", "Road"));
-    else if (p.is_cut) box.append(cardKind("sw cut", "Bottleneck"));
+    else if (p.is_cut) box.append(cardKind("sw cut", "Bottleneck", true));
     else if (nearlyFull(p)) box.append(cardKind("sw full", "Nearly full"));
     else box.append(cardKind("sw", "Room to spare"));
-    box.append(el("p", title, "card-title"), el("p", `${p.lanes} lane${p.lanes === 1 ? "" : "s"}`, "card-main"));
-    notes.push(`Can carry about ${fmtVph(p.capacity_vph)} veh/h.`);
-    if (state === "result") notes.push("Worked out by the analysis, not measured.");
-    if (p.lanes_inferred) notes.push("The lane count is guessed from the road type.");
+    // With a shield the ref is said by the sign, so the name follows it alone.
+    box.append(cardName(refs.length && p.name ? p.name : title, refs));
+    box.append(el("p", `${p.lanes} lane${p.lanes === 1 ? "" : "s"}`, "card-main"));
+    if (p.lanes_inferred) box.append(cardGuessed("Lane count guessed from the road type."));
+    const cap = el("p", "Can carry about ", "card-cap");
+    cap.append(el("b", fmtVph(p.capacity_vph)), " ", el("span", "veh/h", "unit"));
+    box.append(cap);
+    source =
+      state === "result"
+        ? "Worked out by the analysis, not measured."
+        : "From lane counts. Run the analysis to see whether it limits the drive.";
   }
   box.setAttribute("aria-label", title);
-  box.append(el("p", notes.join(" "), "card-note"));
+  box.append(el("p", source, "card-note"));
 
   const acts = el("p", undefined, "card-acts");
   const details = el("button", "View details →", "link");
@@ -843,6 +965,10 @@ function openCard(what: Picked, at: [number, number], pinned = true): void {
   }
   closeCard(true);
   const node = cardBody(what);
+  // The lane diagram draws itself once, in the direction of travel, when a
+  // card is opened on purpose. A hover preview shows it finished; reduced
+  // motion turns the animation off in the stylesheet (DESIGN_BRIEF.md §6).
+  if (pinned) node.querySelector(".lane-diagram")?.classList.add("draw");
   pickDrop(what.drop ?? null);
   pickRoad(what.road?.properties.id ?? null);
   if (!roomForCard()) {
@@ -851,6 +977,8 @@ function openCard(what: Picked, at: [number, number], pinned = true): void {
     byId("peek").hidden = false;
     document.body.dataset.peek = "on";
     card = { popup: null, node, what: key, pinned: true, at };
+    mini = false; // the quick look the reader asked for is shown
+    syncSheet();
     // The sheet may have changed height: keep the picked place on the map.
     requestAnimationFrame(() => {
       map.resize();
@@ -919,6 +1047,7 @@ function closeCard(keepPick = false): void {
     delete document.body.dataset.peek;
     byId("peek").hidden = true;
     byId("peek").replaceChildren();
+    syncSheet();
   }
   if (!keepPick && view !== "detail") {
     pickDrop(null);
@@ -929,7 +1058,8 @@ function closeCard(keepPick = false): void {
 // A click anywhere off the card and off the map closes it (the map handles its own clicks).
 document.addEventListener("pointerdown", (e) => {
   if (!card || !(e.target instanceof Node)) return;
-  if (card.node.contains(e.target) || byId("map").contains(e.target)) return;
+  // The handle only changes the sheet's height: the quick look stays.
+  if (card.node.contains(e.target) || byId("map").contains(e.target) || byId("grab").contains(e.target)) return;
   closeCard();
 });
 
@@ -946,6 +1076,10 @@ function setState(next: State): void {
   setTrace("trace", []);
   styleMap();
   syncLink();
+  syncSheet();
+  // The reader asked for this state, and its sheet may stand taller or
+  // shorter: frame for it now, unless they have moved the map themselves.
+  if (!userMoved) frameMap("ease");
 }
 
 /** The result is on the page: the search finished, was skipped, or motion is reduced. */
@@ -968,25 +1102,45 @@ async function run(): Promise<void> {
   if (still() || steps.length === 0) return finish();
   setState("running");
   const id = ++runId;
+  const n = steps.length;
+  const segs = steps.map(() => el("i"));
+  byId("run-segs").replaceChildren(...segs);
+  const bar = byId("run-progress");
+  bar.setAttribute("aria-valuemin", "0");
+  bar.setAttribute("aria-valuemax", String(n));
+  const progress = (i: number): void => {
+    // i routes are done; the next one, if any, is being traced.
+    segs.forEach((s, k) => s.className = k < i ? "done" : k === i ? "now" : "");
+    byId("run-label").textContent = routeProgress(i, n);
+    bar.setAttribute("aria-valuenow", String(i));
+    bar.setAttribute("aria-valuetext", routeProgress(i, n));
+  };
   byId("run-count").textContent = "0";
-  byId("run-caption").textContent = `Trying the routes one by one. Route 1 of ${steps.length}.`;
+  progress(0);
+  byId("run-caption").textContent = "";
   byId("skip-btn").focus();
   say("The analysis is running.");
 
-  const stepMs = Math.min(RUN_STEP_MAX_MS, RUN_TOTAL_MS / steps.length);
+  const stepMs = Math.min(RUN_STEP_MAX_MS, RUN_TOTAL_MS / n);
   const carried = new Map<number, number>(); // veh/h on each road so far
   let total = 0;
   for (const [i, step] of steps.entries()) {
+    progress(i);
     setTrace("trace", step.edges.map(([edge]) => edge));
-    byId("run-caption").textContent = `Trying the routes one by one. Route ${i + 1} of ${steps.length}.`;
+    // A negative delta: this route takes back flow an earlier one sent there.
+    const movesEarlier = step.edges.some(([, delta]) => delta < 0);
+    byId("run-caption").textContent = routeCaption(i + 1, step.amount_vph, movesEarlier);
     await sleep(stepMs);
     if (id !== runId) return; // skipped, restarted or the direction changed
     for (const [edge, delta] of step.edges) carried.set(edge, (carried.get(edge) ?? 0) + delta);
     total += step.amount_vph;
     setTrace("found", [...carried].filter(([, v]) => v > 0).map(([edge]) => edge));
-    byId("run-count").textContent = fmtVph(total);
+    // Exact while it runs, so it agrees with the caption; the result is rounded.
+    byId("run-count").textContent = fmtExact(total);
   }
   setTrace("trace", []);
+  progress(n);
+  byId("run-caption").textContent = ROUTES_DONE;
   await sleep(stepMs / 2);
   if (id === runId) finish();
 }
@@ -1014,6 +1168,7 @@ byId("limit-btn").addEventListener("click", () => {
 document.querySelectorAll<HTMLElement>("[data-open]").forEach((b) => {
   b.addEventListener("click", () => setView(b.dataset.open === "how" ? "how" : "list", b));
 });
+byId("about-how").addEventListener("click", () => setView("how", byId("about-how")));
 document.querySelectorAll<HTMLElement>("[data-back]").forEach((b) => {
   b.addEventListener("click", () => setView("summary"));
 });
@@ -1025,8 +1180,12 @@ window.addEventListener("keydown", (e) => {
 window.addEventListener("hashchange", () => {
   const p = parseHash(window.location.hash);
   if (p.dir !== dir) {
+    // As the direction switch does: the search under way was for the other direction.
+    const stop = stopsRun(state === "running", dir, p);
     dir = p.dir;
+    closeCard();
     userMoved = false;
+    if (stop) setState("home");
     renderDirection(true);
   }
   const linked = p.drop ? drops.find((d) => dropSlug(d.key) === p.drop) : undefined;
@@ -1038,14 +1197,170 @@ window.addEventListener("hashchange", () => {
   if (p.view === "summary" && p.solved !== (state === "result")) setState(p.solved ? "result" : "home");
 });
 
-// Phones: the sheet opens to the rest of the findings with a button, never a swipe.
+// ---------- the phone sheet: three heights (decisions 0017, 0018) ----------
+// Collapsed: the handle, one line on what the page shows, and that it is not
+// live traffic. Summary: the top of the findings (the default). Expanded: all
+// of the view, scrolling inside the sheet. Every change has a button: the
+// handle hides the findings or brings them back, More detail / Less detail
+// goes between summary and expanded. A drag of the handle does the same by
+// height. None of it moves the camera.
 const more = byId<HTMLButtonElement>("more-btn");
-more.addEventListener("click", () => {
-  const open = document.body.dataset.more !== "open";
+
+function sheetNow(): Sheet {
+  if (mini) return "collapsed";
+  const body = document.body.dataset;
+  return view === "summary" && body.more !== "open" && body.peek !== "on" ? "summary" : "expanded";
+}
+
+/** The heights this view has: the list, a detail and a quick look have no shorter summary. */
+function sheetStops(): Sheet[] {
+  if (view !== "summary" || document.body.dataset.peek === "on") return ["collapsed", "expanded"];
+  return state === "running" ? ["collapsed", "summary"] : ["collapsed", "summary", "expanded"];
+}
+
+/** What the collapsed sheet says the page is showing. */
+function miniTitle(): string {
+  if (card && !card.popup) return card.node.getAttribute("aria-label") ?? "";
+  if (view === "list") return byId("list-h").textContent ?? "";
+  if (view === "detail") return byId("detail-title").textContent ?? "";
+  if (view === "how") return byId("how-h").textContent ?? "";
+  if (state === "running") return "The analysis is running.";
+  if (state === "result") return resultLine(manifest!.max_flow_vph[dir], ENDS[dir].from, ENDS[dir].to);
+  return "Where the road runs out of room.";
+}
+
+/** The page's sheet attribute, the handle's words and the collapsed line, from the state. */
+function syncSheet(): void {
+  document.body.dataset.sheet = sheetNow();
+  const grab = byId("grab");
+  grab.setAttribute("aria-expanded", String(!mini));
+  grab.setAttribute("aria-label", mini ? "Show the findings" : "Show more of the map");
+  byId("mini-title").textContent = miniTitle();
+}
+
+function setMore(open: boolean): void {
   document.body.dataset.more = open ? "open" : "closed";
   more.setAttribute("aria-expanded", String(open));
   more.textContent = open ? "Less detail" : "More detail";
-});
+  syncSheet();
+}
+
+function applySheet(next: Sheet): void {
+  mini = next === "collapsed";
+  if (!mini && view === "summary") setMore(next === "expanded");
+  if (next !== "expanded") byId("panel").scrollTop = 0;
+  syncSheet();
+}
+
+/**
+ * Change the sheet, and let it settle from the height it had (or from where
+ * the finger left it) to its new one. Reduced motion, and the desktop
+ * layout, change at once.
+ */
+function moveSheet(change: () => void, from?: number): void {
+  const panel = byId("panel");
+  window.clearTimeout(settleTimer);
+  const h0 = from ?? panel.offsetHeight;
+  const done = (): void => {
+    settleH = null;
+    delete document.body.dataset.settle;
+    panel.style.height = "";
+  };
+  done();
+  change();
+  if (!phone() || still()) return;
+  const h1 = panel.offsetHeight;
+  if (Math.abs(h1 - h0) < 2) return;
+  settleH = h1;
+  panel.style.height = `${h0}px`;
+  void panel.offsetHeight; // the start height is drawn before the move begins
+  document.body.dataset.settle = "on";
+  panel.style.height = `${h1}px`;
+  settleTimer = window.setTimeout(done, SHEET_MS + 60);
+}
+
+more.addEventListener("click", () => moveSheet(() => setMore(document.body.dataset.more !== "open")));
+
+/**
+ * The handle at the top of the phone sheet. A tap, or Enter or Space, hides
+ * the findings or brings them back. A drag makes the sheet as tall as the
+ * finger asks, over everything the view holds; let go and it settles at the
+ * nearest of the view's heights, or the next one in the direction of a flick.
+ */
+function wireGrab(): void {
+  const grab = byId("grab");
+  const panel = byId("panel");
+  let start: { y: number; t: number; id: number; h: number; from: Sheet } | null = null;
+  let dy = 0;
+  let dragged = false;
+  let dragEnd = -Infinity;
+  const tallest = (): number => parseFloat(getComputedStyle(panel).maxHeight) || panel.offsetHeight;
+  /** Where a drag that ended at height h, having moved dy at this speed, comes to rest. */
+  const rest = (from: Sheet, h: number, speed: number): Sheet => {
+    const stops = sheetStops();
+    const at = Math.max(0, stops.indexOf(from));
+    if (Math.abs(speed) > DRAG_FLICK) return stops[Math.max(0, Math.min(stops.length - 1, at + (speed < 0 ? 1 : -1)))]!;
+    if (Math.abs(dy) < DRAG_SNAP) return stops[at]!;
+    // Each height comes from its content, so measure them as they would stand.
+    let best = stops[at]!;
+    let gap = Infinity;
+    for (const stop of stops) {
+      applySheet(stop);
+      const d = Math.abs(panel.offsetHeight - h);
+      if (d < gap) [best, gap] = [stop, d];
+    }
+    return best;
+  };
+  grab.addEventListener("pointerdown", (e) => {
+    if (e.button !== 0) return;
+    start = { y: e.clientY, t: e.timeStamp, id: e.pointerId, h: panel.offsetHeight, from: sheetNow() };
+    dy = 0;
+    dragged = false;
+    grab.setPointerCapture(e.pointerId);
+  });
+  grab.addEventListener("pointermove", (e) => {
+    if (!start || e.pointerId !== start.id) return;
+    dy = e.clientY - start.y;
+    if (!dragged) {
+      if (Math.abs(dy) < DRAG_TAP) return;
+      dragged = true;
+      window.clearTimeout(settleTimer);
+      settleH = null;
+      delete document.body.dataset.settle;
+      document.body.dataset.drag = "on";
+    }
+    panel.style.height = `${Math.max(SHEET_MIN, Math.min(tallest(), start.h - dy))}px`;
+  });
+  grab.addEventListener("pointerup", (e) => {
+    if (!start || e.pointerId !== start.id) return;
+    const { from, t } = start;
+    start = null;
+    if (!dragged) return; // a tap: the click below
+    dragEnd = e.timeStamp;
+    const h = panel.offsetHeight;
+    const speed = dy / Math.max(1, e.timeStamp - t); // px per ms, + is down
+    delete document.body.dataset.drag;
+    panel.style.height = "";
+    const to = rest(from, h, speed);
+    moveSheet(() => applySheet(to), h);
+  });
+  grab.addEventListener("pointercancel", () => {
+    start = null;
+    if (!dragged) return;
+    dragged = false;
+    delete document.body.dataset.drag;
+    panel.style.height = "";
+  });
+  grab.addEventListener("click", (e) => {
+    if (e.timeStamp - dragEnd < 400) return; // the click that ends a drag is not a tap
+    moveSheet(() => {
+      mini = !mini;
+      if (mini) panel.scrollTop = 0;
+      syncSheet();
+    });
+  });
+}
+wireGrab();
 
 function wireMap(): void {
   const dropLayers = ["drops-key", "drops-rest"];
@@ -1081,11 +1396,34 @@ function wireMap(): void {
   });
   // The map grows and shrinks with the sheet on phones and with the window on desktop.
   // An open card keeps its place in view instead of the frame coming back.
-  new ResizeObserver(() => {
-    map.resize();
-    if (card) revealCard();
+  // On phones the sheet over the map grows and shrinks too (decision 0017):
+  // the map keeps its size and the camera works in the part still showing.
+  const box = map.getContainer();
+  let size = "";
+  const resized = new ResizeObserver(() => {
+    const now = `${box.clientWidth}x${box.clientHeight}`;
+    const mapResized = now !== size;
+    if (mapResized) {
+      size = now;
+      map.resize();
+    }
+    // The credit line rides just above the sheet, mid-drag too.
+    box.style.setProperty("--sheet-cover", `${sheetShown()}px`);
+    // Only a change in the map's own size (a window resized, a phone turned)
+    // re-frames it or moves a card. The sheet growing or shrinking over the
+    // map does neither (decision 0018).
+    if (!mapResized) return;
+    // A map that shrank below a card's room moves the open card into the
+    // sheet or panel instead of cutting it off.
+    if (card?.popup && !roomForCard()) {
+      const { what, at } = card;
+      closeCard(true);
+      openCard("properties" in what ? { road: what } : { drop: what }, at);
+    } else if (card) revealCard();
     else if (!userMoved) frameMap(map.isEasing() ? "ease" : "jump");
-  }).observe(map.getContainer());
+  });
+  resized.observe(box);
+  resized.observe(byId("panel"));
 }
 
 byId("run-btn").addEventListener("click", () => void run());

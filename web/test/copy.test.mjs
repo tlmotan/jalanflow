@@ -4,12 +4,18 @@ import assert from "node:assert/strict";
 import {
   bottleneckSentence,
   confirmedSentence,
+  dropSentence,
+  dropShields,
   dropTitle,
+  expresswayRefs,
   fixDifficulty,
+  whatIfBars,
   fixSentence,
   fmtVph,
   lanesText,
-  pathCaption,
+  routeCaption,
+  routeProgress,
+  fmtExact,
   resultSentence,
   roadBody,
   roadNotes,
@@ -118,14 +124,29 @@ test("lane drop wording", () => {
     lanes_inferred: false, confirmed: null, ...over,
   });
   assert.equal(lanesText(drop()), "6 → 3 lanes");
+  // 15 of the 87 drops end with one lane (2026-11-25): "2 → 1 lanes" read wrong.
+  assert.equal(lanesText(drop({ lanes_in: 2, lanes_out: 1 })), "2 → 1 lane");
   assert.equal(dropTitle(drop()), "ramp onto E5 + E5 merge into E5");
   assert.equal(dropTitle(drop({ kind: "narrowing" })), "E5 narrows");
   assert.equal(dropTitle(drop({ confirmed: { name: "Sri Muda merge", source: "Tim" } })), "Sri Muda merge");
 });
 
-test("pathCaption never counts past the last path", () => {
-  assert.equal(pathCaption(1, 8), "Path 1 of 8.");
-  assert.equal(pathCaption(9, 8), "Path 8 of 8.");
+test("fmtExact keeps every vehicle, with separators", () => {
+  for (const [n, want] of [[5450, "5,450"], [150, "150"], [0, "0"], [6000, "6,000"]]) assert.equal(fmtExact(n), want);
+});
+
+test("routeProgress names the route being traced, the last one too, then all", () => {
+  assert.equal(routeProgress(0, 8), "Route 1 of 8");
+  assert.equal(routeProgress(3, 8), "Route 4 of 8");
+  assert.equal(routeProgress(7, 8), "Route 8 of 8"); // the last route, still being traced
+  assert.equal(routeProgress(8, 8), "8 of 8 routes");
+  assert.equal(routeProgress(9, 8), "8 of 8 routes");
+});
+
+test("routeCaption gives the route's real amount, and says when it moves an earlier one", () => {
+  assert.equal(routeCaption(4, 900, false), "Route 4 has room for 900 vehicles an hour.");
+  assert.equal(routeCaption(10, 150, true), "Route 10 has room for 150 vehicles an hour by moving part of an earlier route.");
+  assert.equal(routeCaption(1, 1200, false), "Route 1 has room for 1,200 vehicles an hour.");
 });
 
 test("a tapped road: name, lanes, capacity, and the result only once the analysis has run", () => {
@@ -152,4 +173,37 @@ test("a tapped road: name, lanes, capacity, and the result only once the analysi
     assert.equal(got.length, c.want.length, c.name);
     c.want.forEach((re, i) => assert.match(got[i], re, c.name));
   }
+});
+
+test("route shields only for exact expressway numbers", () => {
+  assert.deepEqual(expresswayRefs("E5"), ["E5"]);
+  assert.deepEqual(expresswayRefs("E1;E5", "E5"), ["E1", "E5"]);
+  for (const ref of ["", "507", "2", "E6 I/C-SEA RAMP E", "e5"]) assert.deepEqual(expresswayRefs(ref), [], ref);
+});
+
+test("a lane drop's shields: the road it carries on into, else where it comes from", () => {
+  const road = (ref) => ({ osm_way_id: 1, name: "", ref, class: "motorway", lanes: 3, lanes_inferred: false, leaves: "", joins: "", side: "" });
+  const drop = (from, to) => ({ kind: "merge", from: from.map(road), to: to.map(road) });
+  assert.deepEqual(dropShields(drop(["E5", "507"], ["E5"])), ["E5"]);
+  assert.deepEqual(dropShields(drop(["E5"], [""])), ["E5"]);
+  assert.deepEqual(dropShields(drop([""], [""])), []);
+});
+
+test("a lane drop's sentence names the side only when the data says", () => {
+  assert.equal(dropSentence({ kind: "merge" }, "left"), "A road joins from the left and lanes are lost.");
+  assert.equal(dropSentence({ kind: "merge" }, null), "Roads join here and lanes are lost.");
+  assert.equal(dropSentence({ kind: "narrowing" }, null), "The road loses lanes here.");
+});
+
+// The what-if bars (decision 0018): two bars from the same zero on one scale.
+test("whatIfBars", () => {
+  const cases = [
+    { name: "a gain", now: 6000, then: 8000, want: { now: 0.75, then: 1, gain: 0.25 } },
+    { name: "no gain: equal bars", now: 6000, then: 6000, want: { now: 1, then: 1, gain: 0 } },
+    { name: "a loss is drawn shorter, never as a gain", now: 6000, then: 3000, want: { now: 1, then: 0.5, gain: 0 } },
+    { name: "no baseline: no bars, no division by zero", now: 0, then: 2000, want: null },
+    { name: "a missing number: no bars", now: NaN, then: 2000, want: null },
+    { name: "a missing result: no bars", now: 6000, then: NaN, want: null },
+  ];
+  for (const c of cases) assert.deepEqual(whatIfBars(c.now, c.then), c.want, c.name);
 });

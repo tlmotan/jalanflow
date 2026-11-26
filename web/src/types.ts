@@ -79,6 +79,10 @@ export interface LaneDropRoad {
   lanes_inferred: boolean;
   leaves: string; // unnamed ramps: nearest named road where it starts ("" if none)
   joins: string; // unnamed ramps: nearest named road where it ends ("" if none)
+  // Across the road, looking in the direction of travel. Set only at a merge
+  // with 2+ roads in (from) or out (to); "" on every narrowing (OSM does not
+  // say which lane ends) and when the geometry cannot tell the roads apart.
+  side: "left" | "middle" | "right" | "";
 }
 
 export interface LaneDropConfirmation {

@@ -19,15 +19,17 @@ The page puts its state on `<body>`, so the script can wait on these instead of 
 | `data-load` | `loading` → `ready`, or `failed` | the data fetch at start |
 | `data-state` | `home` (nothing computed), `running` (the replay), `result` | Run, Skip, the search ending, a link |
 | `data-view` | `summary`, `list` (lane drops), `detail` (one road or drop), `how` | the panel's links, Back, Escape, a link |
-| `data-more` | `closed`, `open` | phones only: More detail, the grabber |
+| `data-more` | `closed`, `open` | phones only: More detail, a drag of the handle |
+| `data-sheet` | `collapsed`, `summary`, `expanded` | phones: the sheet's height (decision 0018). The handle (a tap or a drag), More detail, a view change. The list, a detail, How this works and a peek have no `summary` |
+| `data-settle` | `on` or absent | phones: while the sheet eases to its new height |
 | `data-peek` | `on` or absent | phones / small maps: a card shown in the sheet instead of on the map |
-| `data-drag` | `on` or absent | phones: while the grabber is held |
+| `data-drag` | `on` or absent | phones: while the handle is dragged (not on a tap) |
 
 Direction is not on `<body>`: read `.seg button[aria-pressed=true]` (`inbound` = to Petaling Jaya, the default; `outbound` = to Kota Kemuning).
 
 Layouts (`PHONE` in `main.ts`, `@media` in `style.css`):
 - **Desktop**: panel beside the map. Anything wider than 760 px, or 561–760 px in landscape.
-- **Phone**: `(max-width: 760px) and (orientation: portrait), (max-width: 560px)`. Floating sheet over a full-height map (decision 0017), grabber, More detail button.
+- **Phone**: `(max-width: 760px) and (orientation: portrait), (max-width: 560px)`. Floating sheet over a full-height map (decision 0017) with three heights (decision 0018), a handle that is a button, More detail button. The sheet never moves the map.
 - **Card or peek**: independent of the layout. A card sits on the map only when the visible map is at least 320 × 420 px (`CARD_MIN_MAP_W/H`); otherwise it goes into the sheet/panel as a peek. So a short desktop window gets peeks too.
 
 ## 2. Viewports
@@ -90,14 +92,14 @@ A2 throws on purpose (`jalanflow: road data did not load`); exclude it from the 
 |---|---|---|---|
 | D1 | Result, to Petaling Jaya | run to the end | ✅ `result` |
 | D2 | Result, to Kota Kemuning | switch direction on the result | ✅ `result-to-kota-kemuning` |
-| D3 | Phone: sheet open (lane strip, what-if, key, links) | `#more-btn` | ✅ `result-more-detail-open` |
+| D3 | Phone: sheet open (what-if bars, About this estimate, key, links) | `#more-btn` | ✅ `result-more-detail-open` |
 | D4 | Phone: sheet open, scrolled | scroll `#panel` | ✅ `result-more-detail-scrolled` |
-| D5 | Phone: dragged closed / dragged open | grabber ±px | ✅ `result-dragged-closed`, `result-dragged-open` |
-| D6 | Phone: grabber mid-drag (`data-drag=on`, sheet following the finger) | mouse down, move, shoot, then up | ✅ `result-dragging-down` |
-| D7 | Phone: grabber tap toggles the sheet | click `#grab` without moving | ✅ `home-grabber-tapped-open` |
+| D5 | Phone: dragged to summary / collapsed / expanded; the map does not move | handle ±px | ✅ `result-dragged-closed`, `result-dragged-collapsed`, `result-dragged-open` |
+| D6 | Phone: handle mid-drag (`data-drag=on`, the sheet's height following the finger) | mouse down, move, shoot, then up | ✅ `result-dragging-down` |
+| D7 | Phone: handle tap collapses the sheet (title line and "not live traffic" stay), another brings it back | click `#grab` without moving | ✅ `home-handle-tapped-collapsed` |
 | D8 | Flow hidden | `#flow-btn` | ✅ `result-flow-hidden` |
 | D9 | Flow shown again (button back to "Hide flow", key row back) | `#flow-btn` twice | ✅ `result-flow-shown-again` |
-| D10 | Desktop: lower panel (lane strip, what-if, key, links) | scroll `#panel` on desktop | ✅ `result-panel-scrolled` |
+| D10 | Desktop: lower panel (what-if bars, key, links) | scroll `#panel` on desktop | ✅ `result-panel-scrolled` |
 | D11 | Replay the analysis | `#replay-btn` → running again | ✅ `replay-running` |
 | D12 | Result, outbound, sheet open (its own what-if and lane strip) | D2 + `#more-btn` | ✅ `result-to-kota-kemuning-detail` |
 
@@ -114,7 +116,7 @@ Data-dependent variants (shoot whichever the current data gives, per direction; 
 | E5 | Card: lane drop solid / hollow after analysis | as B5, B6 | ✅ `result-card-lane-drop` (solid only, as B6) |
 | E6 | Card's lane diagram mid-draw (pinned card) | shoot ~150 ms after the tap | ✅ `jam-card-drawing` |
 | E7 | Phone: card shown in the sheet (peek) | D3 open, tap a jam | ✅ `jam-card-in-sheet` |
-| E8 | Phone: peek dragged away | grabber down on E7 | ✅ `jam-card-dragged-away` |
+| E8 | Phone: sheet collapsed over a peek; the quick look stays open | handle down on E7 | ✅ `jam-card-sheet-collapsed` |
 | E9 | Peek closed with its Close button | E7 → `#peek .card button` "Close" | ✅ `jam-card-in-sheet-closed` |
 | E10 | Card moved into the sheet when the map shrinks (window resized with a card open) | open E1 on desktop, `page.setViewportSize` to a short height | ✅ `card-moved-into-panel` |
 | E11 | Escape closes the card first, then the view | open a card, press Escape | ✅ check only |
@@ -132,7 +134,7 @@ Data-dependent variants (shoot whichever the current data gives, per direction; 
 | F6 | Lane drop detail, confirmed jam ("A local driver confirmed…") | open `#inbound/drop-n33987957` | ✅ `links-*/drop-jamNode` |
 | F7 | Lane drop detail, lanes guessed ("Check on Street View") | list row with "Lanes guessed" | ✅ `links-*/drop-guessed` |
 | F8 | Lane drop detail, merge vs lane loss wording | a `kind: merge` drop and a non-merge drop | ✅ `links-*/drop-merge`, `drop-narrowing` |
-| F9 | Phone: detail, grabber down goes back | F1 on a phone, drag down | ✅ `detail-dragged-back` |
+| F9 | Phone: detail, handle down collapses the sheet; it does not go back | F1 on a phone, drag down | ✅ `detail-dragged-collapsed` |
 | F10 | Detail when the direction switches → back to summary | F1, then the other `.seg` button | ✅ `detail-direction-switched` |
 
 ### G. Lane drops list (`data-view=list`)
@@ -153,7 +155,7 @@ Data-dependent variants (shoot whichever the current data gives, per direction; 
 |---|---|---|---|
 | H1 | How this works, top | `[data-open=how]` | ✅ `how-this-works` |
 | H2 | How this works, end (OSM date, © link) | scroll to the end | ✅ `how-this-works-end` |
-| H3 | Phone: grabber down goes back | drag down on H1 | ✅ `how-dragged-back` |
+| H3 | Phone: handle down collapses the sheet; it does not go back | drag down on H1 | ✅ `how-dragged-collapsed` |
 | H4 | How this works from home | `[data-open=how]` before running | ✅ `home-how-this-works` |
 
 ### I. Deep links (`links.ts`)
@@ -232,9 +234,9 @@ Run from `screenshots/` with the dev server up (needs `ffmpeg`): `node motion.mj
 | `desktop-cars-in-lanes` | dots become cars in lanes when zoomed in | K2 |
 | `desktop-switch-direction`, `mobile-switch-direction` | the drive redrawn for the other direction | D2 |
 | `mobile-sheet-more-detail` | More detail opens the sheet and closes it | B3 |
-| `mobile-sheet-drag` | the grabber dragged up opens the sheet, dragged down closes it; the sheet follows the finger | D5, D6 |
+| `mobile-sheet-drag` | the handle dragged up expands the sheet, down collapses it, up again rests at summary; the height follows the finger and the map stays put | D5, D6 |
 | `mobile-card-on-map` | a card fades in on the map above the sheet, its diagram drawing | E2 |
-| `mobile-card-in-sheet` | with the sheet open the card takes its place; dragged down, it goes | E7, E8 |
-| `mobile-detail-drag-back` | the camera goes to the bottleneck; dragging the grabber down goes back | F1, F9 |
+| `mobile-card-in-sheet` | with the sheet open the card takes its place | E7 |
+| `mobile-detail-back` | the camera goes to the bottleneck; Back returns to the result | F1 |
 
 Not recorded: reduced motion (nothing moves; the stills in the `reduced-*` passes show it), and the card fade when it closes (120 ms, in `desktop-card-hover`).
