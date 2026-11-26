@@ -7,4 +7,5 @@
   - The dots show **max-flow capacity**: density follows each road's flow, labelled "how much the roads can carry, not live traffic". No queues, no slow-downs.
   - Queues and spillback are drawn only from the Phase 1.5 CTM simulation, which computes them, and only after its validation gate passes.
   - Button only, no autoplay; Skip always available; reduced motion jumps to the end.
+  - Update 2026-11-25 (Tim): the running panel shows progress as one segment per real step and says each step's own amount in a sentence, exact rather than rounded while it runs. A step with a negative edge delta is described as moving part of an earlier route. Nothing is interpolated: no percentage, no counter values between steps, no fill inside a segment.
 - Consequences: `replay.json` is a new output file (ARCHITECTURE §4.4). The replay is as long as the real trace; the frontend scales its speed to finish in ≤ 15 s.

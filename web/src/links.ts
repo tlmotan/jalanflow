@@ -51,3 +51,11 @@ export function hashFor(p: Place): string {
   const tail = p.drop ? `/drop-${p.drop}` : p.view === "list" ? "/lane-drops" : p.view === "how" ? "/how" : p.solved ? "/result" : "";
   return p.dir === "inbound" && !tail ? "" : `#${p.dir}${tail}`;
 }
+
+/**
+ * True when a link must stop the analysis that is running: it names the other
+ * direction, and the routes being traced belong to the one shown.
+ */
+export function stopsRun(running: boolean, shown: Direction, next: Place): boolean {
+  return running && next.dir !== shown;
+}

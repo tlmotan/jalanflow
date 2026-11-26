@@ -35,9 +35,41 @@ export function dropTitle(d: LaneDrop): string {
   return `${roads.join(" + ")} merge${into ? ` into ${into}` : ""}`;
 }
 
-/** "3 → 2 lanes" (CONTENT.md, numbers). */
+/** "3 → 2 lanes", "2 → 1 lane" (CONTENT.md, numbers). */
 export function lanesText(d: LaneDrop): string {
-  return `${d.lanes_in} → ${d.lanes_out} lanes`;
+  return `${d.lanes_in} → ${d.lanes_out} lane${d.lanes_out === 1 ? "" : "s"}`;
+}
+
+/**
+ * The expressway numbers that get a route shield (the yellow hexagon):
+ * only an exact E-number, so "E6 I/C-SEA RAMP E", exit numbers ("507") and
+ * federal routes ("2") get none. A ref may list several roads ("E1;E5").
+ */
+export function expresswayRefs(...refs: string[]): string[] {
+  const out = new Set<string>();
+  for (const ref of refs) {
+    for (const part of ref.split(";")) {
+      const r = part.trim();
+      if (/^E\d+$/.test(r)) out.add(r);
+    }
+  }
+  return [...out];
+}
+
+/** The shields for a lane drop: the road the lanes carry on into, else where they come from. */
+export function dropShields(d: LaneDrop): string[] {
+  const into = expresswayRefs(...d.to.map((r) => r.ref));
+  return into.length ? into : expresswayRefs(...d.from.map((r) => r.ref));
+}
+
+/**
+ * What happens at a lane drop, in one sentence. `joinSide` is the side the
+ * joining road comes in on (src/lanediagram.ts), when the data says.
+ */
+export function dropSentence(d: LaneDrop, joinSide: "left" | "right" | null): string {
+  if (d.kind !== "merge") return "The road loses lanes here.";
+  if (joinSide) return `A road joins from the ${joinSide} and lanes are lost.`;
+  return "Roads join here and lanes are lost.";
 }
 
 export function dropBody(d: LaneDrop): string {
@@ -169,9 +201,34 @@ export function roadNotes(r: RoadFacts, solved: boolean, cutCount: number): stri
   return notes;
 }
 
-export function pathCaption(i: number, n: number): string {
-  return `Path ${Math.min(i, n)} of ${n}.`;
+/**
+ * An exact veh/h with separators, no rounding. Only for the running search
+ * (decision 0011 update, 2026-11-25): its steps are multiples of 50, and a
+ * rounded caption would disagree with the counter beside it.
+ */
+export function fmtExact(n: number): string {
+  return Math.round(n).toLocaleString("en-US");
 }
+
+/**
+ * The label beside the route segments while the search runs: the route being
+ * traced, or, once every route is done, how many there were.
+ */
+export function routeProgress(done: number, n: number): string {
+  return done >= n ? `${n} of ${n} routes` : `Route ${Math.max(0, done) + 1} of ${n}`;
+}
+
+/**
+ * The one sentence for the route being traced, from its real amount. A route
+ * that cancels flow an earlier one sent (a negative delta) says so.
+ */
+export function routeCaption(i: number, amountVph: number, movesEarlier: boolean): string {
+  const how = movesEarlier ? " by moving part of an earlier route" : "";
+  return `Route ${i} has room for ${fmtExact(amountVph)} vehicles an hour${how}.`;
+}
+
+/** The last beat of the search, before the result. */
+export const ROUTES_DONE = "No route has room left, so this is the most.";
 
 /** A stretch of the lane strip (profile.ts), as far as the wording needs it. */
 export interface ProfilePart {
@@ -217,4 +274,21 @@ export function profileSentence(parts: ProfilePart[]): string {
 export function profileLabel(parts: ProfilePart[]): string {
   const said = parts.map((p) => `${p.lanes}${p.cut ? " (bottleneck)" : p.full ? " (nearly full)" : ""}`);
   return `Lanes in order: ${said.join(", ")}.`;
+}
+
+/**
+ * The what-if bars (decision 0018): today and with one more lane, each as a
+ * share (0 to 1) of the longer one, so both start at the same zero on one
+ * scale. gain is the part of "then" above today. null when there is no
+ * baseline to compare against: no bars are drawn, and nothing is invented.
+ */
+export function whatIfBars(nowVph: number, thenVph: number): { now: number; then: number; gain: number } | null {
+  if (!(nowVph > 0) || !(thenVph >= 0)) return null;
+  const top = Math.max(nowVph, thenVph);
+  return { now: nowVph / top, then: thenVph / top, gain: Math.max(0, thenVph - nowVph) / top };
+}
+
+/** What the collapsed phone sheet says the page is showing: one line. */
+export function resultLine(maxFlowVph: number, from: string, to: string): string {
+  return `At most ${fmtVph(maxFlowVph)} vehicles an hour, from ${from} to ${to}.`;
 }

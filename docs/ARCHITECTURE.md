@@ -247,7 +247,7 @@ type Drop struct {
     Pos           LatLon
     LanesIn, LanesOut, LanesLost int
     Squeeze       float64 // LanesOut / LanesIn
-    From, To      []Road  // {osm_way_id, name, ref, class, lanes, lanes_inferred, leaves, joins}
+    From, To      []Road  // {osm_way_id, name, ref, class, lanes, lanes_inferred, leaves, joins, side}
     LanesInferred bool    // any lane count here is a class default
     Confirmed     *Confirmation // {name, source} or null
 }
@@ -255,6 +255,7 @@ type Drop struct {
 - **Merge:** node without signals, all roads in `Classes`, one on `RouteRefs`, Σ lanes in > Σ lanes out. Lanes are taken from the part of each edge that touches the node, not the edge minimum.
 - **Narrowing:** consecutive `Edge.Parts` where lanes fall; edge on the route or a ramp touching it. Position = `Parts[k-1].End`.
 - Unnamed ramps get `leaves` / `joins`: the nearest named road (ref, else name) where the ramp starts / ends, found breadth-first through other ramps (ties → lowest edge ID). The site titles ramps "ramp E5 → E11".
+- `side` (`"left" | "middle" | "right" | ""`): where a road sits across the carriageway, looking in the direction of travel, so the site can draw a merge the right way round. Set only at a merge with two or more roads in (`From`) or out (`To`). The direction of travel is the mean of the unit vectors into and out of the node; each road's point 60 m along its own geometry from the node (`sideProbeM`) is ranked by how far left of that line it lies (most left → `left`, most right → `right`, any between → `middle`). Empty for every narrowing (OSM says that a lane ends, not which one) and when the points cannot be told apart.
 - Skip within `TollPlazaRadiusM` of a toll booth. Order: squeeze asc, lanes lost desc, key.
 - Lanes only: no demand, so rank ≠ how bad the jam is. Said on the site.
 

@@ -2,7 +2,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { dropSlug, hashFor, parseHash } from "../src/links.ts";
+import { dropSlug, hashFor, parseHash, stopsRun } from "../src/links.ts";
 
 const place = (over = {}) => ({ dir: "inbound", view: "summary", solved: false, drop: null, ...over });
 

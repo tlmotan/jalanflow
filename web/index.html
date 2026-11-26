@@ -21,7 +21,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="stylesheet" href="/src/style.css" />
   </head>
-  <body data-view="summary" data-state="home" data-load="loading" data-more="closed">
+  <body data-view="summary" data-state="home" data-load="loading" data-more="closed" data-sheet="summary">
     <a class="skip" href="#panel">Skip to the findings</a>
 
     <header id="bar">
@@ -36,6 +36,15 @@
     <div id="map" role="region" aria-label="Map of the roads between Kota Kemuning and Petaling Jaya. Everything on it is also in the findings beside it."></div>
 
     <main id="panel" tabindex="-1">
+      <!-- Phones: the sheet's handle (decisions 0017, 0018). A real button:
+           a tap or a key hides the findings to show more of the map, or brings
+           them back. A drag changes the sheet's height and nothing else. -->
+      <button type="button" class="grab" id="grab" aria-expanded="true" aria-label="Show more of the map"></button>
+      <!-- Phones, sheet collapsed: what the page is showing, and that it is not live traffic. -->
+      <div id="mini">
+        <p id="mini-title"></p>
+        <p class="qual">Worked out from lane counts. It is not live traffic.</p>
+      </div>
       <p id="status" role="status">Loading the road data…</p>
       <div id="failed" hidden>
         <p>The road data did not load, so there is nothing to show yet.</p>
@@ -61,7 +70,12 @@
         <div data-s="running">
           <h1>Found so far <span id="running-dir"></span></h1>
           <p class="metric"><span class="num" id="run-count">0</span> <span class="unit">vehicles an hour</span></p>
-          <p class="qual" id="run-caption"></p>
+          <!-- One segment per route the search found (replay.json): a count, not a percentage. -->
+          <div class="routes" id="run-progress" role="progressbar" aria-label="Routes tried">
+            <span class="segs" id="run-segs" aria-hidden="true"></span>
+            <span class="routes-label" id="run-label"></span>
+          </div>
+          <p class="run-caption" id="run-caption"></p>
           <button type="button" class="btn" id="skip-btn">Skip to the result</button>
         </div>
 
@@ -74,26 +88,45 @@
             <i class="sw cut" aria-hidden="true"></i>
             <span><span id="limit-text"></span> <span class="hint">Show it on the map</span></span>
           </button>
-        </div>
-
-        <div class="more-body">
-          <!-- The lane strip (DESIGN_BRIEF.md §13): filled by main.ts from edges.geojson. -->
-          <div class="strip" id="profile" data-s="result" hidden>
+          <!-- The lane strip (DESIGN_BRIEF.md §13), under the bottleneck and
+               closed until asked for (decision 0018). Filled by main.ts from edges.geojson. -->
+          <details class="disc" id="profile" hidden>
+            <summary>View lane layout</summary>
             <h2 id="profile-title"></h2>
             <div class="profile" id="profile-strip" role="img"></div>
             <p class="small" id="profile-say"></p>
-          </div>
+          </details>
+        </div>
+
+        <div class="more-body">
+          <!-- The tested lane (decision 0018): two bars from the same zero on one
+               scale, filled by main.ts from fixes.json. A what-if, kept apart
+               from the road as it is today. -->
           <div class="whatif" id="whatif" data-s="result">
-            <h2>If one lane were added there</h2>
+            <h2>What if we added one lane?</h2>
             <p class="small">A test in the model. Nothing is planned or built.</p>
-            <p class="compare" id="compare">
-              <span class="num" id="cmp-now"></span>
-              <span aria-hidden="true">→</span><span class="sr">would become</span>
-              <span class="num" id="cmp-then"></span>
-              <span class="unit">veh/h</span>
-            </p>
+            <div class="bars" id="bars">
+              <p class="bar">
+                <span class="bar-name">Today</span>
+                <span class="bar-val"><b class="num" id="cmp-now"></b> <span class="unit">veh/h</span></span>
+                <span class="bar-track" aria-hidden="true"><i id="bar-now"></i></span>
+              </p>
+              <p class="bar">
+                <span class="bar-name">With one more lane</span>
+                <span class="bar-val"><span class="bar-gain num" id="cmp-gain"></span> <b class="num" id="cmp-then"></b> <span class="unit">veh/h</span></span>
+                <span class="bar-track" aria-hidden="true"><i id="bar-then"></i><i class="gain" id="bar-gain"></i></span>
+              </p>
+            </div>
             <p id="whatif-say"></p>
-            <p class="small" id="whatif-hard"></p>
+            <details class="disc" id="about">
+              <summary>About this estimate</summary>
+              <ul class="notes">
+                <li>The test adds one lane to the bottleneck stretch and works out the limit again.</li>
+                <li>It says nothing about how many people want to drive, what a lane would cost or whether there is land for it. It is not advice to build.</li>
+                <li id="whatif-hard"></li>
+                <li><button type="button" class="link" id="about-how">How the numbers are worked out</button></li>
+              </ul>
+            </details>
           </div>
 
           <h2 class="sr" id="key-h">What the map shows</h2>

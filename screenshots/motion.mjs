@@ -208,7 +208,7 @@ mkdirSync(out, { recursive: true });
   const W = 390;
   const { browser, page } = await open({ width: W, height: 844 }, true);
 
-  // The sheet: More detail opens and closes it, and so does the grabber.
+  // The sheet's three heights: More detail and Less detail, then the handle dragged.
   await during(page, "mobile-sheet-more-detail", { maxMs: 2800, width: W }, async () => {
     await page.click("#more-btn");
     await page.waitForTimeout(1100);
@@ -216,10 +216,14 @@ mkdirSync(out, { recursive: true });
   });
   await settle(page, 500);
   await during(page, "mobile-sheet-drag", { maxMs: 3400, width: W }, async () => {
-    await dragSheet(page, -140);
-    await page.waitForTimeout(900);
-    await dragSheet(page, 220);
+    await dragSheet(page, -140); // summary → expanded
+    await page.waitForTimeout(700);
+    await dragSheet(page, 420); // → collapsed
+    await page.waitForTimeout(700);
+    await dragSheet(page, -280); // → summary
   });
+  if ((await page.getAttribute("body", "data-sheet")) === "collapsed") await page.click("#grab");
+  if ((await page.getAttribute("body", "data-more")) === "open") await page.click("#more-btn");
   await settle(page, 500);
 
   await page.click("#run-btn");
@@ -228,7 +232,7 @@ mkdirSync(out, { recursive: true });
   await record(page, "mobile-flow-dots", { maxMs: 4000, width: W });
 
   // A card on the map, where it has room; with the sheet open, the card takes
-  // the sheet's place, and dragging down puts it away.
+  // the sheet's place.
   const onMap = await jamPoint(page);
   if (onMap) {
     await during(page, "mobile-card-on-map", { maxMs: 1800, width: W }, () => page.mouse.click(onMap.x, onMap.y), 200);
@@ -241,18 +245,17 @@ mkdirSync(out, { recursive: true });
     await during(page, "mobile-card-in-sheet", { maxMs: 3400, width: W }, async () => {
       await page.mouse.click(inSheet.x, inSheet.y);
       await page.waitForTimeout(1600);
-      await dragSheet(page, 200);
     }, 200);
   } else console.log("mobile-card-in-sheet: no confirmed jam above the sheet, skipped");
   await closeCard(page);
   if ((await page.getAttribute("body", "data-more")) === "open") await page.click("#more-btn");
   await settle(page, 600);
 
-  // A detail: the camera goes to the bottleneck; dragging the grabber down goes back.
-  await during(page, "mobile-detail-drag-back", { maxMs: 3800, width: W }, async () => {
+  // A detail: the camera goes to the bottleneck; Back returns to the result.
+  await during(page, "mobile-detail-back", { maxMs: 3800, width: W }, async () => {
     await page.click("#limit-btn");
     await page.waitForTimeout(1600);
-    await dragSheet(page, 200);
+    await page.click("[data-v=detail] [data-back]");
   });
   await settle(page, 600);
 

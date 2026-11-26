@@ -7,6 +7,7 @@ package lanedrop
 
 import (
 	"fmt"
+	"math"
 	"sort"
 	"strings"
 
@@ -37,7 +38,30 @@ type Road struct {
 	// Empty for roads that have a name or ref, or if none is found.
 	Leaves string `json:"leaves"`
 	Joins  string `json:"joins"`
+	// Side is where this road sits across the carriageway, looking in the
+	// direction of travel: "left", "middle" or "right". It is set at a
+	// merge where two or more roads come in (on From) or go out (on To),
+	// from each road's own geometry near the junction. Empty when there is
+	// only one road on that side of the drop (every narrowing), or when
+	// the geometry cannot tell the roads apart.
+	Side Side `json:"side"`
 }
+
+// Side says where a road joins or leaves, across the road in the direction
+// of travel.
+type Side string
+
+const (
+	Left   Side = "left"
+	Middle Side = "middle"
+	Right  Side = "right"
+)
+
+// sideProbeM is how far along each road, from the junction, the point that
+// decides its side is taken. Long enough to clear the junction's own
+// rounding, short enough that a ramp curving in still counts by how it
+// arrives, not where it started. Geometry only: no capacity meaning.
+const sideProbeM = 60.0
 
 // Confirmation records that a person checked the drop on the ground.
 type Confirmation struct {
@@ -142,6 +166,7 @@ func Find(g *graph.Graph, cfg config.LaneDrops) ([]Drop, error) {
 		for _, e := range out {
 			d.To = append(d.To, road(e, e.Parts[0]))
 		}
+		setSides(g, n.Pos, in, out, d.From, d.To)
 		if d.finish() {
 			drops = append(drops, d)
 		}
@@ -212,6 +237,126 @@ func (d *Drop) finish() bool {
 		d.Squeeze = float64(d.LanesOut) / float64(d.LanesIn)
 	}
 	return d.LanesLost > 0
+}
+
+// setSides fills Side on the roads coming in (from, built from in) and
+// going out (to, built from out) at a merge at node position at.
+//
+// The direction of travel is the mean of the unit vectors from where the
+// incoming roads arrive to the junction and from the junction to where the
+// outgoing roads go. Each road's probe point (sideProbeM along it) is then
+// left or right of that line; across a group, the most-left road is Left,
+// the most-right is Right and any between are Middle.
+func setSides(g *graph.Graph, at graph.LatLon, in, out []*graph.Edge, from, to []Road) {
+	inPts := make([]vec, len(in))
+	outPts := make([]vec, len(out))
+	var heading vec
+	for i, e := range in {
+		inPts[i] = local(at, probe(g, e, false))
+		heading = heading.add(inPts[i].unit().scale(-1))
+	}
+	for i, e := range out {
+		outPts[i] = local(at, probe(g, e, true))
+		heading = heading.add(outPts[i].unit())
+	}
+	if heading.len() == 0 {
+		return
+	}
+	heading = heading.unit()
+	rank(from, inPts, heading)
+	rank(to, outPts, heading)
+}
+
+// rank sets Side on roads (two or more) by how far left of heading each
+// probe point lies. Leaves them empty if the most-left and most-right are
+// indistinguishable.
+func rank(roads []Road, pts []vec, heading vec) {
+	if len(roads) < 2 {
+		return
+	}
+	// left > 0: the point is to the left of the heading (x east, y north).
+	left := make([]float64, len(pts))
+	for i, p := range pts {
+		left[i] = heading.cross(p.unit())
+	}
+	order := make([]int, len(roads))
+	for i := range order {
+		order[i] = i
+	}
+	sort.SliceStable(order, func(a, b int) bool { return left[order[a]] > left[order[b]] })
+	if left[order[0]]-left[order[len(order)-1]] < 1e-6 {
+		return
+	}
+	for k, i := range order {
+		switch k {
+		case 0:
+			roads[i].Side = Left
+		case len(order) - 1:
+			roads[i].Side = Right
+		default:
+			roads[i].Side = Middle
+		}
+	}
+}
+
+// probe returns the point sideProbeM along e from the junction: from its
+// start if forward (an outgoing road), else back from its end (incoming).
+// Without geometry it falls back to the far node.
+func probe(g *graph.Graph, e *graph.Edge, forward bool) graph.LatLon {
+	pts := e.Geometry
+	if len(pts) < 2 {
+		far := e.From
+		if forward {
+			far = e.To
+		}
+		if n, ok := g.Nodes[far]; ok {
+			return n.Pos
+		}
+		return graph.LatLon{}
+	}
+	if !forward {
+		pts = make([]graph.LatLon, len(e.Geometry))
+		for i, p := range e.Geometry {
+			pts[len(pts)-1-i] = p
+		}
+	}
+	walked := 0.0
+	for i := 1; i < len(pts); i++ {
+		step := graph.HaversineM(pts[i-1], pts[i])
+		if walked+step >= sideProbeM && step > 0 {
+			f := (sideProbeM - walked) / step
+			return graph.LatLon{
+				Lat: pts[i-1].Lat + f*(pts[i].Lat-pts[i-1].Lat),
+				Lon: pts[i-1].Lon + f*(pts[i].Lon-pts[i-1].Lon),
+			}
+		}
+		walked += step
+	}
+	return pts[len(pts)-1]
+}
+
+// vec is a flat offset in metres: x east, y north.
+type vec struct{ x, y float64 }
+
+// local projects p to metres from origin o (equirectangular; fine over
+// the few hundred metres around a junction).
+func local(o, p graph.LatLon) vec {
+	const mPerDegLat = 111_320.0
+	return vec{
+		x: (p.Lon - o.Lon) * mPerDegLat * math.Cos(o.Lat*math.Pi/180),
+		y: (p.Lat - o.Lat) * mPerDegLat,
+	}
+}
+
+func (a vec) add(b vec) vec       { return vec{a.x + b.x, a.y + b.y} }
+func (a vec) scale(k float64) vec { return vec{a.x * k, a.y * k} }
+func (a vec) len() float64        { return math.Hypot(a.x, a.y) }
+func (a vec) cross(b vec) float64 { return a.x*b.y - a.y*b.x }
+func (a vec) unit() vec {
+	if l := a.len(); l > 0 {
+		return a.scale(1 / l)
+	}
+	return a
 }
 
 // isRamp reports whether e is an unnamed link road (OSM *_link).

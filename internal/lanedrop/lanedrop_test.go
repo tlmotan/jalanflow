@@ -1,6 +1,7 @@
 package lanedrop
 
 import (
+	"math"
 	"strings"
 	"testing"
 
@@ -221,5 +222,114 @@ func TestFindNamesRamps(t *testing.T) {
 	}
 	if r := drops[0].To[0]; r.Leaves != "E5" || r.Joins != "Persiaran Kewajipan" {
 		t.Errorf("leaves %q joins %q, want E5 → Persiaran Kewajipan", r.Leaves, r.Joins)
+	}
+}
+
+// at places a point x, y metres east and north of (3.0, 101.0).
+func at(x, y float64) graph.LatLon {
+	const m = 111_320.0
+	return graph.LatLon{Lat: 3.0 + y/m, Lon: 101.0 + x/(m*math.Cos(3.0*math.Pi/180))}
+}
+
+// placed builds a graph from edges whose nodes sit at the given points.
+// Edges keep any Geometry they carry; without it, sides come from nodes.
+func placed(nodes map[int]graph.LatLon, edges ...graph.Edge) *graph.Graph {
+	g := &graph.Graph{Nodes: map[graph.NodeID]*graph.Node{}, Edges: edges}
+	for i := range g.Edges {
+		g.Edges[i].ID = graph.EdgeID(i)
+	}
+	for id, p := range nodes {
+		g.Nodes[graph.NodeID(id)] = &graph.Node{ID: graph.NodeID(id), Pos: p}
+	}
+	return g
+}
+
+func TestFindSides(t *testing.T) {
+	// Travel is east through node 3 at (0, 0). Driving on the left, an
+	// on-ramp from the north joins on the left.
+	east := map[int]graph.LatLon{2: at(-1000, 0), 3: at(0, 0), 4: at(1000, 0)}
+	with := func(extra map[int]graph.LatLon) map[int]graph.LatLon {
+		m := map[int]graph.LatLon{}
+		for k, v := range east {
+			m[k] = v
+		}
+		for k, v := range extra {
+			m[k] = v
+		}
+		return m
+	}
+	main := func() []graph.Edge {
+		return []graph.Edge{
+			edge(2, 3, "E5", "motorway", part{20, 3}),
+			edge(3, 4, "E5", "motorway", part{30, 3}),
+		}
+	}
+	curving := edge(1, 3, "", "motorway_link", part{10, 2})
+	// Starts south of the road but swings round to arrive from the north.
+	curving.Geometry = []graph.LatLon{at(-800, -300), at(-300, -200), at(-150, 100), at(-60, 40), at(0, 0)}
+
+	tests := []struct {
+		name     string
+		g        *graph.Graph
+		wantFrom map[int64]Side // by OSM way id
+	}{
+		{"ramp joins from the left", placed(with(map[int]graph.LatLon{1: at(-900, 300)}),
+			append(main(), edge(1, 3, "", "motorway_link", part{10, 2}))...),
+			map[int64]Side{20: Right, 10: Left}},
+		{"ramp joins from the right", placed(with(map[int]graph.LatLon{1: at(-900, -300)}),
+			append(main(), edge(1, 3, "", "motorway_link", part{10, 2}))...),
+			map[int64]Side{20: Left, 10: Right}},
+		{"the last metres decide, not where the ramp starts", placed(with(map[int]graph.LatLon{1: at(-800, -300)}),
+			append(main(), curving)...),
+			map[int64]Side{20: Right, 10: Left}},
+		{"three roads in: left, middle, right", placed(with(map[int]graph.LatLon{1: at(-900, 300), 5: at(-900, -300)}),
+			append(main(), edge(1, 3, "", "motorway_link", part{10, 2}), edge(5, 3, "", "motorway_link", part{11, 2}))...),
+			map[int64]Side{10: Left, 20: Middle, 11: Right}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			drops, err := Find(tt.g, testCfg)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(drops) != 1 {
+				t.Fatalf("got %d drops, want 1", len(drops))
+			}
+			d := drops[0]
+			for _, r := range d.From {
+				if r.Side != tt.wantFrom[r.OSMWayID] {
+					t.Errorf("way %d: side %q, want %q", r.OSMWayID, r.Side, tt.wantFrom[r.OSMWayID])
+				}
+			}
+			for _, r := range d.To {
+				if r.Side != "" {
+					t.Errorf("single road out: side %q, want empty", r.Side)
+				}
+			}
+		})
+	}
+}
+
+func TestFindSidesNarrowingHasNone(t *testing.T) {
+	// OSM says a lane ends, not which one: a narrowing gets no side.
+	drops, err := Find(build(nil, nil, edge(1, 2, "E5", "motorway", part{10, 3}, part{11, 2})), testCfg)
+	if err != nil || len(drops) != 1 {
+		t.Fatalf("drops %v, err %v", drops, err)
+	}
+	if s := drops[0].From[0].Side + drops[0].To[0].Side; s != "" {
+		t.Errorf("narrowing sides = %q, want none", s)
+	}
+}
+
+func TestFindSidesStraightLineIsUnknown(t *testing.T) {
+	// Every node on one line (the old fixtures): nothing to tell apart.
+	drops, err := Find(sriMuda(nil, nil, "E5", "motorway_link"), testCfg)
+	if err != nil || len(drops) != 1 {
+		t.Fatalf("drops %v, err %v", drops, err)
+	}
+	for _, r := range drops[0].From {
+		if r.Side != "" {
+			t.Errorf("way %d: side %q, want empty", r.OSMWayID, r.Side)
+		}
 	}
 }
