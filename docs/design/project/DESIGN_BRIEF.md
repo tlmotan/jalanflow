@@ -2,7 +2,9 @@
 
 > Project-specific rules. Read `../DESIGN.md` (shared foundation) and the platform guide (`../DESKTOP.md`, `../MOBILE.md`) first, then this file, and `../../CONTENT.md` for wording. The order of work (design on the canvas, review, build, verify) is `../WORKFLOW.md`; the editable design document is `design.fig` beside this file. The site is a responsive web page, so both platform guides apply. Where this file is more specific than the shared guides, this file wins: it records decisions already made and built.
 
-Design decisions with a story behind them are ADRs in `docs/decisions/`: 0004 (lane drops headline), 0010 (no landing page), 0011 (animation honesty), 0012 (lanes and cars), 0013 (the earlier light look; its map rules still hold), 0014 (red for jams, yellow for nearly full roads), 0015 (map cards), 0016 (the dark shell is the site).
+Design decisions with a story behind them are ADRs in `docs/decisions/`: 0004 (lane drops headline), 0010 (no landing page), 0011 (animation honesty), 0012 (lanes and cars), 0013 (the earlier light look; its map rules still hold), 0014 (red for jams, yellow for nearly full roads), 0015 (map cards), 0016 (the dark shell is the site), 0017 (the phone sheet floats over the map), 0018 (the design refinement: agreed in concept, not built).
+
+**Decision 0018 is agreed but not built.** Where a rule below is about to change, a note beginning "Changing (decision 0018…)" says how. Until Tim approves the frames and the change is built, the rule as written is what the site does. When it is built, fold the note into the rule and delete this paragraph.
 
 **The look is the dark shell around a light map** (decision 0016, Tim, 2026-11-25): the site as built in `web/`, drawn in `design.fig`. `light-look-mockup.html` is the earlier light look (decision 0013), kept for the record; its map still looks much the same.
 
@@ -15,17 +17,17 @@ Visual work never changes route geometry, calculations, sources or what the mode
 
 ## 1. Page structure
 - **One page**: a top bar, the map and one panel. No separate landing page until Phase 2 adds several corridors; then a "pick your commute" page sits in front (decision 0010).
-- **Dark shell, light map** (decision 0016). The bar holds the name, the corridor and the direction switch. The map is a rounded light card. The panel sits beside the map on desktop and below it, as a sheet, on phones. It never covers the map.
+- **Dark shell, light map** (decision 0016). The bar holds the name, the corridor and the direction switch. The map is a rounded light card. The panel sits beside the map on desktop, never over it. On phones the map fills the screen under the bar and the panel floats over its bottom as a sheet (decision 0017).
 - **No boxes in the panel.** Text sits straight on the shell, with one hairline between sections. Only controls and the map card have a surface.
 - **A direction switch**, "To Petaling Jaya" / "To Kota Kemuning", because the data holds both directions separately (§10).
 - **One view at a time.** The panel shows exactly one of:
   - **Start** (design.fig page 6, approved by Tim 2026-11-25): headline, a muted corridor line, two count lines each led by its map mark (lane drops, confirmed jams; numbers in bold, from the data), "Run the analysis" as the one filled control (full width on phones), the not-live-traffic line right under it, then the key and the links, smaller and muted.
-  - **Running**: the live counter, "Route n of m", "Skip to the result".
-  - **Result**: the most the roads can carry as the one big number, the bottleneck (a button that shows it on the map), the lane strip (§13), the tested lane as a what-if, the key, "Replay the analysis", "Hide flow", and the same two links.
+  - **Running** (design.fig page 4, "Running v2", approved by Tim 2026-11-25): the live counter, then one thin segment per route in `replay.json` (done white, the route being traced muted, the rest `--edge`) with "Route n of m" beside it, then one sentence for that route from its own amount ("Route 4 has room for 900 vehicles an hour."; "…by moving part of an earlier route." when the step cancels earlier flow), then "Skip to the result". The last beat says "No route has room left, so this is the most." The segments count real steps: no percentage, no fill inside a segment. Screen readers get a progressbar with "Route n of m"; the live region still announces only the start and the result.
+  - **Result**: the most the roads can carry as the one big number, the bottleneck (a button that shows it on the map), the lane strip (§13), the tested lane as a what-if, the key, "Replay the analysis", "Hide flow", and the same two links. **Changing (decision 0018, agreed 2026-11-26, not built):** the order is the number with its qualifier, the limiting road and a short reason, then the what-if as two labelled bars (today, with one more lane) on one scale; the lane strip sits under the bottleneck behind "View lane layout", closed; difficulty and assumptions go under "About this estimate".
   - **All lane drops**, **one lane drop or road** and **How this works**: each replaces the panel and has a Back button. Escape also goes back.
-- On phones the sheet shows the top of the view; "More detail" opens the rest. A button, never a swipe.
+- On phones the sheet shows the top of the view; "More detail" opens the rest, up to 64 % of the screen and always leaving 220 px of map. Open, "Less detail" stays at the top of the sheet, as does Back in the other views, and only the sheet scrolls (overscroll contained). Every change has a button; dragging the grabber up or down does the same as an extra (decision 0017), and nothing needs the drag. The map never changes size; the camera works in the part the sheet leaves showing (§5). **Changing (decision 0018, agreed 2026-11-26, not built):** three heights (collapsed, summary, expanded); collapsed keeps the title line, the not-live-traffic line and a handle that is a real button; a drag only changes the height, so Back and Close stay buttons; and the sheet never moves the camera.
 - **A tap on a marker or a road opens a small card beside it** (decision 0015); the panel keeps what it was showing. "View details" opens the full detail in the panel. No tabs, and no other popups. A road's detail gives its name, lanes, capacity and whether the lanes are guessed; what it carries, and why it is the bottleneck, are added only after the analysis has run. Only roads on the drive can be tapped, and a marker wins where both are under the finger.
-- **The list and the map point at each other.** Hovering or focusing a row rings its marker; hovering a marker marks its row.
+- **The list and the map point at each other.** Hovering or focusing a row rings its marker; hovering a marker marks its row. **Changing (decision 0018, agreed 2026-11-26, not built):** choosing a row goes to the place and opens its card; "View details" on the card opens the detail.
 - **The start shows lanes only.** The drive is a grey line and the confirmed jams are red, because a driver saw them. Everything computed (the red bottleneck, the yellow nearly full roads, the capacity) appears after "Run the analysis", because the lane-drop finding leads (decision 0004).
 - **The map stays readable.** Zoomed out, only the confirmed jam spots and the 10 biggest squeezes get a marker. The rest appear from zoom 13, or all at once while the lane-drop list is open.
 
@@ -82,8 +84,8 @@ Every size, space, radius, border and timing is a token at the top of `web/src/s
 - **Type roles**: display 52 px (40 on phones) for the one big number, title 22 px (20), figure 20 px, body 15 px, small 14 px, meta 13 px, label 12 px.
 - **The result leads with the number**: the most the roads can carry, with its unit and "Worked out from lane counts. It is not live traffic." under it. Before the analysis no number is shown.
 - **Spacing** on a 4 px scale, with 24 px between panel sections (16 on phones) and one hairline, no boxes. Radii 6 / 8 / 12 px.
-- **Desktop**: bar on top, map on the left, panel on the right, `clamp(300px, 32vw, 392px)` wide. **Phones** (portrait up to 760 px wide, or any screen up to 560 px): bar, map, then the panel as a sheet below the map.
-- **The camera follows the view** (decision 0015): the start, the result and "How this works" frame the whole drive; the list frames every lane drop; a detail frames its feature. Within a view the reader's own pans and zooms are kept. Padding keeps roads clear of the zoom buttons and the credit line.
+- **Desktop**: bar on top, map on the left, panel on the right, `clamp(300px, 32vw, 392px)` wide. **Phones** (portrait up to 760 px wide, or any screen up to 560 px): bar, then the map to the bottom of the screen, with the panel as a sheet floating over the map's lower part (decision 0017).
+- **The camera follows the view** (decision 0015): the start, the result and "How this works" frame the whole drive; the list frames every lane drop; a detail frames its feature. Within a view the reader's own pans and zooms are kept. Padding keeps roads clear of the zoom buttons, the credit line and, on phones, the sheet. **Changing (decision 0018, agreed 2026-11-26, not built):** on phones the camera frames once for the sheet's summary height and moves only when the reader picks a place, changes view or direction, or uses the map's controls. A change in the sheet's height never moves it.
 - Controls are at least 44 px tall on touch, with an 8 px radius, and share hover (lighter surface), pressed, focus and disabled states. Primary = light fill. Secondary = `--control` border. Text links are underlined.
 - The compass is hidden, and on phones the map credit folds into a button.
 
@@ -93,14 +95,16 @@ Every size, space, radius, border and timing is a token at the top of `web/src/s
 - `prefers-reduced-motion: reduce` → jump straight to the end state; no moving dots.
 - Background loops (flow dots and cars) pause when the tab is hidden or the toggle is off.
 - Flow is dots when zoomed out and cars in lanes from zoom 14 (decision 0012). All vehicles move at one speed, set in screen pixels so it reads the same at every zoom.
+- A lane-drop card's lane diagram draws itself once, left to right, in 600 ms (`--dur-draw`) when the card is opened by a tap or click; hover previews show it finished, and it never loops (§14).
 - Overview dots are quiet (2026-11-24): fewer below zoom 13 (a fifth of the dots at zoom 11, a quarter at 12), smaller, and with a fainter edge, so the red bottleneck and amber nearly-full roads show through. Dots are thinned evenly on every road, so a road with twice the flow still shows twice the dots. The cars in lanes are unchanged.
+- **Changing (decision 0018, agreed 2026-11-26, not built):** quiet when informing, livelier when the reader acts. Cards, disclosures and view changes take about 120–200 ms on the timing tokens; the sheet follows the finger and can be interrupted; the replay, the flow and asked-for map moves keep their character.
 
 ## 7. Copy
 Plain language, local road names, "veh/h". Short sentences; caveats once. Full rules: `docs/CONTENT.md`.
 
 ## 8. Accessibility
 - Every control is a real `<button>` (or a link) with a visible `:focus-visible` ring. Opening a view moves focus to its Back button; going back returns focus to where it was.
-- The lane-drop list is the keyboard route to every marker, and "Show it on the map" to the bottleneck, since map features cannot take focus. Both open the panel detail directly.
+- The lane-drop list is the keyboard route to every marker, and "Show it on the map" to the bottleneck, since map features cannot take focus. Both open the panel detail directly. **Changing (decision 0018, agreed 2026-11-26, not built):** a row opens the place's card and moves focus into it; View details and Close are buttons there, and closing returns focus to the row. No step needs the map canvas.
 - Text contrast at least WCAG AA.
 - Colour is never the only signal: the bottleneck also gets width and a label; a confirmed jam has its ring and label; a nearly full road says so when tapped; marker types differ by shape (ring, solid, hollow); guessed lanes also get dashes.
 - Status changes during the replay (counter, captions) go in an `aria-live="polite"` region.
@@ -153,3 +157,14 @@ Run these as well as the checklists in `DESKTOP.md` §7 and `MOBILE.md` §9 befo
 - It is drawn for the direction shown. If the traffic splits at once and no road is shared, the strip is left out.
 - Everything comes from `edges.geojson` (`web/src/profile.ts`, pure and tested). Nothing about traffic is computed in the browser.
 - On phones it is under "More detail".
+- **Changing (decision 0018, agreed 2026-11-26, not built):** the strip sits under the bottleneck behind a "View lane layout" disclosure, closed by default, on desktop and phones. It is the lane layout for the bottleneck: a road has only a lane count in the data, so the card's lane diagram (§14) cannot be drawn for it.
+
+## 14. The map cards
+Decision 0015, cards v2 (Tim, 2026-11-25; frames on page 5 of `design.fig`). One order on every card, top to bottom:
+- **What it is**: the map's own mark and a label in capitals. A ringed red dot for a confirmed jam, a solid dot for a lane drop, a hollow dot where its lanes are guessed, and the road's line for a road (red for the bottleneck, amber for nearly full, after the analysis only). The label is light red where it jams (a confirmed jam or the bottleneck); the mark's shape tells which.
+- **Its name**, after a route shield for each exact expressway number in the data (`E5`, `E11`; `expresswayRefs` in `copy.ts`). Exit numbers, federal routes and odd refs get none. With a shield, a road's name follows without repeating the ref.
+- **The lane diagram** (lane drops only; `web/src/lanediagram.ts`, pure and tested): the roads coming in and the lanes going out, drawn as the zoomed-in map draws lanes, travel left to right so the driver's left is the top. Each road's lane count and the side it joins on come from `lane_drops.json` (`side`, from the OSM geometry). The lanes are lost on the side of the road that does not carry on; where the data does not say (every narrowing), both edges taper. A dashed edge means a count is guessed. It is decorative for screen readers: the lanes are said in words under it.
+- **The lanes** in words ("5 → 3 lanes", "2 → 1 lane"), then a guessed flag with the key's dashed line, then for a road what it can carry ("Can carry about **6,000** veh/h").
+- **Where the facts come from**, last: "Seen by a local driver", "From OpenStreetMap lane counts" or "Worked out by the analysis, not measured", with what happens there.
+- **View details →**: the arrow points on, because the detail opens on this page, in the panel. ↗ is kept for links that leave the site. No divider above it: space separates one action.
+- A card needs at least 320 × 420 px of map showing (on phones, the part above the sheet; the tallest card is about 360 px); less shows it in the sheet (on the desktop layout, in the panel: a short window or a phone on its side) with View details and Close, and a map that shrinks, or a sheet that grows, under an open card moves the card there. A card never sits under the sheet or the credit line.
